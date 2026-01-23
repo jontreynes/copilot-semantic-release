@@ -9,15 +9,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/davelosert/daves-youtube-demo-action.git"
+    "url": "git+https://github.com/jontreynes/daves-youtube-demo-action.git"
   },
   "keywords": [],
   "author": "",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/davelosert/daves-youtube-demo-action/issues"
+    "url": "https://github.com/jontreynes/daves-youtube-demo-action/issues"
   },
-  "homepage": "https://github.com/davelosert/daves-youtube-demo-action#readme",
+  "homepage": "https://github.com/jontreynes/daves-youtube-demo-action#readme",
   "dependencies": {
     "@actions/core": "1.10.1"
   },
