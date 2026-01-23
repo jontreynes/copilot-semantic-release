@@ -1,0 +1,74 @@
+name: Auto-set PR title from commits
+
+on:
+  pull_request:
+    types: [opened]  # Only when PR is first created
+
+jobs:
+  auto-title:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Auto-set PR title from commits
+        uses: actions/github-script@v7
+        with:
+          script: |
+            // Get all commits from the PR branch (from base to head)
+            const commits = await github.rest.pulls.listCommits({
+              ...context.repo,
+              pull_number: context.payload.pull_request.number
+            });
+            
+            // Track the highest precedence commit type found
+            let hasBreaking = false;   // Major release (breaking changes)
+            let hasFeature = false;    // Minor release (new features)
+            let hasFix = false;        // Patch release (bug fixes)
+            let hasPerf = false;       // Patch release (performance improvements)
+            let mostRecentConventional = ''; // Fallback to most recent conventional commit
+            
+            // Loop through each commit message in the PR branch
+            for (const commit of commits.data) {
+              const message = commit.commit.message;
+              
+              // Check for breaking changes (highest precedence)
+              // Looks for "feat!:" or "BREAKING CHANGE:" in commit message
+              if (message.includes('!:') || message.includes('BREAKING CHANGE')) {
+                hasBreaking = true;
+              } 
+              // Check for new features (second highest precedence)
+              else if (message.startsWith('feat:')) {
+                hasFeature = true;
+              } 
+              // Check for bug fixes (third precedence)
+              else if (message.startsWith('fix:')) {
+                hasFix = true;
+              }
+              // Check for performance improvements (third precedence)
+              else if (message.startsWith('perf:')) {
+                hasPerf = true;
+              }
+              
+              // Track the most recent conventional commit as fallback
+              // Check if this commit follows conventional commit format (type[!]: description)
+              const conventionalMatch = message.match(/^([a-z]+)(!)?:\s/);
+              if (conventionalMatch && !mostRecentConventional) {
+                // Store the prefix from the most recent conventional commit
+                mostRecentConventional = conventionalMatch[0]; // e.g., "docs: ", "chore: ", etc.
+              }
+            }
+            
+            // Determine PR title prefix based on highest precedence found
+            let prefix = '';
+            if (hasBreaking) prefix = 'feat!: ';        // Major version bump
+            else if (hasFeature) prefix = 'feat: ';     // Minor version bump
+            else if (hasFix) prefix = 'fix: ';          // Patch version bump (bugs)
+            else if (hasPerf) prefix = 'perf: ';        // Patch version bump (performance)
+            else if (mostRecentConventional) prefix = mostRecentConventional; // Use most recent conventional commit
+            else prefix = 'chore: ';                    // Final fallback
+            
+            // Update the PR title by prepending the conventional commit prefix
+            // This title will become the squash merge commit message
+            await github.rest.pulls.update({
+              ...context.repo,
+              pull_number: context.payload.pull_request.number,
+              title: prefix + context.payload.pull_request.title
+            });
