@@ -1,6 +1,6 @@
 {
   "name": "daves-youtube-demo-action",
-  "version": "0.1.3",
+  "version": "0.2.0",
   "description": "This repository accompanies my Youtube Series on how to create and release actions.",
   "main": "index.js",
   "scripts": {

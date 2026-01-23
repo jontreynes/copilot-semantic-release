@@ -1,3 +1,10 @@
+# [0.2.0](https://github.com/jontreynes/daves-youtube-demo-action/compare/v0.1.3...v0.2.0) (2026-01-23)
+
+
+### Features
+
+* add workflow to auto-set PR title based on commit messages ([f8f1c05](https://github.com/jontreynes/daves-youtube-demo-action/commit/f8f1c05d583de9e892236bf7dd11921284484c51))
+
 ## [0.1.3](https://github.com/jontreynes/daves-youtube-demo-action/compare/v0.1.2...v0.1.3) (2026-01-23)
 
 
