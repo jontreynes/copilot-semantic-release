@@ -1,3 +1,10 @@
+## [0.2.1](https://github.com/jontreynes/daves-youtube-demo-action/compare/v0.2.0...v0.2.1) (2026-01-23)
+
+
+### Bug Fixes
+
+* simplify semantic-release config to use default Angular preset ([f94a55a](https://github.com/jontreynes/daves-youtube-demo-action/commit/f94a55a6a806fd3f6c6f59858e844ae58368e68c))
+
 # [0.2.0](https://github.com/jontreynes/daves-youtube-demo-action/compare/v0.1.3...v0.2.0) (2026-01-23)
 
 
