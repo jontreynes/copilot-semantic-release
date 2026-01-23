@@ -2,7 +2,7 @@ name: Auto-set PR title from commits
 
 on:
   pull_request:
-    types: [opened]  # Only when PR is first created
+    types: [opened, synchronize]  # When PR is created OR new commits are pushed
 
 jobs:
   auto-title:
