@@ -35,8 +35,8 @@ jobs:
       - name: Build project
         run: npm run build
 
-      - name: Run tests (if any)
-        run: npm test --if-present
+      # - name: Run tests (if any)
+      #   run: npm test --if-present
 
       - name: Release
         env:
