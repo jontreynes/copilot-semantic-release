@@ -58,17 +58,27 @@ jobs:
             
             // Determine PR title prefix based on highest precedence found
             let prefix = '';
-            if (hasBreaking) prefix = 'feat!: ';        // Major version bump
-            else if (hasFeature) prefix = 'feat: ';     // Minor version bump
-            else if (hasFix) prefix = 'fix: ';          // Patch version bump (bugs)
-            else if (hasPerf) prefix = 'perf: ';        // Patch version bump (performance)
-            else if (mostRecentConventional) prefix = mostRecentConventional; // Use most recent conventional commit
-            else prefix = 'chore: ';                    // Final fallback
+            let body = '';
+            if (hasBreaking) {
+              prefix = 'feat: ';        // Use feat: instead of feat!:
+              body = '\n\nBREAKING CHANGE: This PR contains breaking changes - see individual commits for details';
+            } else if (hasFeature) {
+              prefix = 'feat: ';        // Minor version bump
+            } else if (hasFix) {
+              prefix = 'fix: ';         // Patch version bump (bugs)
+            } else if (hasPerf) {
+              prefix = 'perf: ';        // Patch version bump (performance)
+            } else if (mostRecentConventional) {
+              prefix = mostRecentConventional; // Use most recent conventional commit
+            } else {
+              prefix = 'chore: ';       // Final fallback
+            }
             
-            // Update the PR title by prepending the conventional commit prefix
+            // Update the PR title and body by prepending the conventional commit prefix
             // This title will become the squash merge commit message
             await github.rest.pulls.update({
               ...context.repo,
               pull_number: context.payload.pull_request.number,
-              title: prefix + context.payload.pull_request.title
+              title: prefix + context.payload.pull_request.title,
+              body: (context.payload.pull_request.body || '') + body
             });
