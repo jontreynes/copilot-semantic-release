@@ -2,7 +2,13 @@ const config = {
   branches: ['main'],
   plugins: [
     ["@semantic-release/commit-analyzer", {
-      "preset": "angular"
+      "preset": "conventionalcommits",
+      "releaseRules": [
+        { "type": "feat", "release": "minor" },
+        { "type": "fix", "release": "patch" },
+        { "type": "perf", "release": "patch" },
+        { "breaking": true, "release": "major" }
+      ]
     }],
     '@semantic-release/release-notes-generator',
     '@semantic-release/changelog',
