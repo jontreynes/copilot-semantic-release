@@ -1,9 +1,9 @@
 const config = {
   branches: [
     'main',
-    // Hotfix branches using dynamic name but fixed channel/prerelease
+    // Hotfix branches with pattern matching
     { 
-      name: (branch) => branch.name,
+      name: 'hotfix/*',
       channel: 'hotfix',
       prerelease: 'hotfix'
     }
