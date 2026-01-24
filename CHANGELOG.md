@@ -1,3 +1,10 @@
+## [3.6.4](https://github.com/jontreynes/daves-youtube-demo-action/compare/v3.6.3...v3.6.4) (2026-01-24)
+
+
+### Bug Fixes
+
+* update hotfix branch configuration to use consistent naming convention ([d261e59](https://github.com/jontreynes/daves-youtube-demo-action/commit/d261e593e568045d5d02d59b107670d28532ac9a))
+
 ## [3.6.3](https://github.com/jontreynes/daves-youtube-demo-action/compare/v3.6.2...v3.6.3) (2026-01-24)
 
 
