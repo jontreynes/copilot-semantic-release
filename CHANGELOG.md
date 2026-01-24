@@ -1,3 +1,10 @@
+## [3.0.1](https://github.com/jontreynes/daves-youtube-demo-action/compare/v3.0.0...v3.0.1) (2026-01-24)
+
+
+### Bug Fixes
+
+* Testprchange ([#2](https://github.com/jontreynes/daves-youtube-demo-action/issues/2)) ([e385e81](https://github.com/jontreynes/daves-youtube-demo-action/commit/e385e81c8d008780a7e8efb04bb200d50b6b26dc))
+
 # [3.0.0](https://github.com/jontreynes/daves-youtube-demo-action/compare/v2.0.0...v3.0.0) (2026-01-24)
 
 # [2.0.0](https://github.com/jontreynes/daves-youtube-demo-action/compare/v1.0.0...v2.0.0) (2026-01-23)
