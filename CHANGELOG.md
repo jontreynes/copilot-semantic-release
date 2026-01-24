@@ -1,3 +1,10 @@
+## [3.6.7](https://github.com/jontreynes/daves-youtube-demo-action/compare/v3.6.6...v3.6.7) (2026-01-24)
+
+
+### Bug Fixes
+
+* sanitize all non-alphanumeric characters in prerelease identifiers ([450b445](https://github.com/jontreynes/daves-youtube-demo-action/commit/450b4455b1d89620555b75c63a0212b14456e2a9))
+
 ## [3.6.6](https://github.com/jontreynes/daves-youtube-demo-action/compare/v3.6.5...v3.6.6) (2026-01-24)
 
 
