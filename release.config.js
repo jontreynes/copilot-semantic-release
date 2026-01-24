@@ -1,12 +1,14 @@
+const currentBranch = process.env.GITHUB_REF_NAME || process.env.BRANCH || 'unknown';
+
 const config = {
   branches: [
     'main',
-    // Hotfix branches using commit SHA for unique but simple prerelease identifiers
-    { 
-      name: 'hotfix/*',
-      channel: (branch) => branch.name,
-      prerelease: () => process.env.GITHUB_SHA ? process.env.GITHUB_SHA.substring(0, 7) : 'hotfix'
-    }
+    // Only configure the current hotfix branch for prerelease
+    ...(currentBranch.startsWith('hotfix/') ? [{
+      name: currentBranch,
+      channel: currentBranch,
+      prerelease: 'hotfix'
+    }] : [])
   ],
   plugins: [
     ["@semantic-release/commit-analyzer", {
