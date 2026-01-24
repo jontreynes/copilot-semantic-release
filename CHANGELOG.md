@@ -1,3 +1,11 @@
+## [3.2.1-patch-21306421750.1](https://github.com/jontreynes/daves-youtube-demo-action/compare/v3.2.0...v3.2.1-patch-21306421750.1) (2026-01-24)
+
+
+### Bug Fixes
+
+* resolve critical data processing bug ([afb4abf](https://github.com/jontreynes/daves-youtube-demo-action/commit/afb4abf09969a00ffc3304b2f8e7d00ef1ec797b))
+* update index.js to resolve critical issue ([56cbdba](https://github.com/jontreynes/daves-youtube-demo-action/commit/56cbdba5c89ba5a51585590f81cbeb625aa40135))
+
 # [3.2.0](https://github.com/jontreynes/daves-youtube-demo-action/compare/v3.1.0...v3.2.0) (2026-01-24)
 
 
