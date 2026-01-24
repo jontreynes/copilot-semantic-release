@@ -1,3 +1,10 @@
+# [3.7.0](https://github.com/jontreynes/daves-youtube-demo-action/compare/v3.6.13...v3.7.0) (2026-01-24)
+
+
+### Features
+
+* implement git history-based version detection for hotfix branches ([499dea6](https://github.com/jontreynes/daves-youtube-demo-action/commit/499dea6b14074fb970ce9c578b739c7b69e1aca4))
+
 ## [3.6.13](https://github.com/jontreynes/daves-youtube-demo-action/compare/v3.6.12...v3.6.13) (2026-01-24)
 
 
