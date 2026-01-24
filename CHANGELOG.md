@@ -1,3 +1,10 @@
+## [3.6.6](https://github.com/jontreynes/daves-youtube-demo-action/compare/v3.6.5...v3.6.6) (2026-01-24)
+
+
+### Bug Fixes
+
+* 2empty commit to trigger release ([f985a3a](https://github.com/jontreynes/daves-youtube-demo-action/commit/f985a3a5365b59e2f97830352958abeb0fac65b9))
+
 ## [3.6.5](https://github.com/jontreynes/daves-youtube-demo-action/compare/v3.6.4...v3.6.5) (2026-01-24)
 
 
