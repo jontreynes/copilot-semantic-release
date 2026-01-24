@@ -1,14 +1,16 @@
 const config = {
-  branches: ['main'],
+  branches: [
+    'main',
+    // Hotfix branches with explicit base version traceability
+    { 
+      name: 'hotfix/*', 
+      channel: 'hotfix', 
+      prerelease: `patch-${process.env.GITHUB_RUN_ID || 'local'}`
+    }
+  ],
   plugins: [
     ["@semantic-release/commit-analyzer", {
-      "preset": "conventionalcommits",
-      "releaseRules": [
-        { "type": "feat", "release": "minor" },
-        { "type": "fix", "release": "patch" },
-        { "type": "perf", "release": "patch" },
-        { "breaking": true, "release": "major" }
-      ]
+      "preset": "conventionalcommits"
     }],
     '@semantic-release/release-notes-generator',
     '@semantic-release/changelog',
