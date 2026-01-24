@@ -1,3 +1,10 @@
+## [3.6.5](https://github.com/jontreynes/daves-youtube-demo-action/compare/v3.6.4...v3.6.5) (2026-01-24)
+
+
+### Bug Fixes
+
+* add hotfix branch to workflow trigger for testing ([0de164a](https://github.com/jontreynes/daves-youtube-demo-action/commit/0de164aa67f914b82eb4c617e71c54246e28d1e2))
+
 ## [3.6.4](https://github.com/jontreynes/daves-youtube-demo-action/compare/v3.6.3...v3.6.4) (2026-01-24)
 
 
