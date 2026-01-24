@@ -1,3 +1,10 @@
+## [3.6.11-hotfix.1](https://github.com/jontreynes/daves-youtube-demo-action/compare/v3.6.10...v3.6.11-hotfix.1) (2026-01-24)
+
+
+### Bug Fixes
+
+* update urgent fix log message to include 'newfix' ([a3468a1](https://github.com/jontreynes/daves-youtube-demo-action/commit/a3468a163ceaacb934a43e71aac7e4ded52c2317))
+
 ## [3.6.10](https://github.com/jontreynes/daves-youtube-demo-action/compare/v3.6.9...v3.6.10) (2026-01-24)
 
 
