@@ -1,3 +1,10 @@
+## [3.6.8](https://github.com/jontreynes/daves-youtube-demo-action/compare/v3.6.7...v3.6.8) (2026-01-24)
+
+
+### Bug Fixes
+
+* update README to correct formatting of advanced error handling framework entry ([f9a02bd](https://github.com/jontreynes/daves-youtube-demo-action/commit/f9a02bdf626f46d6f217983be099990cc5b263e1))
+
 ## [3.6.7](https://github.com/jontreynes/daves-youtube-demo-action/compare/v3.6.6...v3.6.7) (2026-01-24)
 
 
