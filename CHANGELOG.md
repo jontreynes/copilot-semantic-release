@@ -1,3 +1,10 @@
+## [3.6.14-hotfix-v3-6-13.2](https://github.com/jontreynes/daves-youtube-demo-action/compare/v3.6.14-hotfix-v3-6-13.1...v3.6.14-hotfix-v3-6-13.2) (2026-01-24)
+
+
+### Bug Fixes
+
+* remove trailing whitespace in README.md ([d379a7d](https://github.com/jontreynes/daves-youtube-demo-action/commit/d379a7d7fb0874d2097164bdbdcfa074d900231c))
+
 ## [3.6.14-hotfix-v3-6-13.1](https://github.com/jontreynes/daves-youtube-demo-action/compare/v3.6.13...v3.6.14-hotfix-v3-6-13.1) (2026-01-24)
 
 
