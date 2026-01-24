@@ -4,8 +4,8 @@ const config = {
     // Hotfix branches with explicit base version traceability
     { 
       name: 'hotfix/*', 
-      channel: 'hotfix', 
-      prerelease: (branch) => branch.name.replace(/[^a-zA-Z0-9]/g, '-').replace(/^hotfix-/, 'hotfix')
+      channel: (branch) => branch.name.replace(/\//g, '-'),
+      prerelease: (branch) => branch.name.replace(/\//g, '-')
     }
   ],
   plugins: [
