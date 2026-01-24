@@ -4,7 +4,7 @@ const config = {
     // Hotfix branches with explicit base version traceability
     { 
       name: 'hotfix/*', 
-      channel: (branch) => branch.name.replace(/\//g, '-'), 
+      channel: 'hotfix', 
       prerelease: (branch) => `patch-${branch.name.replace(/hotfix\//g, '').replace(/[^a-zA-Z0-9]/g, '-')}-${process.env.GITHUB_RUN_ID || 'local'}`
     }
   ],
