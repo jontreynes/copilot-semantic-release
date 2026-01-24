@@ -1,3 +1,14 @@
+## [3.6.9](https://github.com/jontreynes/daves-youtube-demo-action/compare/v3.6.8...v3.6.9) (2026-01-24)
+
+
+### Bug Fixes
+
+* apply urgent hotfix for v3.6.7 production issue ([d1d36f0](https://github.com/jontreynes/daves-youtube-demo-action/commit/d1d36f0a33666a34e7708a8298982a18f541f350))
+* correct exclamation marks in urgent fix log message ([8c417bc](https://github.com/jontreynes/daves-youtube-demo-action/commit/8c417bccaeee25b85803cd9084afa0b94f3c2ea0))
+* correct punctuation in urgent fix log message ([2159657](https://github.com/jontreynes/daves-youtube-demo-action/commit/215965743742a6e46eb319973f0a9fd2d37f6031))
+* restore channel and prerelease functions for hotfix branches ([de992ed](https://github.com/jontreynes/daves-youtube-demo-action/commit/de992ed06b9eaf936e6c9258f02342d8b00c4f8f))
+* use static prerelease identifier for semantic-release validation ([c0b681a](https://github.com/jontreynes/daves-youtube-demo-action/commit/c0b681add9c233ebdcdb976fe2e084ed270ea1f4))
+
 ## [3.6.8](https://github.com/jontreynes/daves-youtube-demo-action/compare/v3.6.7...v3.6.8) (2026-01-24)
 
 
