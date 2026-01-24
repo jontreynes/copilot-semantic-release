@@ -1,3 +1,13 @@
+## [3.6.14-hotfix-from-v3-6-13.1](https://github.com/jontreynes/daves-youtube-demo-action/compare/v3.6.13...v3.6.14-hotfix-from-v3-6-13.1) (2026-01-24)
+
+
+### Bug Fixes
+
+* correct base version format in hotfix branch extraction ([4095085](https://github.com/jontreynes/daves-youtube-demo-action/commit/409508561d844712dee8bf774b7b48a3c633491a))
+* remove trailing whitespace and add 'Check conflict' to README.md ([f9255c6](https://github.com/jontreynes/daves-youtube-demo-action/commit/f9255c608487f92a311235cd47950b49ea628b0f))
+* remove trailing whitespace in README.md ([d379a7d](https://github.com/jontreynes/daves-youtube-demo-action/commit/d379a7d7fb0874d2097164bdbdcfa074d900231c))
+* update hotfix base version extraction and error handling ([9532bc9](https://github.com/jontreynes/daves-youtube-demo-action/commit/9532bc91e47f725e4c679a1c26cef4db0e6821e9))
+
 ## [3.6.14-hotfix-v3-6-13.2](https://github.com/jontreynes/daves-youtube-demo-action/compare/v3.6.14-hotfix-v3-6-13.1...v3.6.14-hotfix-v3-6-13.2) (2026-01-24)
 
 
