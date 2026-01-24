@@ -1,11 +1,11 @@
 const config = {
   branches: [
     'main',
-    // Hotfix branches using commit SHA for unique channels
+    // Hotfix branches using raw branch name for channels
     { 
       name: 'hotfix/*',
-      channel: () => process.env.GITHUB_SHA ? process.env.GITHUB_SHA.substring(0, 7) : 'local',
-      prerelease: 'hotfix'
+      channel: (branch) => branch.name,
+      prerelease: `patch-${process.env.GITHUB_RUN_ID || 'local'}`
     }
   ],
   plugins: [
