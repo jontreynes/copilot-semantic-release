@@ -1,3 +1,10 @@
+## [3.2.1](https://github.com/jontreynes/daves-youtube-demo-action/compare/v3.2.0...v3.2.1) (2026-01-24)
+
+
+### Bug Fixes
+
+* improve error handling ([8743dc2](https://github.com/jontreynes/daves-youtube-demo-action/commit/8743dc2eccc5b9a1e4f111fe70ebb5970b62344c))
+
 # [3.2.0](https://github.com/jontreynes/daves-youtube-demo-action/compare/v3.1.0...v3.2.0) (2026-01-24)
 
 
