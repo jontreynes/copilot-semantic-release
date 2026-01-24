@@ -1,3 +1,10 @@
+## [3.6.14-hotfix-v3613.1](https://github.com/jontreynes/daves-youtube-demo-action/compare/v3.6.13...v3.6.14-hotfix-v3613.1) (2026-01-24)
+
+
+### Bug Fixes
+
+* remove trailing whitespace and add 'Check conflict' to README.md ([f9255c6](https://github.com/jontreynes/daves-youtube-demo-action/commit/f9255c608487f92a311235cd47950b49ea628b0f))
+
 ## [3.6.13](https://github.com/jontreynes/daves-youtube-demo-action/compare/v3.6.12...v3.6.13) (2026-01-24)
 
 
