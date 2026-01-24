@@ -1,3 +1,10 @@
+# [3.2.0](https://github.com/jontreynes/daves-youtube-demo-action/compare/v3.1.0...v3.2.0) (2026-01-24)
+
+
+### Features
+
+* add new logging capability ([b482a24](https://github.com/jontreynes/daves-youtube-demo-action/commit/b482a244e1f33f69b8ec1ed29cd67d97fa06d943))
+
 # [3.1.0](https://github.com/jontreynes/daves-youtube-demo-action/compare/v3.0.1...v3.1.0) (2026-01-24)
 
 
