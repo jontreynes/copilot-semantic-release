@@ -1,3 +1,10 @@
+# [3.6.0](https://github.com/jontreynes/daves-youtube-demo-action/compare/v3.5.0...v3.6.0) (2026-01-24)
+
+
+### Features
+
+* add comprehensive logging and advanced error handling framework ([be216dc](https://github.com/jontreynes/daves-youtube-demo-action/commit/be216dcdb52f9cd8fb24634d685409159943fe5d))
+
 # [3.5.0](https://github.com/jontreynes/daves-youtube-demo-action/compare/v3.4.1...v3.5.0) (2026-01-24)
 
 
