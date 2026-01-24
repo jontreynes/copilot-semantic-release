@@ -1,3 +1,11 @@
+## [3.6.11](https://github.com/jontreynes/daves-youtube-demo-action/compare/v3.6.10...v3.6.11) (2026-01-24)
+
+
+### Bug Fixes
+
+* update hotfix branch comment for clarity ([4a81460](https://github.com/jontreynes/daves-youtube-demo-action/commit/4a81460bcb20a94550d20b3eebf6c84750fa8773))
+* update hotfix branch configuration for clarity ([162933d](https://github.com/jontreynes/daves-youtube-demo-action/commit/162933d5452433007cbfe2dab63bc2015c1583ec))
+
 ## [3.6.10](https://github.com/jontreynes/daves-youtube-demo-action/compare/v3.6.9...v3.6.10) (2026-01-24)
 
 
