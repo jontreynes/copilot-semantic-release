@@ -5,7 +5,7 @@ const config = {
     { 
       name: 'hotfix/*',
       channel: (branch) => branch.name,
-      prerelease: 'hotfix'
+      prerelease: `patch-${process.env.GITHUB_RUN_ID || 'local'}`
     }
   ],
   plugins: [
