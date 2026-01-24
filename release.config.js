@@ -1,10 +1,10 @@
 const config = {
   branches: [
     'main',
-    // Hotfix branches with pattern matching
+    // Hotfix branches using commit SHA for unique channels
     { 
       name: 'hotfix/*',
-      channel: 'hotfix',
+      channel: () => process.env.GITHUB_SHA ? process.env.GITHUB_SHA.substring(0, 7) : 'local',
       prerelease: 'hotfix'
     }
   ],
