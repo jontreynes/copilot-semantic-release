@@ -1,3 +1,11 @@
+## [3.6.8-hotfix.2](https://github.com/jontreynes/daves-youtube-demo-action/compare/v3.6.8-hotfix.1...v3.6.8-hotfix.2) (2026-01-24)
+
+
+### Bug Fixes
+
+* correct exclamation marks in urgent fix log message ([8c417bc](https://github.com/jontreynes/daves-youtube-demo-action/commit/8c417bccaeee25b85803cd9084afa0b94f3c2ea0))
+* correct punctuation in urgent fix log message ([2159657](https://github.com/jontreynes/daves-youtube-demo-action/commit/215965743742a6e46eb319973f0a9fd2d37f6031))
+
 ## [3.6.8-hotfix.1](https://github.com/jontreynes/daves-youtube-demo-action/compare/v3.6.7...v3.6.8-hotfix.1) (2026-01-24)
 
 
