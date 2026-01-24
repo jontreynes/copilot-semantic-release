@@ -1,3 +1,10 @@
+## [3.6.1](https://github.com/jontreynes/daves-youtube-demo-action/compare/v3.6.0...v3.6.1) (2026-01-24)
+
+
+### Bug Fixes
+
+* simplify prerelease configuration for hotfix branches ([9e6c590](https://github.com/jontreynes/daves-youtube-demo-action/commit/9e6c590d40e0595765dc5b2551ea5ee7780e9bf9))
+
 # [3.6.0](https://github.com/jontreynes/daves-youtube-demo-action/compare/v3.5.0...v3.6.0) (2026-01-24)
 
 
