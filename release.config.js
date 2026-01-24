@@ -1,12 +1,22 @@
+const currentBranch = process.env.GITHUB_REF_NAME || process.env.BRANCH || 'unknown';
+
+// Extract base version from hotfix branch name (e.g., "hotfix/v3.6.12" -> "v3612")
+const getBaseVersionSuffix = (branchName) => {
+  const match = branchName.match(/hotfix\/v?(\d+)\.(\d+)\.(\d+)/);
+  return match ? `v${match[1]}${match[2]}${match[3]}` : '';
+};
+
+const baseVersionSuffix = getBaseVersionSuffix(currentBranch);
+
 const config = {
   branches: [
     'main',
-    // Hotfix branches using commit SHA for unique channels
-    { 
-      name: 'hotfix/*',
-      channel: () => process.env.GITHUB_SHA ? process.env.GITHUB_SHA.substring(0, 7) : 'local',
-      prerelease: 'hotfix'
-    }
+    // Only configure the current hotfix branch for prerelease
+    ...(currentBranch.startsWith('hotfix/') ? [{
+      name: currentBranch,
+      channel: currentBranch,
+      prerelease: baseVersionSuffix ? `hotfix-${baseVersionSuffix}` : 'hotfix'
+    }] : [])
   ],
   plugins: [
     ["@semantic-release/commit-analyzer", {
