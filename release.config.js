@@ -1,11 +1,11 @@
 const config = {
   branches: [
     'main',
-    // Hotfix branches using branch-specific prerelease identifiers
+    // Hotfix branches using commit SHA for unique but simple prerelease identifiers
     { 
       name: 'hotfix/*',
       channel: (branch) => branch.name,
-      prerelease: (branch) => branch.name.replace(/[^a-zA-Z0-9]/g, '-')
+      prerelease: () => process.env.GITHUB_SHA ? process.env.GITHUB_SHA.substring(0, 7) : 'hotfix'
     }
   ],
   plugins: [
