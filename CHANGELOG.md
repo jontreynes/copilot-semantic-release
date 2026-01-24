@@ -1,3 +1,10 @@
+# [3.1.0](https://github.com/jontreynes/daves-youtube-demo-action/compare/v3.0.1...v3.1.0) (2026-01-24)
+
+
+### Features
+
+* add hotfix workflow and semantic release rules documentation ([c75c52f](https://github.com/jontreynes/daves-youtube-demo-action/commit/c75c52f9a546d9f2ca78e9f701d666e41032aedd))
+
 ## [3.0.1](https://github.com/jontreynes/daves-youtube-demo-action/compare/v3.0.0...v3.0.1) (2026-01-24)
 
 
