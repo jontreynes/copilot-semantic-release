@@ -1,6 +1,6 @@
 {
   "name": "daves-youtube-demo-action",
-  "version": "3.6.13-hotfix.1",
+  "version": "3.6.13-hotfix-v3612.1",
   "description": "This repository accompanies my Youtube Series on how to create and release actions.",
   "main": "index.js",
   "scripts": {

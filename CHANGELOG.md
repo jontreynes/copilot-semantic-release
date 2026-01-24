@@ -1,3 +1,14 @@
+## [3.6.13-hotfix-v3612.1](https://github.com/jontreynes/daves-youtube-demo-action/compare/v3.6.12...v3.6.13-hotfix-v3612.1) (2026-01-24)
+
+
+### Bug Fixes
+
+* enhance hotfix branch prerelease identifier extraction for clarity ([85281fa](https://github.com/jontreynes/daves-youtube-demo-action/commit/85281fa4a816e303d62e0d4eac8c53022b6d3aac))
+* update hotfix branch comment and prerelease identifier for consistency ([191053f](https://github.com/jontreynes/daves-youtube-demo-action/commit/191053f0a02838bc2f139fa187f0824b8225f0be))
+* update hotfix branch configuration for clarity and consistency should go to v3.6.13 ([53c2289](https://github.com/jontreynes/daves-youtube-demo-action/commit/53c22890d1679a93d6b50a12d825e9b731e8b067))
+* update hotfix branch configuration for unique prerelease identifiers ([cbeac84](https://github.com/jontreynes/daves-youtube-demo-action/commit/cbeac846d4f0c76dcb58991d5c76e9ac23157270))
+* update hotfix branch prerelease identifier for clarity and consistency ([c9196b0](https://github.com/jontreynes/daves-youtube-demo-action/commit/c9196b093d20b3972a036c78dc7ee00245993c54))
+
 ## [3.6.13-hotfix.1](https://github.com/jontreynes/daves-youtube-demo-action/compare/v3.6.12...v3.6.13-hotfix.1) (2026-01-24)
 
 
