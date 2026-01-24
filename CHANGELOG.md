@@ -1,3 +1,10 @@
+## [3.6.3](https://github.com/jontreynes/daves-youtube-demo-action/compare/v3.6.2...v3.6.3) (2026-01-24)
+
+
+### Bug Fixes
+
+* use sanitized branch name function for unique prerelease identifiers ([5d86674](https://github.com/jontreynes/daves-youtube-demo-action/commit/5d86674d96aa3d3a8241362e59d5473728431c8a))
+
 ## [3.6.2](https://github.com/jontreynes/daves-youtube-demo-action/compare/v3.6.1...v3.6.2) (2026-01-24)
 
 
