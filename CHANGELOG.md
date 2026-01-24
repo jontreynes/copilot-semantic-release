@@ -1,3 +1,10 @@
+## [3.6.2](https://github.com/jontreynes/daves-youtube-demo-action/compare/v3.6.1...v3.6.2) (2026-01-24)
+
+
+### Bug Fixes
+
+* update welcome message to reflect test part 7 ([e8eebed](https://github.com/jontreynes/daves-youtube-demo-action/commit/e8eebed25d9c2f71f6840b48e06c830e4f536fd8))
+
 ## [3.6.1](https://github.com/jontreynes/daves-youtube-demo-action/compare/v3.6.0...v3.6.1) (2026-01-24)
 
 
