@@ -1,3 +1,10 @@
+## [3.6.10](https://github.com/jontreynes/daves-youtube-demo-action/compare/v3.6.9...v3.6.10) (2026-01-24)
+
+
+### Bug Fixes
+
+* correct exclamation marks in urgent fix log message ([530c077](https://github.com/jontreynes/daves-youtube-demo-action/commit/530c0779888ed0d692a9402f1270c6c547c43687))
+
 ## [3.6.9](https://github.com/jontreynes/daves-youtube-demo-action/compare/v3.6.8...v3.6.9) (2026-01-24)
 
 
