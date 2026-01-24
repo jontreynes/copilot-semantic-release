@@ -1,3 +1,10 @@
+## [3.3.1](https://github.com/jontreynes/daves-youtube-demo-action/compare/v3.3.0...v3.3.1) (2026-01-24)
+
+
+### Bug Fixes
+
+* use branch.name in channel function and simplify prerelease with unique channels ([7e08a64](https://github.com/jontreynes/daves-youtube-demo-action/commit/7e08a64a1cb9d6663f00a043c79e6996fa2aa90c))
+
 # [3.3.0](https://github.com/jontreynes/daves-youtube-demo-action/compare/v3.2.2...v3.3.0) (2026-01-24)
 
 
