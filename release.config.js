@@ -1,5 +1,13 @@
 const currentBranch = process.env.GITHUB_REF_NAME || process.env.BRANCH || 'unknown';
 
+// Extract base version from hotfix branch name (e.g., "hotfix/v3.6.12" -> "v3612")
+const getBaseVersionSuffix = (branchName) => {
+  const match = branchName.match(/hotfix\/v?(\d+)\.(\d+)\.(\d+)/);
+  return match ? `v${match[1]}${match[2]}${match[3]}` : '';
+};
+
+const baseVersionSuffix = getBaseVersionSuffix(currentBranch);
+
 const config = {
   branches: [
     'main',
@@ -7,7 +15,7 @@ const config = {
     ...(currentBranch.startsWith('hotfix/') ? [{
       name: currentBranch,
       channel: currentBranch,
-      prerelease: 'hotfix'
+      prerelease: baseVersionSuffix ? `hotfix-${baseVersionSuffix}` : 'hotfix'
     }] : [])
   ],
   plugins: [
