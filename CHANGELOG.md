@@ -1,3 +1,15 @@
+# [3.4.0-patch-21307113768.1](https://github.com/jontreynes/daves-youtube-demo-action/compare/v3.3.1...v3.4.0-patch-21307113768.1) (2026-01-24)
+
+
+### Bug Fixes
+
+* add database deadlock retry mechanism for production stability ([f43f115](https://github.com/jontreynes/daves-youtube-demo-action/commit/f43f1156bf6eb13d58778c99b74940faa87246cf))
+
+
+### Features
+
+* add performance monitoring and database timeout improvements ([24469fb](https://github.com/jontreynes/daves-youtube-demo-action/commit/24469fb5c972c93eebe00dfc1c9cf2d824a87657))
+
 ## [3.3.1](https://github.com/jontreynes/daves-youtube-demo-action/compare/v3.3.0...v3.3.1) (2026-01-24)
 
 
