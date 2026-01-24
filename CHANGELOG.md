@@ -1,3 +1,13 @@
+## [3.6.12-patch-21309084337.1](https://github.com/jontreynes/daves-youtube-demo-action/compare/v3.6.11...v3.6.12-patch-21309084337.1) (2026-01-24)
+
+
+### Bug Fixes
+
+* remove trailing whitespace in README.md ([efc4b5c](https://github.com/jontreynes/daves-youtube-demo-action/commit/efc4b5c674d8c6968806fa57eba59a2827cb2aae))
+* remove trailing whitespace in README.md ([8c1658e](https://github.com/jontreynes/daves-youtube-demo-action/commit/8c1658e75c974ca864119898099c3497f6376d5e))
+* update hotfix branch channel configuration for clarity ([7d861bd](https://github.com/jontreynes/daves-youtube-demo-action/commit/7d861bdce9a8a0068179c0912b44bbcdf9f63cc7))
+* update prerelease identifier in release.config.js ([9829308](https://github.com/jontreynes/daves-youtube-demo-action/commit/9829308ecae6cc45ff0e0da39bf81a2f9c19654f))
+
 ## [3.6.12-hotfix.1](https://github.com/jontreynes/daves-youtube-demo-action/compare/v3.6.11...v3.6.12-hotfix.1) (2026-01-24)
 
 
