@@ -1,3 +1,10 @@
+## [3.4.1](https://github.com/jontreynes/daves-youtube-demo-action/compare/v3.4.0...v3.4.1) (2026-01-24)
+
+
+### Bug Fixes
+
+* remove prerelease property from hotfix branches for clean version numbers ([e8e5a57](https://github.com/jontreynes/daves-youtube-demo-action/commit/e8e5a57436b61c24321ae56cd2dfc6463b51ff1d))
+
 # [3.4.0](https://github.com/jontreynes/daves-youtube-demo-action/compare/v3.3.1...v3.4.0) (2026-01-24)
 
 
