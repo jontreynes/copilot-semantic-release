@@ -1,11 +1,11 @@
 const config = {
   branches: [
     'main',
-    // Hotfix branches with explicit base version traceability
+    // Hotfix branches with simple prerelease identifiers
     { 
       name: 'hotfix/*', 
-      channel: (branch) => branch.name.replace(/[^a-zA-Z0-9]/g, '-'),
-      prerelease: (branch) => branch.name.replace(/[^a-zA-Z0-9]/g, '-')
+      channel: 'hotfix',
+      prerelease: 'hotfix'
     }
   ],
   plugins: [

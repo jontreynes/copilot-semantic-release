@@ -3,7 +3,10 @@
 
 ### Bug Fixes
 
+* apply urgent hotfix for v3.6.7 production issue ([d1d36f0](https://github.com/jontreynes/daves-youtube-demo-action/commit/d1d36f0a33666a34e7708a8298982a18f541f350))
+* restore channel and prerelease functions for hotfix branches ([de992ed](https://github.com/jontreynes/daves-youtube-demo-action/commit/de992ed06b9eaf936e6c9258f02342d8b00c4f8f))
 * update README to correct formatting of advanced error handling framework entry ([f9a02bd](https://github.com/jontreynes/daves-youtube-demo-action/commit/f9a02bdf626f46d6f217983be099990cc5b263e1))
+* use static prerelease identifier for semantic-release validation ([c0b681a](https://github.com/jontreynes/daves-youtube-demo-action/commit/c0b681add9c233ebdcdb976fe2e084ed270ea1f4))
 
 ## [3.6.7](https://github.com/jontreynes/daves-youtube-demo-action/compare/v3.6.6...v3.6.7) (2026-01-24)
 
