@@ -1,40 +1,44 @@
 # Hotfix Workflow for Data Science Team
 
 ## Overview
-This workflow allows hotfixing specific releases without affecting main branch development. The system uses **git history analysis** to automatically detect which version you're hotfixing - no strict branch naming required!
+This workflow allows hotfixing specific releases without affecting main branch development. The system uses **branch naming conventions** to reliably detect which version you're hotfixing - simple, fast, and dependable!
 
 ## How It Works
 
-### Automatic Base Version Detection
-The release system uses `git merge-base` to automatically detect which version your hotfix is based on:
+### Branch Naming Convention Detection
+The release system extracts version information directly from your branch name:
 
-1. **Git History Analysis**: Finds the common ancestor between your hotfix branch and main
-2. **Tag Discovery**: Identifies the release tag that contains that common ancestor
-3. **Version Extraction**: Uses that tag to create descriptive prerelease versions
+1. **Branch Name Parsing**: Extracts version from `hotfix/v3.7.0-description` format
+2. **Version Validation**: Ensures branch follows the required naming pattern
+3. **Prerelease Creation**: Generates descriptive versions like `v3.7.1-hotfix-from-v3-7-0.1`
 
 **Example:**
 ```bash
-# Create hotfix from any version - include version in branch name for fallback compatibility!
+# Create hotfix with required naming convention (v prefix required)
 git checkout -b hotfix/v3.6.12-critical-data-bug v3.6.12
 git commit -m "fix: prevent data corruption"
-# → Automatic detection creates: v3.6.13-hotfix-from-v3-6-12.1
+# → Creates: v3.6.13-hotfix-from-v3-6-12.1
 ```
 
-### Benefits of Git History Approach
-- ✅ **Flexible naming**: Use descriptive branch names like `hotfix/v1.2.3-critical-data-bug`
-- ✅ **Auto-detection**: Primary detection uses git history, not branch names
-- ✅ **Accurate tracking**: Based on actual git history for reliability
-- ✅ **Robust fallback**: Version in branch name ensures fallback works if git history fails
+### Benefits of Branch Naming Approach
+- ✅ **Reliable**: No dependency on git history or merge conflicts
+- ✅ **Fast**: Simple string parsing - no git commands required
+- ✅ **Clear**: Version is explicitly stated in branch name
+- ✅ **Predictable**: Same branch name always produces same result
 
 ## Hotfix Types Supported
 
 ### Hotfix Branches (`hotfix/*`)
 For urgent fixes that need to be applied to specific release versions.
 
+**Required Naming Convention:**
+- `hotfix/v{version}-{description}` (e.g., `hotfix/v1.2.3-critical-bug`)
+- **Note**: 'v' prefix is required to prevent duplicate branches
+
 **Workflow:**
 ```bash
 # Create hotfix branch from the release tag you want to patch
-# RECOMMENDED: Include version in branch name for fallback compatibility
+# REQUIRED: Include version in branch name following convention
 git checkout -b hotfix/v1.2.3-critical-data-pipeline-bug v1.2.3
 
 # Make your preparatory commits
@@ -55,9 +59,9 @@ git push origin hotfix/v1.2.3-critical-data-pipeline-bug
 4. Click "Run workflow" to create the release
 
 **Result:** 
-- Git history analysis detects you're hotfixing v1.2.3
+- Branch name parsing detects you're hotfixing v1.2.3
 - Creates descriptive release: `v1.2.4-hotfix-from-v1-2-3.1`
-- Works with any branch name - no version parsing required!
+- Fast and reliable - no git commands needed!
 
 **⚠️ Version Conflict Scenario:** If v1.2.4 already exists from main, see [Version Conflicts](#version-conflicts) below.
 
@@ -66,13 +70,12 @@ git push origin hotfix/v1.2.3-critical-data-pipeline-bug
 | Branch Pattern | Purpose | Release Trigger | Version Detection | Example Output |
 |---------------|---------|----------------|------------------|----------------|
 | `main` | Primary development | Automatic on push | Standard semver | v2.1.0 |
-| `hotfix/*` | Targeted fixes | Manual workflow dispatch | Git history analysis | v1.2.4-hotfix-from-v1-2-3.1 |
+| `hotfix/v*.*.*-*` | Targeted fixes | Manual workflow dispatch | Branch name parsing | v1.2.4-hotfix-from-v1-2-3.1 |
 
-### Git History-Based Detection
-- **Flexible but recommended naming**: Use `hotfix/v1.2.3-descriptive-name` for reliability
-- **Auto-detection**: Uses `git merge-base` for primary version detection
-- **Robust fallback**: Version in branch name ensures compatibility if git commands fail
-- **Descriptive versions**: Creates clear version names showing what's being hotfixed
+### Branch Naming Convention
+- **Required format**: `hotfix/v{version}-{description}` (v prefix required)
+- **Version extraction**: Direct parsing from branch name
+- **Prevents duplicates**: Single format eliminates confusion between teams
 
 ## Best Practices
 
@@ -107,7 +110,7 @@ git push origin hotfix/v1.2.3-critical-data-pipeline-bug
 
 ### Scenario 1: Critical Bug in Production (v2.0.0)
 ```bash
-# Recommended naming - include version for fallback reliability!
+# Required naming convention - version must be in branch name
 git checkout -b hotfix/v2.0.0-data-corruption-emergency v2.0.0
 git commit -m "wip: add debug logging"
 git commit -m "wip: setup test case"
@@ -115,32 +118,47 @@ git commit -m "fix!: prevent data corruption in pipeline"
 git push origin hotfix/v2.0.0-data-corruption-emergency
 
 # Manual release via GitHub Actions workflow dispatch
-# → Git history detects v2.0.0 base (primary method)
+# → Branch name parsing extracts v2.0.0 base version
 # → Creates v3.0.0-hotfix-from-v2-0-0.1 (breaking change) when you're ready
 ```
 
 ### Scenario 2: Performance Hotfix (v1.5.2)
 ```bash
-# Recommended naming with version and description
+# Required naming with version and description
 git checkout -b hotfix/v1.5.2-optimize-query-performance v1.5.2
 git commit -m "perf: optimize database query for large datasets"
 git push origin hotfix/v1.5.2-optimize-query-performance
 
 # Manual release triggers:
-# → Git history auto-detects base version v1.5.2 (primary method)
+# → Branch name parsing extracts base version v1.5.2
 # → Creates v1.5.3-hotfix-from-v1-5-2.1
 ```
 
-This approach ensures your data science pipelines in production remain stable while allowing targeted fixes with clear, descriptive naming.
+### Scenario 3: Invalid Branch Name (Error)
+```bash
+# ❌ This will fail with clear error:
+git checkout -b hotfix/urgent-data-fix v1.2.3
+git commit -m "fix: urgent issue"
+git push origin hotfix/urgent-data-fix
+
+# Error during release:
+# Invalid hotfix branch name: "hotfix/urgent-data-fix". 
+# Expected format: hotfix/v1.2.3-description (v prefix required)
+
+# ❌ This would also fail (missing v prefix):
+git checkout -b hotfix/1.2.3-data-fix v1.2.3  # Missing 'v' prefix
+```
+
+This approach ensures your data science pipelines in production remain stable while enforcing clear, predictable naming conventions.
 
 ## Version Conflicts
 
-### How Git History Solves Version Conflicts
-The git history-based approach automatically creates descriptive prerelease versions that avoid conflicts:
+### How Branch Naming Solves Version Conflicts
+The branch naming convention automatically creates descriptive prerelease versions that avoid conflicts:
 
 ### Example: Hotfixing v1.2.3 when v1.2.4 already exists
 ```bash
-# Create hotfix branch with recommended naming (version + description)
+# Create hotfix branch with required naming convention
 git checkout -b hotfix/v1.2.3-critical-security-patch v1.2.3
 
 # Apply your fix
@@ -155,53 +173,93 @@ git push origin hotfix/v1.2.3-critical-security-patch
 ### Benefits:
 - ✅ **No version conflicts**: Prerelease versions never collide with main releases
 - ✅ **Clear traceability**: Version name shows exactly what's being patched
-- ✅ **Multiple hotfixes**: Can hotfix same version multiple times with different suffixes
-- ✅ **Automatic**: No manual version calculation needed
+- ✅ **Multiple hotfixes**: Can hotfix same version multiple times with different descriptions
+- ✅ **Predictable**: Same branch name format always produces same version pattern
 
-### Legacy Branch Naming Support
-The system still supports old naming conventions as a fallback:
+### Required Branch Format:
 ```bash
-# This still works - parsed from branch name if git history fails
-git checkout -b hotfix/v1.2.3-legacy-fix v1.2.3
-# → Creates: v1.2.4-hotfix-from-v1-2-3.1
+# ✅ Valid format (v prefix required):
+git checkout -b hotfix/v1.2.3-security-fix v1.2.3
+git checkout -b hotfix/v2.5.1-performance-patch v2.5.1
+git checkout -b hotfix/v3.0.0-critical-data-bug v3.0.0
+
+# ❌ Invalid formats (will error):
+git checkout -b hotfix/urgent-fix                 # No version
+git checkout -b hotfix/1.2.3-no-v-prefix         # Missing 'v' prefix
+git checkout -b hotfix/fix-the-bug                # No version
 ```
+
+**Why single format?**
+- ✅ **Prevents duplicate work**: No confusion between `hotfix/v1.2.3-bug` and `hotfix/1.2.3-bug`
+- ✅ **Consistent with git tags**: Matches `v1.2.3` tag naming convention
+- ✅ **Clear and explicit**: 'v' makes version immediately recognizable
 
 ## Technical Implementation
 
-### Git History Detection Process
-The system uses a multi-step process to determine hotfix base versions:
+### Branch Name Parsing Process
+The system uses a simple and reliable process to determine hotfix base versions:
 
-1. **Merge Base Detection**:
-   ```bash
-   git merge-base HEAD origin/main
-   # Finds the common ancestor commit between hotfix branch and main
+1. **Branch Name Validation**:
+   ```javascript
+   // Validates branch follows required pattern (v prefix required)
+   const versionMatch = branchName.match(/^hotfix\/v(\d+)\.(\d+)\.(\d+)/);
    ```
 
-2. **Tag Discovery**:
-   ```bash
-   git describe --tags --abbrev=0 --contains <merge-base-commit>
-   # Finds the release tag that contains the common ancestor
+2. **Version Extraction**:
+   ```javascript
+   // Extracts major, minor, patch from branch name
+   const [, major, minor, patch] = versionMatch;
+   return `v${major}-${minor}-${patch}`;
    ```
 
-3. **Version Parsing**:
-   - Extracts version numbers from the discovered tag
-   - Converts to prerelease identifier format: `v3.6.12` → `from-v3-6-12`
+3. **Prerelease Identifier Creation**:
+   - Converts extracted version to prerelease format
+   - Example: `v3.7.0` → `v3-7-0` → `hotfix-from-v3-7-0`
 
-4. **Fallback Strategy**:
-   - If git history detection fails, attempts branch name parsing
-   - If both fail, throws clear error to prevent prerelease conflicts
+### Semantic-Release Configuration
+
+Our release.config.js implements the branch naming convention with this function:
+
+```javascript
+/**
+ * Extract base version from hotfix branch name
+ * Enforces naming convention: hotfix/v1.2.3-description
+ * This is the most reliable approach - no dependency on complex git history
+ */
+const getBaseVersionFromBranchName = (branchName) => {
+  if (!branchName.startsWith('hotfix/')) return '';
+  
+  // Extract version from branch name: hotfix/v3.7.0-description (v prefix required)
+  const versionMatch = branchName.match(/^hotfix\/v(\d+)\.(\d+)\.(\d+)/);
+  
+  if (!versionMatch) {
+    throw new Error(
+      `Invalid hotfix branch name: "${branchName}". ` +
+      `Expected format: hotfix/v1.2.3-description (v prefix required)`
+    );
+  }
+
+  const [, major, minor, patch] = versionMatch;
+  return `v${major}-${minor}-${patch}`;
+};
+```
 
 ### Error Handling
-- Graceful fallback to branch name parsing if git commands fail
-- Clear error message if branch name doesn't contain version information
-- Prevents prerelease identifier conflicts that would break semantic-release
-- **Recommended**: Always include version in branch name for reliability
+- Clear error message if branch name doesn't follow convention
+- Immediate feedback during release process
+- Prevents semantic-release conflicts with descriptive error:
+  ```
+  Invalid hotfix branch name: "hotfix/urgent-fix". 
+  Expected format: hotfix/v1.2.3-description (v prefix required)
+  ```
+- **Prevents duplicate work**: Single format eliminates confusion
 
 ### Why This Approach?
-- **Accurate**: Based on actual git history, not naming conventions
-- **Flexible**: Works with any descriptive branch names
-- **Robust**: Multiple fallback strategies prevent build failures
-- **Traceable**: Clear version naming shows hotfix relationships
+- **Simple**: Just string parsing, no external git commands
+- **Fast**: No network calls or git operations required
+- **Reliable**: Not affected by merge conflicts, rebases, or git history
+- **Predictable**: Same input always gives same output
+- **Team-friendly**: Enforces clear naming conventions that prevent duplicate branches
 git push origin hotfix/v1.2.3-critical-bug-fix
 # → Creates v1.2.3-hotfix.1 (clear it's patching v1.2.3)
 ```
