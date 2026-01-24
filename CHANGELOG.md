@@ -1,3 +1,10 @@
+## [3.7.1-hotfix-from-from-v3-7-0.2](https://github.com/jontreynes/daves-youtube-demo-action/compare/v3.7.1-hotfix-from-from-v3-7-0.1...v3.7.1-hotfix-from-from-v3-7-0.2) (2026-01-24)
+
+
+### Bug Fixes
+
+* update README.md to include additional update note ([3de133e](https://github.com/jontreynes/daves-youtube-demo-action/commit/3de133e07992834c6a2bd5a964acb1a0f8ec40fe))
+
 ## [3.7.1-hotfix-from-from-v3-7-0.1](https://github.com/jontreynes/daves-youtube-demo-action/compare/v3.7.0...v3.7.1-hotfix-from-from-v3-7-0.1) (2026-01-24)
 
 
