@@ -5,7 +5,7 @@ const config = {
     { 
       name: 'hotfix/*', 
       channel: 'hotfix', 
-      prerelease: true
+      prerelease: (branch) => branch.name.replace(/[^a-zA-Z0-9]/g, '-').replace(/^hotfix-/, 'hotfix')
     }
   ],
   plugins: [
