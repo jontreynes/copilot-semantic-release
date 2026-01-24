@@ -1,3 +1,15 @@
+# [3.5.0](https://github.com/jontreynes/daves-youtube-demo-action/compare/v3.4.1...v3.5.0) (2026-01-24)
+
+
+### Bug Fixes
+
+* standardize channel name for hotfix branches ([ec718bd](https://github.com/jontreynes/daves-youtube-demo-action/commit/ec718bd94eca25bb38d1ea0b3a3141e465d84fce))
+
+
+### Features
+
+* add prerelease property to hotfix branches for version traceability ([50fe519](https://github.com/jontreynes/daves-youtube-demo-action/commit/50fe5198d7e333e2f327f1a9ab4035f8fd87bff0))
+
 ## [3.4.1](https://github.com/jontreynes/daves-youtube-demo-action/compare/v3.4.0...v3.4.1) (2026-01-24)
 
 
