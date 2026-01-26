@@ -3,7 +3,6 @@ const currentBranch = process.env.GITHUB_REF_NAME || process.env.BRANCH || 'unkn
 /**
  * Extract base version from hotfix branch name
  * Enforces naming convention: hotfix/v1.2.3-description
- * This is the most reliable approach - no dependency on complex git history
  * 
  * @param {string} branchName - Branch name (e.g., "hotfix/v3.7.0-critical-bug")
  * @returns {string} - Formatted version for prerelease (e.g., "v3-7-0")
