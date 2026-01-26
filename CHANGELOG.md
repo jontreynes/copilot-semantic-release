@@ -1,3 +1,11 @@
+## [3.8.1](https://github.com/jontreynes/daves-youtube-demo-action/compare/v3.8.0...v3.8.1) (2026-01-26)
+
+* Merge branch 'main' of https://github.com/jontreynes/daves-youtube-demo-action ([](https://github.com/jontreynes/daves-youtube-demo-action/commit/a5bb54e24b17539f70234197e7935acb2fc1689a))
+
+### fix
+
+* doc ([](https://github.com/jontreynes/daves-youtube-demo-action/commit/8187fba20109f76c642eca90b15dc6f638259d58))
+
 ## [3.8.0](https://github.com/jontreynes/daves-youtube-demo-action/compare/v3.7.3...v3.8.0) (2026-01-26)
 
 ### fix
