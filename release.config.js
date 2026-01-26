@@ -54,14 +54,13 @@ const config = {
             
             const compareLink = `\n\n🔍 **Review Changes**: [Compare ${baseVersionSuffix}...v${context.version}](${repoUrl}/compare/${baseVersionSuffix}...v${context.version})`;
             
-            // Add to release notes
-            if (context.noteGroups && context.noteGroups.length > 0) {
-              const lastGroup = context.noteGroups[context.noteGroups.length - 1];
-              lastGroup.notes = lastGroup.notes || [];
-              lastGroup.notes.push({ text: compareLink });
-            } else {
-              context.noteGroups = [{ title: '', notes: [{ text: compareLink }] }];
+            // Add to the end of the entire notes content instead of as a bullet point
+            if (!context.noteGroups || context.noteGroups.length === 0) {
+              context.noteGroups = [{ title: 'Changes', notes: [] }];
             }
+            
+            // Add as footer content, not a bullet note
+            context.footer = compareLink;
           }
           return context;
         }
