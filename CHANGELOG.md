@@ -1,3 +1,10 @@
+## [3.7.2](https://github.com/jontreynes/daves-youtube-demo-action/compare/v3.7.1...v3.7.2) (2026-01-26)
+
+
+### Bug Fixes
+
+* try semantic without 2 dependencies ([80b2fbd](https://github.com/jontreynes/daves-youtube-demo-action/commit/80b2fbd1cf55caa7e950fbc44faad3c7b9c0eb6f))
+
 ## [3.7.1](https://github.com/jontreynes/daves-youtube-demo-action/compare/v3.7.0...v3.7.1) (2026-01-26)
 
 
