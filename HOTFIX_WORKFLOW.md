@@ -420,6 +420,4 @@ Timeline:
 2. **Main continues:** `v1.2.4` (independent release)  
 3. **Hotfix variant:** `v1.2.3-patch-389138.1` (hotfix of v1.2.3 specifically)
 4. **Next main patch:** `v1.2.5` (main branch continues normally)
-5. **Clear separation:** Hotfix targets specific version, main continues independently 
-
-compare
+5. **Clear separation:** Hotfix targets specific version, main continues independently
