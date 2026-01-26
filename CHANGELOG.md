@@ -1,3 +1,15 @@
+## [3.8.2-hotfix-from-v3-8-1.2](https://github.com/jontreynes/daves-youtube-demo-action/compare/v3.8.2-hotfix-from-v3-8-1.1...v3.8.2-hotfix-from-v3-8-1.2) (2026-01-26)
+
+### ⚠ 
+
+* 
+
+🔍 **Review Changes**: [Compare v3.8.1...v3.8.2-hotfix-from-v3-8-1.2](https://github.com/jontreynes/daves-youtube-demo-action/compare/v3.8.1...v3.8.2-hotfix-from-v3-8-1.2)
+
+### Bug Fixes
+
+* update compare URL generation for hotfix releases ([633d4eb](https://github.com/jontreynes/daves-youtube-demo-action/commit/633d4eb5dafcd868f109466c7949a7b75512e3c4))
+
 ## [3.8.2-hotfix-from-v3-8-1.1](https://github.com/jontreynes/daves-youtube-demo-action/compare/v3.8.1...v3.8.2-hotfix-from-v3-8-1.1) (2026-01-26)
 
 ### fix
