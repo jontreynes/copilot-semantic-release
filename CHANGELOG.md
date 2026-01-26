@@ -1,3 +1,41 @@
+## [3.8.2-hotfix-from-v3-8-1.4](https://github.com/jontreynes/daves-youtube-demo-action/compare/v3.8.2-hotfix-from-v3-8-1.3...v3.8.2-hotfix-from-v3-8-1.4) (2026-01-26)
+
+### ⚠ 
+
+* 🔍 **Review Changes**: [Compare v3.8.1...v3.8.2-hotfix-from-v3-8-1.4](https://github.com/jontreynes/daves-youtube-demo-action/compare/v3.8.1...v3.8.2-hotfix-from-v3-8-1.4)
+
+### Bug Fixes
+
+* update compare link handling in release notes to append to last note ([16a9b9c](https://github.com/jontreynes/daves-youtube-demo-action/commit/16a9b9c357f58b5ae63f8d10d3e281608329d78c))
+
+## [3.8.2-hotfix-from-v3-8-1.3](https://github.com/jontreynes/daves-youtube-demo-action/compare/v3.8.2-hotfix-from-v3-8-1.2...v3.8.2-hotfix-from-v3-8-1.3) (2026-01-26)
+
+### ⚠ Changes
+
+
+### Bug Fixes
+
+* update release notes format to include compare link as footer ([3e2f0e8](https://github.com/jontreynes/daves-youtube-demo-action/commit/3e2f0e80c264e3cbdd2907798cb5b6ee3d5bf4b0))
+
+## [3.8.2-hotfix-from-v3-8-1.2](https://github.com/jontreynes/daves-youtube-demo-action/compare/v3.8.2-hotfix-from-v3-8-1.1...v3.8.2-hotfix-from-v3-8-1.2) (2026-01-26)
+
+### ⚠ 
+
+* 
+
+🔍 **Review Changes**: [Compare v3.8.1...v3.8.2-hotfix-from-v3-8-1.2](https://github.com/jontreynes/daves-youtube-demo-action/compare/v3.8.1...v3.8.2-hotfix-from-v3-8-1.2)
+
+### Bug Fixes
+
+* update compare URL generation for hotfix releases ([633d4eb](https://github.com/jontreynes/daves-youtube-demo-action/commit/633d4eb5dafcd868f109466c7949a7b75512e3c4))
+
+## [3.8.2-hotfix-from-v3-8-1.1](https://github.com/jontreynes/daves-youtube-demo-action/compare/v3.8.1...v3.8.2-hotfix-from-v3-8-1.1) (2026-01-26)
+
+### fix
+
+* add compare URL for hotfix releases ([](https://github.com/jontreynes/daves-youtube-demo-action/commit/6ffea4cac8b5d6a9693dfe71f0574eab3e20243d))
+* compare ([](https://github.com/jontreynes/daves-youtube-demo-action/commit/217183463cc650bebd44fc0f57f86a31b9cb51dc))
+
 ## [3.8.1](https://github.com/jontreynes/daves-youtube-demo-action/compare/v3.8.0...v3.8.1) (2026-01-26)
 
 * Merge branch 'main' of https://github.com/jontreynes/daves-youtube-demo-action ([](https://github.com/jontreynes/daves-youtube-demo-action/commit/a5bb54e24b17539f70234197e7935acb2fc1689a))
