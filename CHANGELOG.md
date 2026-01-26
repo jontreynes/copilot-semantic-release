@@ -1,3 +1,10 @@
+## [3.8.2-hotfix-from-v3-8-1.1](https://github.com/jontreynes/daves-youtube-demo-action/compare/v3.8.1...v3.8.2-hotfix-from-v3-8-1.1) (2026-01-26)
+
+### fix
+
+* add compare URL for hotfix releases ([](https://github.com/jontreynes/daves-youtube-demo-action/commit/6ffea4cac8b5d6a9693dfe71f0574eab3e20243d))
+* compare ([](https://github.com/jontreynes/daves-youtube-demo-action/commit/217183463cc650bebd44fc0f57f86a31b9cb51dc))
+
 ## [3.8.1](https://github.com/jontreynes/daves-youtube-demo-action/compare/v3.8.0...v3.8.1) (2026-01-26)
 
 * Merge branch 'main' of https://github.com/jontreynes/daves-youtube-demo-action ([](https://github.com/jontreynes/daves-youtube-demo-action/commit/a5bb54e24b17539f70234197e7935acb2fc1689a))
