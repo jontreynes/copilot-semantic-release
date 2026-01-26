@@ -68,11 +68,14 @@ const config = {
       "preset": "conventionalcommits",
       "writerOpts": {
         "transform": (commit, context) => {
+          // Clone the commit object to avoid modifying immutable object
+          const modifiableCommit = { ...commit };
+          
           // Add compare URL for hotfix releases
           if (currentBranch.startsWith('hotfix/') && context.version) {
-            commit.compareUrl = generateCompareUrl(currentBranch, `v${context.version}`);
+            modifiableCommit.compareUrl = generateCompareUrl(currentBranch, `v${context.version}`);
           }
-          return commit;
+          return modifiableCommit;
         }
       }
     }],
