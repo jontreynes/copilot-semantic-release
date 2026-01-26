@@ -23,27 +23,7 @@ const getBaseVersionFromBranchName = (branchName) => {
   }
 
   const [, major, minor, patch] = versionMatch;
-  return `v${major}-${minor}-${patch}`;
-};
-
-/**
- * Generate compare URL for hotfix releases
- * @param {string} branchName - Branch name
- * @param {string} newVersion - New release version
- * @returns {string} - Compare URL or empty string
- */
-const generateCompareUrl = (branchName, newVersion) => {
-  if (!branchName.startsWith('hotfix/')) {
-    return '';
-  }
-
-  const versionMatch = branchName.match(/^hotfix\/v(\d+\.\d+\.\d+)/);
-  if (!versionMatch) return '';
-
-  const baseVersion = `v${versionMatch[1]}`;
-  const repoUrl = `${process.env.GITHUB_SERVER_URL || 'https://github.com'}/${process.env.GITHUB_REPOSITORY || 'owner/repo'}`;
-  
-  return `\n\n🔍 **Review Changes**: [Compare ${baseVersion}...${newVersion}](${repoUrl}/compare/${baseVersion}...${newVersion})`;
+  return `v${major}.${minor}.${patch}`;
 };
 
 const baseVersionSuffix = getBaseVersionFromBranchName(currentBranch);
@@ -57,7 +37,7 @@ const config = {
     ...(currentBranch.startsWith('hotfix/') ? [{
       name: currentBranch,
       channel: currentBranch, // Isolate each hotfix to its own channel
-      prerelease: baseVersionSuffix ? `hotfix-from-${baseVersionSuffix}` : 'hotfix'
+      prerelease: baseVersionSuffix ? `hotfix-from-${baseVersionSuffix.replace(/\./g, '-')}` : 'hotfix'
     }] : [])
   ],
   plugins: [
@@ -67,15 +47,23 @@ const config = {
     ["@semantic-release/release-notes-generator", {
       "preset": "conventionalcommits",
       "writerOpts": {
-        "transform": (commit, context) => {
-          // Clone the commit object to avoid modifying immutable object
-          const modifiableCommit = { ...commit };
-          
-          // Add compare URL for hotfix releases
-          if (currentBranch.startsWith('hotfix/') && context.version) {
-            modifiableCommit.compareUrl = generateCompareUrl(currentBranch, `v${context.version}`);
+        "finalizeContext": (context) => {
+          // Simple approach: reuse the existing baseVersionSuffix
+          if (currentBranch.startsWith('hotfix/') && context.version && baseVersionSuffix) {
+            const repoUrl = `${process.env.GITHUB_SERVER_URL || 'https://github.com'}/${process.env.GITHUB_REPOSITORY || 'owner/repo'}`;
+            
+            const compareLink = `\n\n🔍 **Review Changes**: [Compare ${baseVersionSuffix}...v${context.version}](${repoUrl}/compare/${baseVersionSuffix}...v${context.version})`;
+            
+            // Add to release notes
+            if (context.noteGroups && context.noteGroups.length > 0) {
+              const lastGroup = context.noteGroups[context.noteGroups.length - 1];
+              lastGroup.notes = lastGroup.notes || [];
+              lastGroup.notes.push({ text: compareLink });
+            } else {
+              context.noteGroups = [{ title: '', notes: [{ text: compareLink }] }];
+            }
           }
-          return modifiableCommit;
+          return context;
         }
       }
     }],
