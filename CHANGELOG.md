@@ -1,3 +1,9 @@
+## [3.8.3](https://github.com/jontreynes/daves-youtube-demo-action/compare/v3.8.2...v3.8.3) (2026-01-26)
+
+### Bug Fixes
+
+*  test remove unnecessary dependencies from package.json ([6271729](https://github.com/jontreynes/daves-youtube-demo-action/commit/62717293fa4195e40e29b3b7564092f6848965f3))
+
 ## [3.8.2](https://github.com/jontreynes/daves-youtube-demo-action/compare/v3.8.1...v3.8.2) (2026-01-26)
 
 ### Bug Fixes
