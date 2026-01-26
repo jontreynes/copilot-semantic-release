@@ -18,7 +18,14 @@ The release system extracts version information directly from your branch name:
 git checkout -b hotfix/v3.6.12-critical-data-bug v3.6.12
 git commit -m "fix: prevent data corruption"
 # → Creates: v3.6.13-hotfix-from-v3-6-12.1
+#    ^^^^^^^ Next semantic version (not v3.6.12!)
+#                      ^^^^^^^^^^^^ Shows which version we're hotfixing
 ```
+
+**Key Point**: Due to semantic versioning limitations, we can't release v3.6.12 again. Instead:
+- **Release version**: `v3.6.13` (next semantic version)
+- **Prerelease identifier**: `hotfix-from-v3-6-12` (shows origin)
+- **Build number**: `.1` (increments for multiple releases from same branch)
 
 ### Benefits of Branch Naming Approach
 - ✅ **Reliable**: No dependency on git history or merge conflicts
@@ -60,7 +67,10 @@ git push origin hotfix/v1.2.3-critical-data-pipeline-bug
 
 **Result:** 
 - Branch name parsing detects you're hotfixing v1.2.3
-- Creates descriptive release: `v1.2.4-hotfix-from-v1-2-3.1`
+- **Creates release**: `v1.2.4-hotfix-from-v1-2-3.1`
+  - `v1.2.4` = Next semantic version (can't reuse v1.2.3)
+  - `hotfix-from-v1-2-3` = Shows which version we're patching
+  - `.1` = First release from this hotfix branch
 - Fast and reliable - no git commands needed!
 
 **⚠️ Version Conflict Scenario:** If v1.2.4 already exists from main, see [Version Conflicts](#version-conflicts) below.
@@ -119,7 +129,9 @@ git push origin hotfix/v2.0.0-data-corruption-emergency
 
 # Manual release via GitHub Actions workflow dispatch
 # → Branch name parsing extracts v2.0.0 base version
-# → Creates v3.0.0-hotfix-from-v2-0-0.1 (breaking change) when you're ready
+# → Creates v3.0.0-hotfix-from-v2-0-0.1 (breaking change)
+#    ^^^^^^^ Next major version (due to fix!)
+#                      ^^^^^^^^^ Shows we're hotfixing v2.0.0
 ```
 
 ### Scenario 2: Performance Hotfix (v1.5.2)
@@ -132,9 +144,24 @@ git push origin hotfix/v1.5.2-optimize-query-performance
 # Manual release triggers:
 # → Branch name parsing extracts base version v1.5.2
 # → Creates v1.5.3-hotfix-from-v1-5-2.1
+#    ^^^^^^^ Next patch version
+#                      ^^^^^^^^^ Shows origin version
 ```
 
-### Scenario 3: Invalid Branch Name (Error)
+### Scenario 3: Multiple Hotfixes from Same Branch
+```bash
+# First release from hotfix branch
+git checkout -b hotfix/v1.2.3-security-fixes v1.2.3
+git commit -m "fix: patch vulnerability A"
+# → Manual release creates: v1.2.4-hotfix-from-v1-2-3.1
+
+# Additional fix on same branch
+git commit -m "fix: patch vulnerability B"
+# → Manual release creates: v1.2.4-hotfix-from-v1-2-3.2
+#                                                    ^^^ Increments!
+```
+
+### Scenario 4: Invalid Branch Name (Error)
 ```bash
 # ❌ This will fail with clear error:
 git checkout -b hotfix/urgent-data-fix v1.2.3
@@ -153,6 +180,26 @@ This approach ensures your data science pipelines in production remain stable wh
 
 ## Version Conflicts
 
+### Understanding Hotfix Version Numbering
+
+**Important**: Due to semantic versioning rules, we cannot release the same version twice. Here's how our system handles this:
+
+#### The Problem
+```bash
+# You want to hotfix v1.2.3, but:
+# ❌ Cannot release v1.2.3 again (already exists)
+# ❌ Cannot go backwards to v1.2.2
+```
+
+#### The Solution: Next Version + Traceability
+```bash
+# Our approach:
+git checkout -b hotfix/v1.2.3-critical-fix v1.2.3
+# → Creates: v1.2.4-hotfix-from-v1-2-3.1
+#    ^^^^^^^ Next valid semantic version
+#                      ^^^^^^^^^ Shows which version we're hotfixing
+```
+
 ### How Branch Naming Solves Version Conflicts
 The branch naming convention automatically creates descriptive prerelease versions that avoid conflicts:
 
@@ -167,14 +214,22 @@ git commit -m "fix: critical security vulnerability"
 # Push and manually trigger release
 git push origin hotfix/v1.2.3-critical-security-patch
 
-# Result: v1.2.4-hotfix-from-v1-2-3.1 (no conflict with existing v1.2.4!)
+# Result: v1.2.5-hotfix-from-v1-2-3.1
+#         ^^^^^^^ Next available semantic version (v1.2.4 was taken)
+#                           ^^^^^^^^^ Clear traceability to v1.2.3
 ```
 
+**Timeline Example:**
+1. `v1.2.3` - Original production version (has a bug)
+2. `v1.2.4` - Released from main branch (unrelated feature)
+3. `v1.2.5-hotfix-from-v1-2-3.1` - Hotfix for v1.2.3 (skips to next available version)
+
 ### Benefits:
-- ✅ **No version conflicts**: Prerelease versions never collide with main releases
-- ✅ **Clear traceability**: Version name shows exactly what's being patched
-- ✅ **Multiple hotfixes**: Can hotfix same version multiple times with different descriptions
-- ✅ **Predictable**: Same branch name format always produces same version pattern
+- ✅ **No version conflicts**: Each hotfix gets next available semantic version
+- ✅ **Clear traceability**: Prerelease identifier shows origin version (e.g., `hotfix-from-v1-2-3`)
+- ✅ **Multiple hotfixes**: Can create multiple releases from same hotfix branch (.1, .2, .3)
+- ✅ **Semantic compliance**: Follows strict semantic versioning rules
+- ✅ **Audit trail**: Full history of which versions were hotfixed and when
 
 ### Required Branch Format:
 ```bash
@@ -258,8 +313,31 @@ const getBaseVersionFromBranchName = (branchName) => {
 - **Simple**: Just string parsing, no external git commands
 - **Fast**: No network calls or git operations required
 - **Reliable**: Not affected by merge conflicts, rebases, or git history
-- **Predictable**: Same input always gives same output
+- **Semantic version compliant**: Uses next valid version (can't reuse existing versions)
+- **Traceable**: Prerelease identifier shows exactly which version is being hotfixed
+- **Multiple hotfixes**: Supports multiple releases from same hotfix branch (.1, .2, .3)
 - **Team-friendly**: Enforces clear naming conventions that prevent duplicate branches
+
+### Semantic Versioning Limitations & Solutions
+
+**The Challenge**: 
+- Cannot release v1.2.3 twice (semantic versioning rule)
+- Need clear traceability to show which version was hotfixed
+
+**Our Solution**:
+```
+Branch: hotfix/v1.2.3-bug-fix
+→ Release: v1.2.4-hotfix-from-v1-2-3.1
+          ^^^^^^^ Next valid semantic version
+                            ^^^^^^^^^^^^^ Traceability identifier
+                                        ^^ Build increment
+```
+
+**Benefits**:
+- ✅ **Compliance**: Follows semantic versioning strictly
+- ✅ **Traceability**: Clear connection to original version
+- ✅ **No conflicts**: Each hotfix gets unique version
+- ✅ **Audit trail**: Build numbers track multiple releases
 git push origin hotfix/v1.2.3-critical-bug-fix
 # → Creates v1.2.3-hotfix.1 (clear it's patching v1.2.3)
 ```
