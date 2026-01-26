@@ -1,3 +1,10 @@
+## [3.7.1](https://github.com/jontreynes/daves-youtube-demo-action/compare/v3.7.0...v3.7.1) (2026-01-26)
+
+
+### Bug Fixes
+
+* docs: enhance hotfix workflow documentation with versioning details and scenarios ([aee9e72](https://github.com/jontreynes/daves-youtube-demo-action/commit/aee9e72b1944182666ce3e96760b9b162267e888))
+
 # [3.7.0](https://github.com/jontreynes/daves-youtube-demo-action/compare/v3.6.13...v3.7.0) (2026-01-24)
 
 
