@@ -1,3 +1,13 @@
+## [3.8.0](https://github.com/jontreynes/daves-youtube-demo-action/compare/v3.7.3...v3.8.0) (2026-01-26)
+
+### fix
+
+* Implement feature X to enhance user experience and fix bug Y in module Z ([](https://github.com/jontreynes/daves-youtube-demo-action/commit/a95e7b1f80c9bc0b74e274182178df14fd9f1667))
+
+### feat
+
+* add npm release configuration to semantic-release setup ([](https://github.com/jontreynes/daves-youtube-demo-action/commit/6d23f8bb386be7f1a2f81311f5046e29c1df9340))
+
 ## [3.7.2](https://github.com/jontreynes/daves-youtube-demo-action/compare/v3.7.1...v3.7.2) (2026-01-26)
 
 
