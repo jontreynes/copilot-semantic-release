@@ -54,13 +54,21 @@ const config = {
             
             const compareLink = `\n\n🔍 **Review Changes**: [Compare ${baseVersionSuffix}...v${context.version}](${repoUrl}/compare/${baseVersionSuffix}...v${context.version})`;
             
-            // Add to the end of the entire notes content instead of as a bullet point
-            if (!context.noteGroups || context.noteGroups.length === 0) {
-              context.noteGroups = [{ title: 'Changes', notes: [] }];
+            // Add to the last existing note instead of creating a new bullet
+            if (context.noteGroups && context.noteGroups.length > 0) {
+              const lastGroup = context.noteGroups[context.noteGroups.length - 1];
+              if (lastGroup.notes && lastGroup.notes.length > 0) {
+                const lastNote = lastGroup.notes[lastGroup.notes.length - 1];
+                lastNote.text = (lastNote.text || '') + compareLink;
+              } else {
+                // If no notes exist, add as new note but with proper text
+                lastGroup.notes = lastGroup.notes || [];
+                lastGroup.notes.push({ text: compareLink.trim() });
+              }
+            } else {
+              // Fallback: create a note group
+              context.noteGroups = [{ title: '', notes: [{ text: compareLink.trim() }] }];
             }
-            
-            // Add as footer content, not a bullet note
-            context.footer = compareLink;
           }
           return context;
         }
