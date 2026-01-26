@@ -20,9 +20,9 @@
   "homepage": "https://github.com/jontreynes/daves-youtube-demo-action#readme",
   "devDependencies": {
     "@semantic-release/changelog": "^6.0.3",
-    "@semantic-release/git": "10.0.1",
-    "@semantic-release/github": "9.2.6",
-    "@semantic-release/npm": "^12.0.1",
+    "@semantic-release/git": "^10.0.1",
+    "@semantic-release/github": "^11.0.1",
+    "@semantic-release/npm": "^13.1.3",
     "conventional-changelog-conventionalcommits": "^9.1.0",
     "semantic-release": "^25.0.2"
   }
