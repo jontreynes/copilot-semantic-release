@@ -1,3 +1,9 @@
+## [3.10.0](https://github.com/jontreynes/daves-youtube-demo-action/compare/v3.9.1...v3.10.0) (2026-01-27)
+
+### Features
+
+* test deployment workflow trigger ([fd76fc0](https://github.com/jontreynes/daves-youtube-demo-action/commit/fd76fc02a2d9c873288e2bdc96e158cf2890da21))
+
 ## [3.9.1](https://github.com/jontreynes/daves-youtube-demo-action/compare/v3.9.0...v3.9.1) (2026-01-27)
 
 ### Bug Fixes
