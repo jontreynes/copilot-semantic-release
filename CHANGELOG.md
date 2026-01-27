@@ -1,3 +1,9 @@
+## [3.12.3](https://github.com/jontreynes/daves-youtube-demo-action/compare/v3.12.2...v3.12.3) (2026-01-27)
+
+### Bug Fixes
+
+* update permissions to allow write access for repository_dispatch ([7564147](https://github.com/jontreynes/daves-youtube-demo-action/commit/7564147cada3eba0d3e418dd2898b329dd2fd697))
+
 ## [3.12.2](https://github.com/jontreynes/daves-youtube-demo-action/compare/v3.12.1...v3.12.2) (2026-01-27)
 
 ### Bug Fixes
