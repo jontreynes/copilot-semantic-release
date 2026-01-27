@@ -1,0 +1,61 @@
+name: Deploy to Development
+
+on:
+  release:
+    types: [published]  # Triggers when semantic-release creates a release
+  workflow_dispatch:
+    inputs:
+      release_tag:
+        description: 'Release tag to deploy (e.g., v1.2.3)'
+        required: true
+        type: string
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  deploy-dev:
+    name: Deploy to Development
+    runs-on: ubuntu-latest
+    # environment: Development
+
+    steps:
+      - name: Get Release Info
+        id: release
+        run: |
+          if [[ "${{ github.event_name }}" == "release" ]]; then
+            # Direct from release event
+            RELEASE_TAG="${{ github.event.release.tag_name }}"
+          elif [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+            # Manual trigger
+            RELEASE_TAG="${{ inputs.release_tag }}"
+          fi
+          
+          echo "tag=$RELEASE_TAG" >> $GITHUB_OUTPUT
+          echo "artifact_url=${{ github.server_url }}/${{ github.repository }}/releases/download/${RELEASE_TAG}/github-action-release.tar.gz" >> $GITHUB_OUTPUT
+          echo "manifest_url=${{ github.server_url }}/${{ github.repository }}/releases/download/${RELEASE_TAG}/deployment-manifest.json" >> $GITHUB_OUTPUT
+          
+          echo "🎯 Deploying release: $RELEASE_TAG"
+      
+      - name: Test Output
+        run: |
+          echo "Release Tag: ${{ steps.release.outputs.tag }}"
+          echo "Artifact URL: ${{ steps.release.outputs.artifact_url }}"
+          echo "Manifest URL: ${{ steps.release.outputs.manifest_url }}"
+      
+      - name: Save release info for downstream workflows
+        run: |
+          mkdir -p deployment-info
+          echo "${{ steps.release.outputs.tag }}" > deployment-info/release-tag.txt
+          echo "${{ steps.release.outputs.artifact_url }}" > deployment-info/artifact-url.txt
+          echo "${{ steps.release.outputs.manifest_url }}" > deployment-info/manifest-url.txt
+      
+      - name: Upload deployment info
+        uses: actions/upload-artifact@v4
+        with:
+          name: deployment-info
+          path: deployment-info/
+          retention-days: 7
+    
+

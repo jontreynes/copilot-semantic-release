@@ -4,20 +4,19 @@ on:
   push:
     branches:
       - main
-      - hotfix/*     # todo: for quick testing remove later to use workflow dispatch
   workflow_dispatch: # Manual trigger for hotfix releases
 
 permissions:
   contents: write
   issues: write
   pull-requests: write
-  packages: write
   id-token: write
 
 jobs:
-  release:
-    name: Release
+  build-and-release:
+    name: Build Artifacts and Create Release
     runs-on: ubuntu-latest
+    
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -26,22 +25,142 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           persist-credentials: false
 
-      - name: Setup Node.js
+      - name: Setup Node.js (for semantic-release)
         uses: actions/setup-node@v4
         with:
           node-version: '22'
-          registry-url: 'https://registry.npmjs.org'
 
-      - name: Install dependencies
+      - name: Build release artifacts
+        id: build
+        run: |
+          echo "Creating release artifact bundle..."
+          
+          # Create artifact directory
+          mkdir -p release-artifacts
+          
+          # Build the action if needed
+          if [ -f "esbuild.cjs" ]; then
+            npm run build
+          fi
+          
+          # Create tarball of deployable code
+          tar -czf release-artifacts/github-action-release.tar.gz \
+            --exclude='.git' \
+            --exclude='.github' \
+            --exclude='node_modules' \
+            --exclude='release-artifacts' \
+            --exclude='*.log' \
+            .
+          
+          # Create deployment manifest
+          cat > release-artifacts/deployment-manifest.json <<EOF
+          {
+            "build_time": "$(date -u +%Y-%m-%dT%H:%M:%SZ)",
+            "commit_sha": "${{ github.sha }}",
+            "branch": "${{ github.ref_name }}",
+            "workflow_run_id": "${{ github.run_id }}",
+            "node_version": "$(node --version)",
+            "npm_version": "$(npm --version)",
+            "artifact_checksum": "$(sha256sum release-artifacts/github-action-release.tar.gz | cut -d' ' -f1)"
+          }
+          EOF
+          
+          echo "artifact_path=release-artifacts/github-action-release.tar.gz" >> $GITHUB_OUTPUT
+          echo "manifest_path=release-artifacts/deployment-manifest.json" >> $GITHUB_OUTPUT
+
+      - name: Install semantic-release dependencies
         run: npm ci
 
-      # - name: Build project
-      #   run: npm run build
-
-      # - name: Run tests (if any)
-      #   run: npm test --if-present
-
-      - name: Release
+      - name: Create semantic release
+        id: semantic
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: npx semantic-release
+        run: |
+          # Capture all output to file
+          npx semantic-release > release-output.txt 2>&1 || true
+          
+          # Parse the file for success indicator
+          if grep -q "Published release" release-output.txt; then
+            # Extract version number: "Published release v2.1.46" → "v2.1.46"
+            VERSION=$(grep "Published release" release-output.txt | sed 's/.*Published release \(v[^ ]*\).*/\1/')
+            # Make it available to other steps
+            echo "release_version=$VERSION" >> $GITHUB_OUTPUT
+            echo "release_created=true" >> $GITHUB_OUTPUT
+            echo "✅ Release created: $VERSION"
+          else
+            echo "release_created=false" >> $GITHUB_OUTPUT
+            echo "ℹ️ No release created (no semantic commits found)"
+          fi
+          
+          cat release-output.txt
+
+      - name: Summary
+        if: always()
+        run: |
+          echo "## Release Build Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          if [[ "${{ steps.semantic.outputs.release_created }}" == "true" ]]; then
+            echo "✅ **Release Created**: ${{ steps.semantic.outputs.release_version }}" >> $GITHUB_STEP_SUMMARY
+            echo "📦 **Artifact**: github-action-release.tar.gz" >> $GITHUB_STEP_SUMMARY
+            echo "🚀 **GitHub Release**: Available for download" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "ℹ️ **No Release**: No semantic commits found (feat, fix, BREAKING CHANGE)" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "Commits must follow conventional commits format:" >> $GITHUB_STEP_SUMMARY
+            echo "- \`feat: add new feature\` - creates minor release" >> $GITHUB_STEP_SUMMARY
+            echo "- \`fix: bug fix\` - creates patch release" >> $GITHUB_STEP_SUMMARY
+            echo "- \`feat!: breaking change\` - creates major release" >> $GITHUB_STEP_SUMMARY
+          fi
+
+
+
+
+
+# name: Release
+
+# on:
+#   push:
+#     branches:
+#       - main
+#       - hotfix/*     # todo: for quick testing remove later to use workflow dispatch
+#   workflow_dispatch: # Manual trigger for hotfix releases
+
+# permissions:
+#   contents: write
+#   issues: write
+#   pull-requests: write
+#   # packages: write no need
+#   id-token: write
+
+# jobs:
+#   release:
+#     name: Release
+#     runs-on: ubuntu-latest
+#     steps:
+#       - name: Checkout
+#         uses: actions/checkout@v4
+#         with:
+#           fetch-depth: 0
+#           token: ${{ secrets.GITHUB_TOKEN }}
+#           persist-credentials: false
+
+#       - name: Setup Node.js
+#         uses: actions/setup-node@v4
+#         with:
+#           node-version: '22'
+#           registry-url: 'https://registry.npmjs.org'
+
+#       - name: Install dependencies
+#         run: npm ci
+
+#       # - name: Build project
+#       #   run: npm run build
+
+#       # - name: Run tests (if any)
+#       #   run: npm test --if-present
+
+#       - name: Release
+#         env:
+#           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#         run: npx semantic-release
