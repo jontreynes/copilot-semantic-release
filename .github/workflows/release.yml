@@ -77,6 +77,8 @@ jobs:
       - name: Create semantic release
         id: semantic
         env:
+          # Use GITHUB_TOKEN for semantic-release (may not trigger other workflows)
+          # For triggering deploy workflow, consider using a PAT instead
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           # Capture all output to file
@@ -96,6 +98,16 @@ jobs:
           fi
           
           cat release-output.txt
+
+      - name: Trigger deployment
+        if: steps.semantic.outputs.release_created == 'true'
+        run: |
+          echo "🚀 Triggering deployment for ${{ steps.semantic.outputs.release_version }}"
+          curl -X POST \
+            -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+            -H "Accept: application/vnd.github.v3+json" \
+            "${{ github.api_url }}/repos/${{ github.repository }}/dispatches" \
+            -d "{\"event_type\":\"deploy-release\",\"client_payload\":{\"release_tag\":\"${{ steps.semantic.outputs.release_version }}\"}}"
 
       - name: Summary
         if: always()

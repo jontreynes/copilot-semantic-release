@@ -1,8 +1,8 @@
 name: Deploy to Development
 
 on:
-  release:
-    types: [published]  # Triggers when any release is published (full or prerelease)
+  repository_dispatch:
+    types: [deploy-release]  # Triggered by release workflow
   workflow_dispatch:
     inputs:
       release_tag:
@@ -24,9 +24,9 @@ jobs:
       - name: Get Release Info
         id: release
         run: |
-          if [[ "${{ github.event_name }}" == "release" ]]; then
-            # Direct from release event
-            RELEASE_TAG="${{ github.event.release.tag_name }}"
+          if [[ "${{ github.event_name }}" == "repository_dispatch" ]]; then
+            # From repository dispatch event
+            RELEASE_TAG="${{ github.event.client_payload.release_tag }}"
           elif [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
             # Manual trigger
             RELEASE_TAG="${{ inputs.release_tag }}"
