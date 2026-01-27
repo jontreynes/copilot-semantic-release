@@ -1,3 +1,9 @@
+## [3.12.0](https://github.com/jontreynes/daves-youtube-demo-action/compare/v3.11.0...v3.12.0) (2026-01-27)
+
+### Features
+
+* update deployment workflows to support staging environment and adjust dispatch types ([c4ddb64](https://github.com/jontreynes/daves-youtube-demo-action/commit/c4ddb64053277b934251ae381105b7448d9e3bc1))
+
 ## [3.11.0](https://github.com/jontreynes/daves-youtube-demo-action/compare/v3.10.0...v3.11.0) (2026-01-27)
 
 ### Features
