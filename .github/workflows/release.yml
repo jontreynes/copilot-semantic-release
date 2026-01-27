@@ -38,9 +38,12 @@ jobs:
           # Create artifact directory
           mkdir -p release-artifacts
           
-          # Build the action if needed
-          if [ -f "esbuild.cjs" ]; then
+          # Build the action only if esbuild is installed
+          if [ -f "esbuild.cjs" ] && npm list esbuild >/dev/null 2>&1; then
+            echo "Building with esbuild..."
             npm run build
+          else
+            echo "Skipping build - esbuild not available or not needed"
           fi
           
           # Create tarball of deployable code
