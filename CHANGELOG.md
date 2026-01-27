@@ -1,3 +1,14 @@
+## [3.12.4-hotfix-from-v3-12-3.1](https://github.com/jontreynes/daves-youtube-demo-action/compare/v3.12.3...v3.12.4-hotfix-from-v3-12-3.1) (2026-01-27)
+
+### ⚠ 
+
+* 🔍 **Review Changes**: [Compare v3.12.3...v3.12.4-hotfix-from-v3-12-3.1](https://github.com/jontreynes/daves-youtube-demo-action/compare/v3.12.3...v3.12.4-hotfix-from-v3-12-3.1)
+
+### Bug Fixes
+
+* hotfix ([514f07e](https://github.com/jontreynes/daves-youtube-demo-action/commit/514f07e66d0699a76de493c3c43a5578e0deca77))
+* log message formatting in index.js ([a08e196](https://github.com/jontreynes/daves-youtube-demo-action/commit/a08e19621645d72d9a2f202b89345cde0c16078d))
+
 ## [3.12.3](https://github.com/jontreynes/daves-youtube-demo-action/compare/v3.12.2...v3.12.3) (2026-01-27)
 
 ### Bug Fixes
