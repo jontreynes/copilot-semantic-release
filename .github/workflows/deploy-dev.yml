@@ -11,7 +11,7 @@ on:
         type: string
 
 permissions:
-  contents: read
+  contents: write  # Required for repository_dispatch
   id-token: write
 
 jobs:
