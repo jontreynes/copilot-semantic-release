@@ -1,0 +1,72 @@
+name: Deployment Template
+
+on:
+  workflow_call:
+    inputs:
+      environment:
+        description: 'Target environment name'
+        required: true
+        type: string
+      release_tag:
+        description: 'Release tag to deploy'
+        required: true
+        type: string
+      next_environment:
+        description: 'Next environment to trigger (optional)'
+        required: false
+        type: string
+        default: ''
+
+permissions:
+  contents: write  # Required for repository_dispatch
+  id-token: write
+
+jobs:
+  deploy:
+    name: Deploy to ${{ inputs.environment }}
+    runs-on: ubuntu-latest
+    # environment: ${{ inputs.environment }}
+
+    steps:
+      - name: Get Release Info
+        id: release
+        run: |
+          RELEASE_TAG="${{ inputs.release_tag }}"
+          
+          echo "tag=$RELEASE_TAG" >> $GITHUB_OUTPUT
+          echo "artifact_url=${{ github.server_url }}/${{ github.repository }}/releases/download/${RELEASE_TAG}/github-action-release.tar.gz" >> $GITHUB_OUTPUT
+          echo "manifest_url=${{ github.server_url }}/${{ github.repository }}/releases/download/${RELEASE_TAG}/deployment-manifest.json" >> $GITHUB_OUTPUT
+          
+          echo "🎯 Deploying to ${{ inputs.environment }}: $RELEASE_TAG"
+      
+      - name: Test Output
+        run: |
+          echo "Environment: ${{ inputs.environment }}"
+          echo "Release Tag: ${{ steps.release.outputs.tag }}"
+          echo "Artifact URL: ${{ steps.release.outputs.artifact_url }}"
+          echo "Manifest URL: ${{ steps.release.outputs.manifest_url }}"
+      
+      - name: Save release info for downstream workflows
+        run: |
+          mkdir -p deployment-info
+          echo "${{ steps.release.outputs.tag }}" > deployment-info/release-tag.txt
+          echo "${{ steps.release.outputs.artifact_url }}" > deployment-info/artifact-url.txt
+          echo "${{ steps.release.outputs.manifest_url }}" > deployment-info/manifest-url.txt
+          echo "${{ inputs.environment }}" > deployment-info/environment.txt
+      
+      - name: Upload deployment info
+        uses: actions/upload-artifact@v4
+        with:
+          name: deployment-info-${{ inputs.environment }}
+          path: deployment-info/
+          retention-days: 7
+      
+      - name: Trigger next environment deployment
+        if: inputs.next_environment != ''
+        run: |
+          echo "🚀 Triggering ${{ inputs.next_environment }} deployment for ${{ steps.release.outputs.tag }}"
+          curl -X POST \
+            -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+            -H "Accept: application/vnd.github.v3+json" \
+            "${{ github.api_url }}/repos/${{ github.repository }}/dispatches" \
+            -d "{\"event_type\":\"deploy-${{ inputs.next_environment }}\",\"client_payload\":{\"release_tag\":\"${{ steps.release.outputs.tag }}\"}}"

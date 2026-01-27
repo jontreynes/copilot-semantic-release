@@ -1,10 +1,10 @@
-name: Deploy to Staging
+name: Deploy to Production
 
-run-name: "Deploy to Stage: ${{ github.event.client_payload.release_tag || inputs.release_tag }}"
+run-name: "Deploy to Prod: ${{ github.event.client_payload.release_tag || inputs.release_tag }}"
 
 on:
   repository_dispatch:
-    types: [deploy-stage]  # Triggered by deploy-dev workflow
+    types: [deploy-prod]  # Triggered by deploy-stage workflow
   workflow_dispatch:
     inputs:
       release_tag:
@@ -33,7 +33,7 @@ jobs:
     needs: get-release-tag
     uses: ./.github/workflows/deploy-template.yml
     with:
-      environment: 'stage'
+      environment: 'prod'
       release_tag: ${{ needs.get-release-tag.outputs.release_tag }}
-      next_environment: 'prod'
+      next_environment: ''  # No next environment - production is final
     secrets: inherit

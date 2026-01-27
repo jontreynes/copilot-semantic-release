@@ -1,8 +1,10 @@
 name: Deploy to Development
 
+run-name: "Deploy to Dev: ${{ github.event.client_payload.release_tag || inputs.release_tag }}"
+
 on:
   repository_dispatch:
-    types: [deploy-dev]  # Triggered by release workflow
+    types: [deploy-dev, deploy-release]  # Triggered by release workflow
   workflow_dispatch:
     inputs:
       release_tag:
@@ -10,61 +12,30 @@ on:
         required: true
         type: string
 
-permissions:
-  contents: write  # Required for repository_dispatch
-  id-token: write
-
 jobs:
-  deploy-dev:
-    name: Deploy to Development
+  get-release-tag:
+    name: Determine Release Tag
     runs-on: ubuntu-latest
-    # environment: Development
-
+    outputs:
+      release_tag: ${{ steps.get-tag.outputs.tag }}
     steps:
-      - name: Get Release Info
-        id: release
+      - name: Get Release Tag
+        id: get-tag
         run: |
           if [[ "${{ github.event_name }}" == "repository_dispatch" ]]; then
-            # From repository dispatch event
-            RELEASE_TAG="${{ github.event.client_payload.release_tag }}"
+            echo "tag=${{ github.event.client_payload.release_tag }}" >> $GITHUB_OUTPUT
           elif [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
-            # Manual trigger
-            RELEASE_TAG="${{ inputs.release_tag }}"
+            echo "tag=${{ inputs.release_tag }}" >> $GITHUB_OUTPUT
           fi
-          
-          echo "tag=$RELEASE_TAG" >> $GITHUB_OUTPUT
-          echo "artifact_url=${{ github.server_url }}/${{ github.repository }}/releases/download/${RELEASE_TAG}/github-action-release.tar.gz" >> $GITHUB_OUTPUT
-          echo "manifest_url=${{ github.server_url }}/${{ github.repository }}/releases/download/${RELEASE_TAG}/deployment-manifest.json" >> $GITHUB_OUTPUT
-          
-          echo "🎯 Deploying release: $RELEASE_TAG"
-      
-      - name: Test Output
-        run: |
-          echo "Release Tag: ${{ steps.release.outputs.tag }}"
-          echo "Artifact URL: ${{ steps.release.outputs.artifact_url }}"
-          echo "Manifest URL: ${{ steps.release.outputs.manifest_url }}"
-      
-      - name: Save release info for downstream workflows
-        run: |
-          mkdir -p deployment-info
-          echo "${{ steps.release.outputs.tag }}" > deployment-info/release-tag.txt
-          echo "${{ steps.release.outputs.artifact_url }}" > deployment-info/artifact-url.txt
-          echo "${{ steps.release.outputs.manifest_url }}" > deployment-info/manifest-url.txt
-      
-      - name: Upload deployment info
-        uses: actions/upload-artifact@v4
-        with:
-          name: deployment-info
-          path: deployment-info/
-          retention-days: 7
-      
-      - name: Trigger staging deployment
-        run: |
-          echo "🚀 Triggering staging deployment for ${{ steps.release.outputs.tag }}"
-          curl -X POST \
-            -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
-            -H "Accept: application/vnd.github.v3+json" \
-            "${{ github.api_url }}/repos/${{ github.repository }}/dispatches" \
-            -d "{\"event_type\":\"deploy-stage\",\"client_payload\":{\"release_tag\":\"${{ steps.release.outputs.tag }}\"}}"
+  
+  deploy:
+    name: Deploy
+    needs: get-release-tag
+    uses: ./.github/workflows/deploy-template.yml
+    with:
+      environment: 'dev'
+      release_tag: ${{ needs.get-release-tag.outputs.release_tag }}
+      next_environment: 'stage'
+    secrets: inherit
     
 

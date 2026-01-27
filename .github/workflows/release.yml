@@ -1,5 +1,7 @@
 name: Release
 
+run-name: "Release from ${{ github.ref_name }}"
+
 on:
   push:
     branches:
@@ -136,7 +138,7 @@ jobs:
               EVENT_TYPE="deploy-prod"
               ;;
             *)
-              EVENT_TYPE="deploy-dev"  # dev deployment
+              EVENT_TYPE="deploy-dev"  # dev deployment (changed from deploy-release)
               ;;
           esac
           
