@@ -1,3 +1,9 @@
+## [3.13.2](https://github.com/jontreynes/daves-youtube-demo-action/compare/v3.13.1...v3.13.2) (2026-01-27)
+
+### Bug Fixes
+
+* update run-name format in release workflow for better clarity ([9e4f4f7](https://github.com/jontreynes/daves-youtube-demo-action/commit/9e4f4f7d30e020392d318b10fbf442c04bbe910b))
+
 ## [3.13.1](https://github.com/jontreynes/daves-youtube-demo-action/compare/v3.13.0...v3.13.1) (2026-01-27)
 
 ### Bug Fixes
