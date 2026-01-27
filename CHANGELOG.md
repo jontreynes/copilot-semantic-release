@@ -1,3 +1,13 @@
+## [3.9.0](https://github.com/jontreynes/daves-youtube-demo-action/compare/v3.8.4...v3.9.0) (2026-01-27)
+
+### Features
+
+* Add deployment workflow for development and enhance release process ([999c779](https://github.com/jontreynes/daves-youtube-demo-action/commit/999c77941bd8963cc5080e6e4e8da72382a9aeb7))
+
+### Bug Fixes
+
+* Improve build step to check for esbuild installation before building ([a979b17](https://github.com/jontreynes/daves-youtube-demo-action/commit/a979b173441955261bea2b3460356ee30af1b29b))
+
 ## [3.8.4](https://github.com/jontreynes/daves-youtube-demo-action/compare/v3.8.3...v3.8.4) (2026-01-27)
 
 ### Bug Fixes
