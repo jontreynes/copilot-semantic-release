@@ -2,7 +2,7 @@ name: Deploy to Development
 
 on:
   release:
-    types: [published]  # Triggers when semantic-release creates a release
+    types: [published]  # Triggers when any release is published (full or prerelease)
   workflow_dispatch:
     inputs:
       release_tag:
