@@ -1,3 +1,9 @@
+## [3.11.0](https://github.com/jontreynes/daves-youtube-demo-action/compare/v3.10.0...v3.11.0) (2026-01-27)
+
+### Features
+
+* update deployment workflow to trigger on repository dispatch event ([8ed0fab](https://github.com/jontreynes/daves-youtube-demo-action/commit/8ed0fab268f8e714b9f46239a3fdadd63865fd85))
+
 ## [3.10.0](https://github.com/jontreynes/daves-youtube-demo-action/compare/v3.9.1...v3.10.0) (2026-01-27)
 
 ### Features
