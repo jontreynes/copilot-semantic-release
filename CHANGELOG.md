@@ -1,3 +1,9 @@
+## [3.9.1](https://github.com/jontreynes/daves-youtube-demo-action/compare/v3.9.0...v3.9.1) (2026-01-27)
+
+### Bug Fixes
+
+* Update comment to clarify trigger for release publication in deploy-dev.yml ([6d62432](https://github.com/jontreynes/daves-youtube-demo-action/commit/6d62432d814eb3f481aa5a2f6683d02197215eba))
+
 ## [3.9.0](https://github.com/jontreynes/daves-youtube-demo-action/compare/v3.8.4...v3.9.0) (2026-01-27)
 
 ### Features
