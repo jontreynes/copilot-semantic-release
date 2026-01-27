@@ -1,3 +1,9 @@
+## [3.12.1](https://github.com/jontreynes/daves-youtube-demo-action/compare/v3.12.0...v3.12.1) (2026-01-27)
+
+### Bug Fixes
+
+* update log message for urgent hotfix to reflect deployment to stage ([4df4680](https://github.com/jontreynes/daves-youtube-demo-action/commit/4df468091b5721ec8a600fb1ab9405fbce798b3a))
+
 ## [3.12.0](https://github.com/jontreynes/daves-youtube-demo-action/compare/v3.11.0...v3.12.0) (2026-01-27)
 
 ### Features
