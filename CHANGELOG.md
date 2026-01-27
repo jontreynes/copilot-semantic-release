@@ -1,3 +1,9 @@
+## [3.13.3](https://github.com/jontreynes/daves-youtube-demo-action/compare/v3.13.2...v3.13.3) (2026-01-27)
+
+### Bug Fixes
+
+* update log message for clarity in urgent hotfix ([ea68136](https://github.com/jontreynes/daves-youtube-demo-action/commit/ea68136fac4b4c192eabce6b7f967baeb735a8cd))
+
 ## [3.13.2](https://github.com/jontreynes/daves-youtube-demo-action/compare/v3.13.1...v3.13.2) (2026-01-27)
 
 ### Bug Fixes
