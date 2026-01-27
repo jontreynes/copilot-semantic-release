@@ -1,3 +1,9 @@
+## [3.13.0](https://github.com/jontreynes/daves-youtube-demo-action/compare/v3.12.3...v3.13.0) (2026-01-27)
+
+### Features
+
+* enhance deployment workflows for staging and production ([7682c79](https://github.com/jontreynes/daves-youtube-demo-action/commit/7682c79b157693afcb34bbd4c15472b547517475))
+
 ## [3.12.3](https://github.com/jontreynes/daves-youtube-demo-action/compare/v3.12.2...v3.12.3) (2026-01-27)
 
 ### Bug Fixes
