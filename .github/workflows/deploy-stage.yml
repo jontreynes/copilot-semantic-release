@@ -1,6 +1,6 @@
 name: Deploy to Staging
 
-run-name: "Deploy to Stage: ${{ github.event.client_payload.release_tag || inputs.release_tag }}"
+run-name: "${{ github.event.client_payload.release_tag || inputs.release_tag || 'triggered' }}"
 
 on:
   repository_dispatch:

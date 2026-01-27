@@ -1,6 +1,6 @@
 name: Deploy to Production
 
-run-name: "Deploy to Prod: ${{ github.event.client_payload.release_tag || inputs.release_tag }}"
+run-name: "${{ github.event.client_payload.release_tag || inputs.release_tag || 'triggered' }}"
 
 on:
   repository_dispatch:
