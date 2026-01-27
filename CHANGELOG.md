@@ -1,3 +1,10 @@
+## [3.8.4](https://github.com/jontreynes/daves-youtube-demo-action/compare/v3.8.3...v3.8.4) (2026-01-27)
+
+### Bug Fixes
+
+* Implement feature X to enhance user experience and fix bug Y in module Z ([7db1ec2](https://github.com/jontreynes/daves-youtube-demo-action/commit/7db1ec29ab6e27a98ca59a54bff686177115fda4))
+* update semantic-release dependencies to latest versions ([563e987](https://github.com/jontreynes/daves-youtube-demo-action/commit/563e9871b12dd4640bdcc83f0f23407d988acb75))
+
 ## [3.8.3](https://github.com/jontreynes/daves-youtube-demo-action/compare/v3.8.2...v3.8.3) (2026-01-26)
 
 ### Bug Fixes
