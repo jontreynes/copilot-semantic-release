@@ -1,3 +1,9 @@
+## [3.14.2](https://github.com/jontreynes/daves-youtube-demo-action/compare/v3.14.1...v3.14.2) (2026-02-06)
+
+### Bug Fixes
+
+* simplify release promotion commands in deployment workflows ([c6cf91e](https://github.com/jontreynes/daves-youtube-demo-action/commit/c6cf91e0dc4e63c9926a627263290e3439e935c6))
+
 ## [3.14.1](https://github.com/jontreynes/daves-youtube-demo-action/compare/v3.14.0...v3.14.1) (2026-02-06)
 
 ### Bug Fixes
