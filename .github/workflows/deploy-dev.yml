@@ -35,7 +35,8 @@ jobs:
     with:
       environment: 'dev'
       release_tag: ${{ needs.get-release-tag.outputs.release_tag }}
-      next_environment: 'stage'
+      # next_environment: 'stage'
+      next_environment: '' #todo
     secrets: inherit
   
   promote-release:
@@ -48,13 +49,10 @@ jobs:
       - name: Promote to prerelease
         run: |
           echo "📝 Promoting release to prerelease (visible, not latest)..."
-          gh api repos/${{ github.repository }}/releases/tags/${{ needs.get-release-tag.outputs.release_tag }} \
-            --jq .id | xargs -I {} gh api \
-            --method PATCH \
-            repos/${{ github.repository }}/releases/{} \
-            -f draft=false \
-            -f prerelease=true \
-            -f make_latest=false
+          gh release edit "${{ needs.get-release-tag.outputs.release_tag }}" \
+            --draft=false \
+            --prerelease \
+            --latest=false
           echo "✅ Release promoted to prerelease"
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

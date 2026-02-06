@@ -48,13 +48,10 @@ jobs:
       - name: Promote to latest
         run: |
           echo "🎉 Promoting release to latest..."
-          gh api repos/${{ github.repository }}/releases/tags/${{ needs.get-release-tag.outputs.release_tag }} \
-            --jq .id | xargs -I {} gh api \
-            --method PATCH \
-            repos/${{ github.repository }}/releases/{} \
-            -f draft=false \
-            -f prerelease=false \
-            -f make_latest=true
+          gh release edit "${{ needs.get-release-tag.outputs.release_tag }}" \
+            --draft=false \
+            --prerelease=false \
+            --latest
           echo "✅ Release promoted to latest"
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
