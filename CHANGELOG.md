@@ -1,3 +1,9 @@
+## [3.14.6](https://github.com/jontreynes/daves-youtube-demo-action/compare/v3.14.5...v3.14.6) (2026-02-06)
+
+### Bug Fixes
+
+* improve version extraction in release workflow to handle missing 'v' prefix ([02f713f](https://github.com/jontreynes/daves-youtube-demo-action/commit/02f713f40dce0bdb9c2123cf50982eab47760424))
+
 ## [3.14.5](https://github.com/jontreynes/daves-youtube-demo-action/compare/v3.14.4...v3.14.5) (2026-02-06)
 
 ### Bug Fixes
