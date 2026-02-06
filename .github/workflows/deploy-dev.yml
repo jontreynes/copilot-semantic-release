@@ -35,8 +35,7 @@ jobs:
     with:
       environment: 'dev'
       release_tag: ${{ needs.get-release-tag.outputs.release_tag }}
-      # next_environment: 'stage'
-      next_environment: '' #todo
+      next_environment: 'stage'
     secrets: inherit
   
   promote-release:
