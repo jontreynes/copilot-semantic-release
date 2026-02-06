@@ -1,3 +1,9 @@
+## [3.14.8](https://github.com/jontreynes/daves-youtube-demo-action/compare/v3.14.7...v3.14.8) (2026-02-06)
+
+### Bug Fixes
+
+* simplify release promotion steps using GitHub CLI ([708e69f](https://github.com/jontreynes/daves-youtube-demo-action/commit/708e69fe9becbfd24d581421cfcf449f990d06b1))
+
 ## [3.14.7](https://github.com/jontreynes/daves-youtube-demo-action/compare/v3.14.6...v3.14.7) (2026-02-06)
 
 ### Bug Fixes
