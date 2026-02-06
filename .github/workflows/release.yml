@@ -93,8 +93,8 @@ jobs:
           # For triggering deploy workflow, consider using a PAT instead
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          # Capture all output to file
-          npx semantic-release > release-output.txt 2>&1 || true
+          # Capture all output to file (errors will fail the workflow)
+          npx semantic-release | tee release-output.txt
           
           # Parse the file for success indicator
           if grep -q "Published release" release-output.txt; then
@@ -109,7 +109,6 @@ jobs:
             echo "ℹ️ No release created (no semantic commits found)"
           fi
           
-          cat release-output.txt
 
       - name: Trigger deployment
         if: steps.semantic.outputs.release_created == 'true'
