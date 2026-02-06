@@ -1,3 +1,9 @@
+## [3.14.4](https://github.com/jontreynes/daves-youtube-demo-action/compare/v3.14.3...v3.14.4) (2026-02-06)
+
+### Bug Fixes
+
+* update release ID retrieval in deployment workflows to use releases endpoint ([08b7a2b](https://github.com/jontreynes/daves-youtube-demo-action/commit/08b7a2b505080432c05f75e099a5125863e4065f))
+
 ## [3.14.3](https://github.com/jontreynes/daves-youtube-demo-action/compare/v3.14.2...v3.14.3) (2026-02-06)
 
 ### Bug Fixes
