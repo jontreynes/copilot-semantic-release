@@ -1,3 +1,9 @@
+## [3.13.4](https://github.com/jontreynes/daves-youtube-demo-action/compare/v3.13.3...v3.13.4) (2026-02-06)
+
+### Bug Fixes
+
+* remove deploy-release type from repository_dispatch and update release config for prerelease handling ([d4cbaab](https://github.com/jontreynes/daves-youtube-demo-action/commit/d4cbaab7cd76e0e820a30466d30620b553269314))
+
 ## [3.13.3](https://github.com/jontreynes/daves-youtube-demo-action/compare/v3.13.2...v3.13.3) (2026-01-27)
 
 ### Bug Fixes
