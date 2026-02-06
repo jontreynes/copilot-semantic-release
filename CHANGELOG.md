@@ -1,3 +1,9 @@
+## [3.13.5](https://github.com/jontreynes/daves-youtube-demo-action/compare/v3.13.4...v3.13.5) (2026-02-06)
+
+### Bug Fixes
+
+* explicitly set makeLatest as a string to prevent marking as latest in GitHub API ([cc41078](https://github.com/jontreynes/daves-youtube-demo-action/commit/cc41078fc64d7164f686cbf8e630fe91656af399))
+
 ## [3.13.4](https://github.com/jontreynes/daves-youtube-demo-action/compare/v3.13.3...v3.13.4) (2026-02-06)
 
 ### Bug Fixes
