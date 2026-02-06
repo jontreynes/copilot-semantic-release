@@ -1,3 +1,9 @@
+## [3.14.0](https://github.com/jontreynes/daves-youtube-demo-action/compare/v3.13.8...v3.14.0) (2026-02-06)
+
+### Features
+
+* add promote release steps for prerelease and latest in deployment workflows ([26f24df](https://github.com/jontreynes/daves-youtube-demo-action/commit/26f24df6e4072b8cd95beef068caac031b45c3c0))
+
 ## [3.13.8](https://github.com/jontreynes/daves-youtube-demo-action/compare/v3.13.7...v3.13.8) (2026-02-06)
 
 ### Bug Fixes
