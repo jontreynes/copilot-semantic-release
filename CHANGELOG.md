@@ -1,3 +1,9 @@
+## [3.13.6](https://github.com/jontreynes/daves-youtube-demo-action/compare/v3.13.5...v3.13.6) (2026-02-06)
+
+### Bug Fixes
+
+* update release workflow to capture output correctly and adjust release config ([988a38d](https://github.com/jontreynes/daves-youtube-demo-action/commit/988a38d36a17f8cd5ddc2d77361a7e88dcaa9163))
+
 ## [3.13.5](https://github.com/jontreynes/daves-youtube-demo-action/compare/v3.13.4...v3.13.5) (2026-02-06)
 
 ### Bug Fixes
