@@ -91,7 +91,7 @@ const config = {
       "failComment": false,
       "releasedLabels": ["released"],
       "prerelease": true,  // All releases start as prerelease
-      "makeLatest": false  // Don't mark as latest; deploy-production workflow does this after successful deployment
+      "makeLatest": "false"  // Explicitly prevent marking as latest (string value required for GitHub API)
     }]
   ]
 };
