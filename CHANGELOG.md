@@ -1,3 +1,9 @@
+## [3.14.1](https://github.com/jontreynes/daves-youtube-demo-action/compare/v3.14.0...v3.14.1) (2026-02-06)
+
+### Bug Fixes
+
+* update release promotion steps to use GitHub API for prerelease and latest ([ec799fa](https://github.com/jontreynes/daves-youtube-demo-action/commit/ec799fa3ee16f0b3a7edc7869dc4807bf7ae26bb))
+
 ## [3.14.0](https://github.com/jontreynes/daves-youtube-demo-action/compare/v3.13.8...v3.14.0) (2026-02-06)
 
 ### Features
