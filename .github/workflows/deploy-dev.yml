@@ -4,7 +4,7 @@ run-name: "${{ github.event.client_payload.release_tag || inputs.release_tag || 
 
 on:
   repository_dispatch:
-    types: [deploy-dev, deploy-release]  # Triggered by release workflow
+    types: [deploy-dev]  # Triggered by release workflow
   workflow_dispatch:
     inputs:
       release_tag:

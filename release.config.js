@@ -89,7 +89,9 @@ const config = {
       ],
       "successComment": false,
       "failComment": false,
-      "releasedLabels": ["released"]
+      "releasedLabels": ["released"],
+      "prerelease": true,  // All releases start as prerelease
+      "makeLatest": false  // Don't mark as latest; deploy-production workflow does this after successful deployment
     }]
   ]
 };
