@@ -48,10 +48,16 @@ jobs:
       - name: Promote to latest
         run: |
           echo "🎉 Promoting release to latest..."
-          gh release edit "${{ needs.get-release-tag.outputs.release_tag }}" \
-            --draft=false \
-            --prerelease=false \
-            --latest
+          RELEASE_ID=$(curl -s \
+            -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+            -H "Accept: application/vnd.github.v3+json" \
+            "https://api.github.com/repos/${{ github.repository }}/releases/tags/${{ needs.get-release-tag.outputs.release_tag }}" \
+            | jq -r '.id')
+          
+          curl -X PATCH \
+            -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+            -H "Accept: application/vnd.github.v3+json" \
+            "https://api.github.com/repos/${{ github.repository }}/releases/${RELEASE_ID}" \
+            -d '{"draft":false,"prerelease":false,"make_latest":"true"}'
+          
           echo "✅ Release promoted to latest"
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
