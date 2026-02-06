@@ -37,3 +37,20 @@ jobs:
       release_tag: ${{ needs.get-release-tag.outputs.release_tag }}
       next_environment: ''  # No next environment - production is final
     secrets: inherit
+  
+  promote-release:
+    name: Promote Release to Latest
+    needs: [get-release-tag, deploy]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Promote to latest
+        run: |
+          echo "🎉 Promoting release to latest..."
+          gh release edit "${{ needs.get-release-tag.outputs.release_tag }}" \
+            --prerelease=false \
+            --latest
+          echo "✅ Release promoted to latest"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
