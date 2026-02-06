@@ -1,3 +1,10 @@
+## [3.13.8](https://github.com/jontreynes/daves-youtube-demo-action/compare/v3.13.7...v3.13.8) (2026-02-06)
+
+### Bug Fixes
+
+* add missing newline at end of file in release workflow ([88e8c3f](https://github.com/jontreynes/daves-youtube-demo-action/commit/88e8c3fc8457a7036edc8dd5dd42a35b8d0a45fd))
+* improve error handling in semantic-release step ([13c475f](https://github.com/jontreynes/daves-youtube-demo-action/commit/13c475fcdf87e822970ea8b62fb822ca05b51fa7))
+
 ## [3.13.7](https://github.com/jontreynes/daves-youtube-demo-action/compare/v3.13.6...v3.13.7) (2026-02-06)
 
 ### Bug Fixes
