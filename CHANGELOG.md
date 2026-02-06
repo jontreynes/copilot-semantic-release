@@ -1,3 +1,9 @@
+## [3.14.9](https://github.com/jontreynes/daves-youtube-demo-action/compare/v3.14.8...v3.14.9) (2026-02-06)
+
+### Bug Fixes
+
+* set next_environment to 'stage' in deploy-dev workflow ([60097d2](https://github.com/jontreynes/daves-youtube-demo-action/commit/60097d2db910ac6f8e47a413872f884c2b3fcb96))
+
 ## [3.14.8](https://github.com/jontreynes/daves-youtube-demo-action/compare/v3.14.7...v3.14.8) (2026-02-06)
 
 ### Bug Fixes
