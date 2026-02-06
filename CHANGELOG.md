@@ -1,3 +1,9 @@
+## [3.13.7](https://github.com/jontreynes/daves-youtube-demo-action/compare/v3.13.6...v3.13.7) (2026-02-06)
+
+### Bug Fixes
+
+* remove extra whitespace before deployment trigger in release workflow ([0f99c24](https://github.com/jontreynes/daves-youtube-demo-action/commit/0f99c24af70c4ba687f4ca178a96a8afa5164a05))
+
 ## [3.13.6](https://github.com/jontreynes/daves-youtube-demo-action/compare/v3.13.5...v3.13.6) (2026-02-06)
 
 ### Bug Fixes
