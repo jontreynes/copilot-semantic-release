@@ -1,3 +1,9 @@
+## [3.14.7](https://github.com/jontreynes/daves-youtube-demo-action/compare/v3.14.6...v3.14.7) (2026-02-06)
+
+### Bug Fixes
+
+* remove unnecessary blank line in release workflow ([6199950](https://github.com/jontreynes/daves-youtube-demo-action/commit/619995032e55a8dfd5838afd3b774f07d13e6824))
+
 ## [3.14.6](https://github.com/jontreynes/daves-youtube-demo-action/compare/v3.14.5...v3.14.6) (2026-02-06)
 
 ### Bug Fixes
