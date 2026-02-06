@@ -1,3 +1,9 @@
+## [3.14.5](https://github.com/jontreynes/daves-youtube-demo-action/compare/v3.14.4...v3.14.5) (2026-02-06)
+
+### Bug Fixes
+
+* enhance release promotion steps to validate release existence and display available releases ([a9621cb](https://github.com/jontreynes/daves-youtube-demo-action/commit/a9621cbdb5c654762a4f8372c858e8ee707055a1))
+
 ## [3.14.4](https://github.com/jontreynes/daves-youtube-demo-action/compare/v3.14.3...v3.14.4) (2026-02-06)
 
 ### Bug Fixes
