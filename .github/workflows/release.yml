@@ -93,8 +93,17 @@ jobs:
           # For triggering deploy workflow, consider using a PAT instead
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          # Capture all output to file (errors will fail the workflow)
+          # Run semantic-release and capture exit code
+          set +e  # Don't exit on error yet
           npx semantic-release | tee release-output.txt
+          EXIT_CODE=${PIPESTATUS[0]}  # Get exit code from npx, not tee
+          set -e
+          
+          # Check for actual errors (exit code != 0)
+          if [ $EXIT_CODE -ne 0 ]; then
+            echo "❌ Semantic release failed with exit code $EXIT_CODE"
+            exit $EXIT_CODE
+          fi
           
           # Parse the file for success indicator
           if grep -q "Published release" release-output.txt; then
