@@ -1,3 +1,9 @@
+## [3.18.0](https://github.com/jontreynes/daves-youtube-demo-action/compare/v3.17.0...v3.18.0) (2026-02-10)
+
+### Features
+
+* change release promotion to immediate publication and update related messages ([c2001e1](https://github.com/jontreynes/daves-youtube-demo-action/commit/c2001e165f2be87c7fe129e828c1fa138e3bb28d))
+
 ## [3.17.0](https://github.com/jontreynes/daves-youtube-demo-action/compare/v3.16.0...v3.17.0) (2026-02-10)
 
 ### Features
