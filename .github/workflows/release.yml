@@ -133,6 +133,12 @@ jobs:
             --draft=false \
             --prerelease \
             --latest=false
+          
+          echo "🔍 Verifying release state..."
+          gh release view ${{ steps.semantic.outputs.release_version }} \
+            --repo ${{ github.repository }} \
+            --json isDraft,isPrerelease,isLatest
+          
           echo "✅ Release promoted to prerelease"
 
       - name: Trigger deployment
