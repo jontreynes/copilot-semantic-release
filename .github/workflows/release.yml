@@ -148,7 +148,7 @@ jobs:
           # Default deployment target
           DEPLOY_TARGET="dev"
           
-          # Check if this is a manual workflow dispatch with target environment
+          # Check if this is a manual workflow dispatch with target environment 
           if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
             # Manual hotfix with target environment
             DEPLOY_TARGET="${{ inputs.environment }}"
