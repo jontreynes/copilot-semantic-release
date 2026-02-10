@@ -122,18 +122,16 @@ jobs:
             echo "ℹ️ No release created (no semantic commits found)"
           fi
 
-      - name: Mark release as prerelease
+      - name: Mark draft as prerelease
         if: steps.semantic.outputs.release_created == 'true'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           echo "📝 Marking release as prerelease (visible, not latest)..."
           
-          # Wait briefly for semantic-release to finish
-          sleep 2
-          
           gh release edit ${{ steps.semantic.outputs.release_version }} \
             --repo ${{ github.repository }} \
+            --draft=false \
             --prerelease \
             --latest=false
           
