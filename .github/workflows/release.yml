@@ -137,7 +137,7 @@ jobs:
           echo "🔍 Verifying release state..."
           gh release view ${{ steps.semantic.outputs.release_version }} \
             --repo ${{ github.repository }} \
-            --json isDraft,isPrerelease,isLatest
+            --json isDraft,isPrerelease,name,tagName
           
           echo "✅ Release promoted to prerelease"
 
