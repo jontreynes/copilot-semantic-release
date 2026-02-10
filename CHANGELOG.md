@@ -1,3 +1,9 @@
+## [3.19.0](https://github.com/jontreynes/daves-youtube-demo-action/compare/v3.18.0...v3.19.0) (2026-02-10)
+
+### Features
+
+* comment out prerelease marking and deployment trigger steps in release workflowout prerelease logic ([882025c](https://github.com/jontreynes/daves-youtube-demo-action/commit/882025c192f84dbb0919577567c312af78e5c7d4))
+
 ## [3.18.0](https://github.com/jontreynes/daves-youtube-demo-action/compare/v3.17.0...v3.18.0) (2026-02-10)
 
 ### Features
