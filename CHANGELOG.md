@@ -1,3 +1,9 @@
+## [3.16.0](https://github.com/jontreynes/daves-youtube-demo-action/compare/v3.15.0...v3.16.0) (2026-02-10)
+
+### Features
+
+* add verification step for release state before promoting to prerelease ([cd6b974](https://github.com/jontreynes/daves-youtube-demo-action/commit/cd6b9749e9bab091858598aaa9334eea9b65dc1b))
+
 ## [3.15.0](https://github.com/jontreynes/daves-youtube-demo-action/compare/v3.14.9...v3.15.0) (2026-02-10)
 
 ### Features
