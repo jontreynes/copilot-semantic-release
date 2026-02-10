@@ -1,3 +1,9 @@
+## [3.17.0](https://github.com/jontreynes/daves-youtube-demo-action/compare/v3.16.0...v3.17.0) (2026-02-10)
+
+### Features
+
+* enhance release verification by including name and tag in JSON output ([5296bda](https://github.com/jontreynes/daves-youtube-demo-action/commit/5296bda1fcfe186f1fbc603b73f11077e906c0cc))
+
 ## [3.16.0](https://github.com/jontreynes/daves-youtube-demo-action/compare/v3.15.0...v3.16.0) (2026-02-10)
 
 ### Features
