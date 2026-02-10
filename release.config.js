@@ -90,7 +90,7 @@ const config = {
       "successComment": false,
       "failComment": false,
       "releasedLabels": ["released"],
-      "draftRelease": false  // Publish immediately so workflow can edit it
+      "draftRelease": true  // Start as draft, workflow promotes to prerelease after dev, then latest after prod
     }]
   ]
 };
