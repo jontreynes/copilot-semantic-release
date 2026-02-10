@@ -37,22 +37,3 @@ jobs:
       release_tag: ${{ needs.get-release-tag.outputs.release_tag }}
       next_environment: 'stage'
     secrets: inherit
-  
-  promote-release:
-    name: Promote Release to Prerelease
-    needs: [get-release-tag, deploy]
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
-    steps:
-      - name: Promote to prerelease
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          echo "📝 Promoting release to prerelease (visible, not latest)..."
-          gh release edit ${{ needs.get-release-tag.outputs.release_tag }} \
-            --repo ${{ github.repository }} \
-            --draft=false \
-            --prerelease \
-            --latest=false
-          echo "✅ Release promoted to prerelease"
