@@ -1,3 +1,9 @@
+## [3.21.1](https://github.com/jontreynes/daves-youtube-demo-action/compare/v3.21.0...v3.21.1) (2026-02-10)
+
+### Bug Fixes
+
+* update comment for clarity on manual workflow dispatch environment ([eae7edd](https://github.com/jontreynes/daves-youtube-demo-action/commit/eae7edd96b50fadf0c275be0410def7cd43c2ec1))
+
 ## [3.21.0](https://github.com/jontreynes/daves-youtube-demo-action/compare/v3.20.0...v3.21.0) (2026-02-10)
 
 ### Features
