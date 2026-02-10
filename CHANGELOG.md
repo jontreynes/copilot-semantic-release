@@ -1,3 +1,9 @@
+## [3.15.0](https://github.com/jontreynes/daves-youtube-demo-action/compare/v3.14.9...v3.15.0) (2026-02-10)
+
+### Features
+
+* add promote draft to prerelease step in release workflow ([a0ee816](https://github.com/jontreynes/daves-youtube-demo-action/commit/a0ee816567cc52d0426bdf5c39437329172ad1fe))
+
 ## [3.14.9](https://github.com/jontreynes/daves-youtube-demo-action/compare/v3.14.8...v3.14.9) (2026-02-06)
 
 ### Bug Fixes
