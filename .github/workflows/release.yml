@@ -122,63 +122,63 @@ jobs:
             echo "ℹ️ No release created (no semantic commits found)"
           fi
 
-      - name: Mark release as prerelease
-        if: steps.semantic.outputs.release_created == 'true'
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          echo "📝 Marking release as prerelease (visible, not latest)..."
+      # - name: Mark release as prerelease
+      #   if: steps.semantic.outputs.release_created == 'true'
+      #   env:
+      #     GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #   run: |
+      #     echo "📝 Marking release as prerelease (visible, not latest)..."
           
-          gh release edit ${{ steps.semantic.outputs.release_version }} \
-            --repo ${{ github.repository }} \
-            --prerelease \
-            --latest=false
+      #     gh release edit ${{ steps.semantic.outputs.release_version }} \
+      #       --repo ${{ github.repository }} \
+      #       --prerelease \
+      #       --latest=false
           
-          echo "🔍 Verifying release state..."
-          gh release view ${{ steps.semantic.outputs.release_version }} \
-            --repo ${{ github.repository }} \
-            --json isDraft,isPrerelease,name,tagName
+      #     echo "🔍 Verifying release state..."
+      #     gh release view ${{ steps.semantic.outputs.release_version }} \
+      #       --repo ${{ github.repository }} \
+      #       --json isDraft,isPrerelease,name,tagName
           
-          echo "✅ Release marked as prerelease"
+      #     echo "✅ Release marked as prerelease"
 
-      - name: Trigger deployment
-        if: steps.semantic.outputs.release_created == 'true'
-        run: |
-          # Default deployment target
-          DEPLOY_TARGET="dev"
+      # - name: Trigger deployment
+      #   if: steps.semantic.outputs.release_created == 'true'
+      #   run: |
+      #     # Default deployment target
+      #     DEPLOY_TARGET="dev"
           
-          # Check if this is a manual workflow dispatch with target environment
-          if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
-            # Manual hotfix with target environment
-            DEPLOY_TARGET="${{ inputs.environment }}"
-            echo "🎯 Manual deployment target: $DEPLOY_TARGET"
-          else
-            # Automatic push to main or hotfix/* - always goes to dev first
-            echo "🔄 Automatic deployment - targeting dev environment"
-          fi
+      #     # Check if this is a manual workflow dispatch with target environment
+      #     if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+      #       # Manual hotfix with target environment
+      #       DEPLOY_TARGET="${{ inputs.environment }}"
+      #       echo "🎯 Manual deployment target: $DEPLOY_TARGET"
+      #     else
+      #       # Automatic push to main or hotfix/* - always goes to dev first
+      #       echo "🔄 Automatic deployment - targeting dev environment"
+      #     fi
           
-          echo "🚀 Triggering $DEPLOY_TARGET deployment for ${{ steps.semantic.outputs.release_version }}"
+      #     echo "🚀 Triggering $DEPLOY_TARGET deployment for ${{ steps.semantic.outputs.release_version }}"
           
-          # Dispatch to appropriate deployment workflow
-          case "$DEPLOY_TARGET" in
-            "stage")
-              EVENT_TYPE="deploy-stage"
-              ;;
-            "prod"|"production")
-              EVENT_TYPE="deploy-prod"
-              ;;
-            *)
-              EVENT_TYPE="deploy-dev"  # dev deployment (changed from deploy-release)
-              ;;
-          esac
+      #     # Dispatch to appropriate deployment workflow
+      #     case "$DEPLOY_TARGET" in
+      #       "stage")
+      #         EVENT_TYPE="deploy-stage"
+      #         ;;
+      #       "prod"|"production")
+      #         EVENT_TYPE="deploy-prod"
+      #         ;;
+      #       *)
+      #         EVENT_TYPE="deploy-dev"  # dev deployment (changed from deploy-release)
+      #         ;;
+      #     esac
           
-          curl -X POST \
-            -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
-            -H "Accept: application/vnd.github.v3+json" \
-            "${{ github.api_url }}/repos/${{ github.repository }}/dispatches" \
-            -d "{\"event_type\":\"$EVENT_TYPE\",\"client_payload\":{\"release_tag\":\"${{ steps.semantic.outputs.release_version }}\"}}"
+      #     curl -X POST \
+      #       -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+      #       -H "Accept: application/vnd.github.v3+json" \
+      #       "${{ github.api_url }}/repos/${{ github.repository }}/dispatches" \
+      #       -d "{\"event_type\":\"$EVENT_TYPE\",\"client_payload\":{\"release_tag\":\"${{ steps.semantic.outputs.release_version }}\"}}"
           
-          echo "✅ Triggered $EVENT_TYPE event for release ${{ steps.semantic.outputs.release_version }}"
+      #     echo "✅ Triggered $EVENT_TYPE event for release ${{ steps.semantic.outputs.release_version }}"
 
       - name: Summary
         if: always()
