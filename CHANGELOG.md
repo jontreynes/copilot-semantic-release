@@ -1,3 +1,9 @@
+## [3.21.0](https://github.com/jontreynes/daves-youtube-demo-action/compare/v3.20.0...v3.21.0) (2026-02-10)
+
+### Features
+
+* update release workflow to mark draft as prerelease ([33819a3](https://github.com/jontreynes/daves-youtube-demo-action/commit/33819a3e0e0c58f39104c6e5e8a8142dfb16b4b7))
+
 ## [3.20.0](https://github.com/jontreynes/daves-youtube-demo-action/compare/v3.19.0...v3.20.0) (2026-02-10)
 
 ### Features
