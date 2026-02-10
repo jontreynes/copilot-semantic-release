@@ -122,15 +122,15 @@ jobs:
             echo "ℹ️ No release created (no semantic commits found)"
           fi
 
-      - name: Promote draft to prerelease
+      - name: Mark release as prerelease
         if: steps.semantic.outputs.release_created == 'true'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          echo "📝 Promoting release to prerelease (visible, not latest)..."
+          echo "📝 Marking release as prerelease (visible, not latest)..."
+          
           gh release edit ${{ steps.semantic.outputs.release_version }} \
             --repo ${{ github.repository }} \
-            --draft=false \
             --prerelease \
             --latest=false
           
@@ -139,7 +139,7 @@ jobs:
             --repo ${{ github.repository }} \
             --json isDraft,isPrerelease,name,tagName
           
-          echo "✅ Release promoted to prerelease"
+          echo "✅ Release marked as prerelease"
 
       - name: Trigger deployment
         if: steps.semantic.outputs.release_created == 'true'
