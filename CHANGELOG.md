@@ -1,3 +1,9 @@
+## [3.26.0](https://github.com/jontreynes/daves-youtube-demo-action/compare/v3.25.0...v3.26.0) (2026-04-22)
+
+### 🚀 Features
+
+* test release 3 ([61e576d](https://github.com/jontreynes/daves-youtube-demo-action/commit/61e576d6ba1257968be205c9a341050bb97ceab8))
+
 ## [3.25.0](https://github.com/jontreynes/daves-youtube-demo-action/compare/v3.24.0...v3.25.0) (2026-04-22)
 
 ### 🚀 Features
