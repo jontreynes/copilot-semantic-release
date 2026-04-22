@@ -1,3 +1,9 @@
+## [3.22.4](https://github.com/jontreynes/daves-youtube-demo-action/compare/v3.22.3...v3.22.4) (2026-04-22)
+
+### 🐛 Bug Fixes
+
+* try with curl ([ab32dc5](https://github.com/jontreynes/daves-youtube-demo-action/commit/ab32dc5cc8846a94075cb4392d8dc4ff96b02670))
+
 ## [3.22.3](https://github.com/jontreynes/daves-youtube-demo-action/compare/v3.22.2...v3.22.3) (2026-04-22)
 
 ### 🐛 Bug Fixes
