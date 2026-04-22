@@ -72,10 +72,15 @@ jobs:
               echo "is_first_deployment=true" >> $GITHUB_OUTPUT
             else
               # Extract release tag from run name (run-name is set to release_tag)
-              OLD_TAG=$(echo "$LAST_RUN" | jq -r '.name // empty' | grep -oP 'v\d+\.\d+\.\d+(-.*)?')
+              RUN_NAME=$(echo "$LAST_RUN" | jq -r '.name // empty')
+              echo "🔍 Last run name: $RUN_NAME"
+              
+              # Extract version using sed (more compatible than grep -P)
+              OLD_TAG=$(echo "$RUN_NAME" | sed -n 's/.*\(v[0-9]\+\.[0-9]\+\.[0-9]\+\(-[^[:space:]]*\)\?\).*/\1/p')
               
               if [[ -z "$OLD_TAG" ]]; then
                 echo "⚠️  Could not extract version from last deployment"
+                echo "⚠️  Run name was: $RUN_NAME"
                 echo "old_version=" >> $GITHUB_OUTPUT
                 echo "is_first_deployment=true" >> $GITHUB_OUTPUT
               else
