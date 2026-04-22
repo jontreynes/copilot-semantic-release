@@ -1,3 +1,10 @@
+## [3.22.10](https://github.com/jontreynes/daves-youtube-demo-action/compare/v3.22.9...v3.22.10) (2026-04-22)
+
+### 🐛 Bug Fixes
+
+* cha ([59904d5](https://github.com/jontreynes/daves-youtube-demo-action/commit/59904d578f65dc81bf0638c037e0dca3bce063f8))
+* improve Python script syntax for string replacement in deployment notes ([2459f9f](https://github.com/jontreynes/daves-youtube-demo-action/commit/2459f9fcbf1ef405b18abb7073a58c0a9a360587))
+
 ## [3.22.9](https://github.com/jontreynes/daves-youtube-demo-action/compare/v3.22.8...v3.22.9) (2026-04-22)
 
 ### 🐛 Bug Fixes
