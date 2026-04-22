@@ -32,8 +32,6 @@ jobs:
       
       - name: Find last deployment to ${{ inputs.environment }}
         id: find-last-deployment
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           echo "🔍 Finding last successful deployment to ${{ inputs.environment }}..."
           
@@ -47,30 +45,44 @@ jobs:
             exit 1
           fi
           
-          # Query GitHub API for last successful deployment
-          LAST_RUN=$(gh api \
-            "/repos/${{ github.repository }}/actions/workflows/${WORKFLOW_FILE}/runs" \
-            --field status=completed \
-            --field conclusion=success \
-            --field per_page=1 \
-            --jq '.workflow_runs[0]')
+          # Query GitHub API for last successful deployment using curl
+          echo "🔎 Querying API: /repos/${{ github.repository }}/actions/workflows/${WORKFLOW_FILE}/runs"
           
-          if [[ -z "$LAST_RUN" || "$LAST_RUN" == "null" ]]; then
-            echo "ℹ️  No previous deployment found to ${{ inputs.environment }}"
+          RESPONSE=$(curl -s -w "\n%{http_code}" \
+            -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+            -H "Accept: application/vnd.github.v3+json" \
+            "https://api.github.com/repos/${{ github.repository }}/actions/workflows/${WORKFLOW_FILE}/runs?status=completed&conclusion=success&per_page=1")
+          
+          HTTP_CODE=$(echo "$RESPONSE" | tail -n1)
+          BODY=$(echo "$RESPONSE" | sed '$d')
+          
+          echo "📊 HTTP Status: $HTTP_CODE"
+          
+          if [[ "$HTTP_CODE" != "200" ]]; then
+            echo "⚠️  API request failed (HTTP $HTTP_CODE) - assuming first deployment"
+            echo "Response: $BODY"
             echo "old_version=" >> $GITHUB_OUTPUT
             echo "is_first_deployment=true" >> $GITHUB_OUTPUT
           else
-            # Extract release tag from run name (run-name is set to release_tag)
-            OLD_TAG=$(echo "$LAST_RUN" | jq -r '.name // empty' | grep -oP 'v\d+\.\d+\.\d+(-.*)?')
+            LAST_RUN=$(echo "$BODY" | jq -r '.workflow_runs[0] // empty')
             
-            if [[ -z "$OLD_TAG" ]]; then
-              echo "⚠️  Could not extract version from last deployment"
+            if [[ -z "$LAST_RUN" || "$LAST_RUN" == "null" ]]; then
+              echo "ℹ️  No previous deployment found to ${{ inputs.environment }}"
               echo "old_version=" >> $GITHUB_OUTPUT
               echo "is_first_deployment=true" >> $GITHUB_OUTPUT
             else
-              echo "✅ Last deployment to ${{ inputs.environment }}: $OLD_TAG"
-              echo "old_version=$OLD_TAG" >> $GITHUB_OUTPUT
-              echo "is_first_deployment=false" >> $GITHUB_OUTPUT
+              # Extract release tag from run name (run-name is set to release_tag)
+              OLD_TAG=$(echo "$LAST_RUN" | jq -r '.name // empty' | grep -oP 'v\d+\.\d+\.\d+(-.*)?')
+              
+              if [[ -z "$OLD_TAG" ]]; then
+                echo "⚠️  Could not extract version from last deployment"
+                echo "old_version=" >> $GITHUB_OUTPUT
+                echo "is_first_deployment=true" >> $GITHUB_OUTPUT
+              else
+                echo "✅ Last deployment to ${{ inputs.environment }}: $OLD_TAG"
+                echo "old_version=$OLD_TAG" >> $GITHUB_OUTPUT
+                echo "is_first_deployment=false" >> $GITHUB_OUTPUT
+              fi
             fi
           fi
       
