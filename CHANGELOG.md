@@ -1,3 +1,9 @@
+## [3.22.6](https://github.com/jontreynes/daves-youtube-demo-action/compare/v3.22.5...v3.22.6) (2026-04-22)
+
+### 🐛 Bug Fixes
+
+* d ([935b009](https://github.com/jontreynes/daves-youtube-demo-action/commit/935b00920a733dc5ecce10b00d9c81df554a7419))
+
 ## [3.22.5](https://github.com/jontreynes/daves-youtube-demo-action/compare/v3.22.4...v3.22.5) (2026-04-22)
 
 ### 🐛 Bug Fixes
