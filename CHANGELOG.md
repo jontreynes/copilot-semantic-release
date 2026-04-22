@@ -1,3 +1,9 @@
+## [3.26.2](https://github.com/jontreynes/daves-youtube-demo-action/compare/v3.26.1...v3.26.2) (2026-04-22)
+
+### 🐛 Bug Fixes
+
+* normalize version comparison in changelog extraction ([5ec8d4d](https://github.com/jontreynes/daves-youtube-demo-action/commit/5ec8d4d05a41438f13cddc8d06d53d4ff2b5a5ed))
+
 ## [3.26.1](https://github.com/jontreynes/daves-youtube-demo-action/compare/v3.26.0...v3.26.1) (2026-04-22)
 
 ### 🐛 Bug Fixes
