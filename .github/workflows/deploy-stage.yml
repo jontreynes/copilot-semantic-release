@@ -35,11 +35,7 @@ jobs:
     with:
       release_tag: ${{ needs.get-release-tag.outputs.release_tag }}
       environment: 'stage'
-    secrets:
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    permissions:
-      contents: write
-      actions: read
+    secrets: inherit
   
   approval:
     name: "Staging Deployment Approval (Manual Step)"
