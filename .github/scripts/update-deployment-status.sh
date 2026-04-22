@@ -47,8 +47,38 @@ fi
 
 echo "🔍 Looking for: $PENDING_HEADER"
 
-# Check if pending header exists  
+# First try exact match
+FOUND_EXACT=false
 if echo "$CURRENT_BODY" | grep -qF "$PENDING_HEADER" 2>/dev/null; then
+  FOUND_EXACT=true
+  echo "✅ Found exact pending deployment header"
+fi
+
+# If exact match not found, search for any pending deployment to this environment
+if [[ "$FOUND_EXACT" == false ]]; then
+  echo "🔍 Exact match not found, searching for any pending deployment to ${ENVIRONMENT}..."
+  PENDING_LINE=$(echo "$CURRENT_BODY" | grep "^## 📦 Pending Deployment to ${ENVIRONMENT} |" || true)
+  
+  if [[ -n "$PENDING_LINE" ]]; then
+    echo "✅ Found pending deployment line: $PENDING_LINE"
+    PENDING_HEADER="$PENDING_LINE"
+    
+    # Extract version info from the found header to build deployed header
+    if echo "$PENDING_LINE" | grep -q "Initial Deployment"; then
+      DEPLOYED_HEADER="## 📦 Deployed to ${ENVIRONMENT} | Initial Deployment | ${TIMESTAMP}"
+    else
+      # Extract the version range from the pending header
+      VERSION_RANGE=$(echo "$PENDING_LINE" | sed 's/^## 📦 Pending Deployment to .* | //')
+      DEPLOYED_HEADER="## 📦 Deployed to ${ENVIRONMENT} | ${VERSION_RANGE} | ${TIMESTAMP}"
+    fi
+    
+    echo "📝 Will replace with: $DEPLOYED_HEADER"
+    FOUND_EXACT=true
+  fi
+fi
+
+# Check if pending header exists  
+if [[ "$FOUND_EXACT" == true ]]; then
   echo "✅ Found pending deployment section, updating to deployed status..."
   
   # Save current body to temp file

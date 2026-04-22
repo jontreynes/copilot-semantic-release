@@ -17,7 +17,7 @@ permissions:
   actions: read
 
 jobs:
-  consolidate:
+  consolidate-changelog:
     name: Consolidate Changelog for ${{ inputs.environment }}
     runs-on: ubuntu-latest
     environment: changelog-approval
