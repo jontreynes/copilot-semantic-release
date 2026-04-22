@@ -178,11 +178,9 @@ jobs:
           if [[ "$IS_FIRST" == "true" || -z "$OLD_VERSION" ]]; then
             # First deployment to this environment
             HEADER="## 📦 Pending Deployment to ${ENVIRONMENT} | Initial Deployment"
-            cat > /tmp/consolidated_section.md <<EOF
-${HEADER}
-
-This is the first deployment to ${ENVIRONMENT}.
-EOF
+            echo "${HEADER}" > /tmp/consolidated_section.md
+            echo "" >> /tmp/consolidated_section.md
+            echo "This is the first deployment to ${ENVIRONMENT}." >> /tmp/consolidated_section.md
             OLD_VERSION="initial"
           else
             # Normal deployment with version range
@@ -190,21 +188,17 @@ EOF
             
             CHANGELOG_CONTENT=$(cat /tmp/changelog_extract.md 2>/dev/null || echo "No changes extracted")
             
-            cat > /tmp/consolidated_section.md <<EOF
-${HEADER}
-
-${CHANGELOG_CONTENT}
-EOF
+            echo "${HEADER}" > /tmp/consolidated_section.md
+            echo "" >> /tmp/consolidated_section.md
+            echo "${CHANGELOG_CONTENT}" >> /tmp/consolidated_section.md
           fi
           
           # Append to release body
-          cat > /tmp/release_body.md <<EOF
-${CURRENT_BODY}
-
----
-
-$(cat /tmp/consolidated_section.md)
-EOF
+          echo "${CURRENT_BODY}" > /tmp/release_body.md
+          echo "" >> /tmp/release_body.md
+          echo "---" >> /tmp/release_body.md
+          echo "" >> /tmp/release_body.md
+          cat /tmp/consolidated_section.md >> /tmp/release_body.md
           
           # Update release notes
           gh release edit "$NEW_VERSION" --notes-file /tmp/release_body.md
