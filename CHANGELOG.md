@@ -1,3 +1,10 @@
+## [3.22.2](https://github.com/jontreynes/daves-youtube-demo-action/compare/v3.22.1...v3.22.2) (2026-04-22)
+
+### 🐛 Bug Fixes
+
+* specify GITHUB_TOKEN in deploy workflows ([7dc3283](https://github.com/jontreynes/daves-youtube-demo-action/commit/7dc328367e3a5a7f668d3cad4214b393ebd10f8f))
+* try ([68d3a19](https://github.com/jontreynes/daves-youtube-demo-action/commit/68d3a19463911fed31a5df9ccc23a548b58e0e1e))
+
 ## [3.22.1](https://github.com/jontreynes/daves-youtube-demo-action/compare/v3.22.0...v3.22.1) (2026-04-22)
 
 ### 🐛 Bug Fixes
