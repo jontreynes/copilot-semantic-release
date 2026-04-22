@@ -20,6 +20,7 @@ jobs:
   consolidate:
     name: Consolidate Changelog for ${{ inputs.environment }}
     runs-on: ubuntu-latest
+    environment: changelog-approval
     outputs:
       old_version: ${{ steps.consolidate.outputs.old_version }}
       new_version: ${{ steps.consolidate.outputs.new_version }}
@@ -90,7 +91,7 @@ jobs:
               fi
             fi
           fi
-          
+
       
       - name: Extract changelog sections
         id: extract-changelog

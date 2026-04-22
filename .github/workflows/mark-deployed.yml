@@ -75,19 +75,33 @@ jobs:
             DEPLOYED_HEADER="## 📦 Deployed to ${ENVIRONMENT} | ${OLD_VERSION} → ${NEW_VERSION} | ${TIMESTAMP}"
           fi
           
-          # Check if pending header exists
-          if echo "$CURRENT_BODY" | grep -F "$PENDING_HEADER" > /dev/null; then
+          echo "🔍 Looking for: $PENDING_HEADER"
+          
+          # Check if pending header exists  
+          if echo "$CURRENT_BODY" | grep -qF "$PENDING_HEADER" 2>/dev/null; then
             echo "✅ Found pending deployment section, updating to deployed status..."
             
-            # Replace pending header with deployed header (escape special chars for sed)
-            PENDING_ESCAPED=$(echo "$PENDING_HEADER" | sed 's/[&/\]/\\&/g')
-            DEPLOYED_ESCAPED=$(echo "$DEPLOYED_HEADER" | sed 's/[&/\]/\\&/g')
+            # Save to files for reliable replacement (handles unicode arrow)
+            echo "$CURRENT_BODY" > /tmp/current_body.txt
+            echo "$PENDING_HEADER" > /tmp/pending.txt
+            echo "$DEPLOYED_HEADER" > /tmp/deployed.txt
             
-            # Replace pending header with deployed header
-            UPDATED_BODY=$(echo "$CURRENT_BODY" | sed "s|${PENDING_ESCAPED}|${DEPLOYED_ESCAPED}|")
+            # Use Python for reliable string replacement
+            python3 << 'PYTHON_SCRIPT'
+with open('/tmp/current_body.txt', 'r', encoding='utf-8') as f:
+    content = f.read()
+with open('/tmp/pending.txt', 'r', encoding='utf-8') as f:
+    pending = f.read().strip()
+with open('/tmp/deployed.txt', 'r', encoding='utf-8') as f:
+    deployed = f.read().strip()
+    
+updated = content.replace(pending, deployed)
+
+with open('/tmp/release_body.md', 'w', encoding='utf-8') as f:
+    f.write(updated)
+PYTHON_SCRIPT
             
             # Update release notes
-            echo "$UPDATED_BODY" > /tmp/release_body.md
             gh release edit "$RELEASE_TAG" --notes-file /tmp/release_body.md
             
             echo "✅ Release notes updated with deployed status"
@@ -97,6 +111,9 @@ jobs:
             echo "    - Deployment was done without running consolidate-changelog"
             echo "    - Release notes were manually edited"
             echo "    - This is a retry after manual intervention"
+            echo ""
+            echo "📋 Current release body headers:"
+            echo "$CURRENT_BODY" | grep "^## " || echo "  (no headers found)"
             echo ""
             echo "ℹ️  Skipping status update (not blocking deployment)"
           fi
