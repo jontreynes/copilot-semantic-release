@@ -1,3 +1,10 @@
+## [3.22.3](https://github.com/jontreynes/daves-youtube-demo-action/compare/v3.22.2...v3.22.3) (2026-04-22)
+
+### 🐛 Bug Fixes
+
+* gh app ([ccd503d](https://github.com/jontreynes/daves-youtube-demo-action/commit/ccd503d7018ba8aa7df17295ff1dfb81f4028eac))
+* use gh app ([9f4ede6](https://github.com/jontreynes/daves-youtube-demo-action/commit/9f4ede6999bef522550a7877d1dfce90fa1a107b))
+
 ## [3.22.2](https://github.com/jontreynes/daves-youtube-demo-action/compare/v3.22.1...v3.22.2) (2026-04-22)
 
 ### 🐛 Bug Fixes
