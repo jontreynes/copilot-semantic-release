@@ -35,6 +35,7 @@ jobs:
     with:
       release_tag: ${{ needs.get-release-tag.outputs.release_tag }}
       environment: 'prod'
+    secrets: inherit
     permissions:
       contents: write
       actions: read
