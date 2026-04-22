@@ -90,6 +90,7 @@ jobs:
               fi
             fi
           fi
+          
       
       - name: Extract changelog sections
         id: extract-changelog
