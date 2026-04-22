@@ -108,15 +108,21 @@ jobs:
             exit 1
           fi
           
+          # Normalize versions (strip 'v' prefix for comparison)
+          OLD_VERSION_NORMALIZED="${OLD_VERSION#v}"
+          NEW_VERSION_NORMALIZED="${NEW_VERSION#v}"
+          
+          echo "🔍 Searching for versions: $OLD_VERSION_NORMALIZED to $NEW_VERSION_NORMALIZED"
+          
           # Extract changelog between versions
-          EXTRACTED=$(awk -v old="$OLD_VERSION" -v new="$NEW_VERSION" '
+          EXTRACTED=$(awk -v old="$OLD_VERSION_NORMALIZED" -v new="$NEW_VERSION_NORMALIZED" '
             BEGIN { 
               in_range=0
               found_new=0
             }
             /^## \[/ {
               version = $0
-              gsub(/^## \[/, "", version)
+              gsub(/^## \[v?/, "", version)
               gsub(/\].*$/, "", version)
               
               # Check if we hit the new version
