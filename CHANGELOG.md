@@ -1,3 +1,9 @@
+## [3.23.0](https://github.com/jontreynes/daves-youtube-demo-action/compare/v3.22.10...v3.23.0) (2026-04-22)
+
+### 🚀 Features
+
+* add script to update deployment status in release notes ([06448fd](https://github.com/jontreynes/daves-youtube-demo-action/commit/06448fd2eae88e51cd0d9109cee74d584b01dde4))
+
 ## [3.22.10](https://github.com/jontreynes/daves-youtube-demo-action/compare/v3.22.9...v3.22.10) (2026-04-22)
 
 ### 🐛 Bug Fixes
