@@ -1,5 +1,6 @@
 name: Consolidate Changelog
 
+
 on:
   workflow_call:
     inputs:
