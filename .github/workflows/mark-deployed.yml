@@ -87,19 +87,19 @@ jobs:
             echo "$DEPLOYED_HEADER" > /tmp/deployed.txt
             
             # Use Python for reliable string replacement
-            python3 << 'PYTHON_SCRIPT'
-with open('/tmp/current_body.txt', 'r', encoding='utf-8') as f:
+            python3 -c '
+with open("/tmp/current_body.txt", "r", encoding="utf-8") as f:
     content = f.read()
-with open('/tmp/pending.txt', 'r', encoding='utf-8') as f:
+with open("/tmp/pending.txt", "r", encoding="utf-8") as f:
     pending = f.read().strip()
-with open('/tmp/deployed.txt', 'r', encoding='utf-8') as f:
+with open("/tmp/deployed.txt", "r", encoding="utf-8") as f:
     deployed = f.read().strip()
     
 updated = content.replace(pending, deployed)
 
-with open('/tmp/release_body.md', 'w', encoding='utf-8') as f:
+with open("/tmp/release_body.md", "w", encoding="utf-8") as f:
     f.write(updated)
-PYTHON_SCRIPT
+'
             
             # Update release notes
             gh release edit "$RELEASE_TAG" --notes-file /tmp/release_body.md
