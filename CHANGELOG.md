@@ -1,3 +1,9 @@
+## [3.26.1](https://github.com/jontreynes/daves-youtube-demo-action/compare/v3.26.0...v3.26.1) (2026-04-22)
+
+### 🐛 Bug Fixes
+
+* mark and changelg naming ([0b4254a](https://github.com/jontreynes/daves-youtube-demo-action/commit/0b4254adfb43ecbe7cd6750aec8855c5b80f42fb))
+
 ## [3.26.0](https://github.com/jontreynes/daves-youtube-demo-action/compare/v3.25.0...v3.26.0) (2026-04-22)
 
 ### 🚀 Features
