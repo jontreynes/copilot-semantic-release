@@ -13,12 +13,14 @@ on:
         type: string
       old_version:
         description: 'Previous version deployed to environment'
-        required: true
+        required: false
         type: string
+        default: ''
       new_version:
         description: 'New version that was deployed'
-        required: true
+        required: false
         type: string
+        default: ''
 
 permissions:
   contents: write
@@ -37,6 +39,16 @@ jobs:
           ENVIRONMENT="${{ inputs.environment }}"
           OLD_VERSION="${{ inputs.old_version }}"
           NEW_VERSION="${{ inputs.new_version }}"
+          
+          # Default to release_tag if new_version not provided
+          if [[ -z "$NEW_VERSION" ]]; then
+            NEW_VERSION="$RELEASE_TAG"
+          fi
+          
+          # If old_version is empty, treat as initial deployment
+          if [[ -z "$OLD_VERSION" ]]; then
+            OLD_VERSION="initial"
+          fi
           
           echo "✅ Marking deployment as complete..."
           echo "Release: $RELEASE_TAG"
@@ -67,8 +79,12 @@ jobs:
           if echo "$CURRENT_BODY" | grep -F "$PENDING_HEADER" > /dev/null; then
             echo "✅ Found pending deployment section, updating to deployed status..."
             
+            # Replace pending header with deployed header (escape special chars for sed)
+            PENDING_ESCAPED=$(echo "$PENDING_HEADER" | sed 's/[&/\]/\\&/g')
+            DEPLOYED_ESCAPED=$(echo "$DEPLOYED_HEADER" | sed 's/[&/\]/\\&/g')
+            
             # Replace pending header with deployed header
-            UPDATED_BODY=$(echo "$CURRENT_BODY" | sed "s|${PENDING_HEADER}|${DEPLOYED_HEADER}|")
+            UPDATED_BODY=$(echo "$CURRENT_BODY" | sed "s|${PENDING_ESCAPED}|${DEPLOYED_ESCAPED}|")
             
             # Update release notes
             echo "$UPDATED_BODY" > /tmp/release_body.md
