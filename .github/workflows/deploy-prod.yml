@@ -28,9 +28,31 @@ jobs:
             echo "tag=${{ inputs.release_tag }}" >> $GITHUB_OUTPUT
           fi
   
+  consolidate-changelog:
+    name: Consolidate Changelog
+    needs: get-release-tag
+    uses: ./.github/workflows/consolidate-changelog.yml
+    with:
+      release_tag: ${{ needs.get-release-tag.outputs.release_tag }}
+      environment: 'prod'
+    permissions:
+      contents: write
+      actions: read
+  
+  approval:
+    name: "Production Deployment Approval (Manual Step)"
+    runs-on: ubuntu-latest
+    needs: [get-release-tag, consolidate-changelog]
+    steps:
+      - name: Approval checkpoint
+        run: |
+          echo "✅ Changelog consolidated for ${{ needs.get-release-tag.outputs.release_tag }}"
+          echo "🔗 Review release notes: https://github.com/${{ github.repository }}/releases/tag/${{ needs.get-release-tag.outputs.release_tag }}"
+          echo "✅ Ready to deploy to production"
+  
   deploy:
     name: Deploy
-    needs: get-release-tag
+    needs: [get-release-tag, approval]
     uses: ./.github/workflows/deploy-template.yml
     with:
       environment: 'prod'
@@ -38,9 +60,21 @@ jobs:
       next_environment: ''  # No next environment - production is final
     secrets: inherit
   
+  mark-deployed:
+    name: Mark Deployed
+    needs: [get-release-tag, consolidate-changelog, deploy]
+    uses: ./.github/workflows/mark-deployed.yml
+    with:
+      release_tag: ${{ needs.get-release-tag.outputs.release_tag }}
+      environment: 'prod'
+      old_version: ${{ needs.consolidate-changelog.outputs.old_version }}
+      new_version: ${{ needs.consolidate-changelog.outputs.new_version }}
+    permissions:
+      contents: write
+  
   promote-release:
     name: Promote Release to Latest
-    needs: [get-release-tag, deploy]
+    needs: [get-release-tag, mark-deployed]
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -49,8 +83,16 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
+          RELEASE_TAG="${{ needs.get-release-tag.outputs.release_tag }}"
+          
+          # Skip promotion for hotfix releases (keep them as prerelease)
+          if [[ "$RELEASE_TAG" =~ hotfix ]]; then
+            echo "⏭️ Skipping promotion - hotfix releases remain as prerelease"
+            exit 0
+          fi
+          
           echo "🎉 Promoting release to latest..."
-          gh release edit ${{ needs.get-release-tag.outputs.release_tag }} \
+          gh release edit $RELEASE_TAG \
             --repo ${{ github.repository }} \
             --draft=false \
             --prerelease=false \

@@ -46,6 +46,20 @@ const config = {
     }],
     ["@semantic-release/release-notes-generator", {
       "preset": "conventionalcommits",
+      "presetConfig": {
+        "types": [
+          { "type": "feat",     "section": "🚀 Features" },
+          { "type": "fix",      "section": "🐛 Bug Fixes" },
+          { "type": "perf",     "section": "⚡ Performance Improvements" },
+          { "type": "refactor", "section": "♻️ Code Refactoring" },
+          { "type": "docs",     "section": "📚 Documentation", "hidden": false },
+          { "type": "chore",    "section": "🔧 Chores", "hidden": false },
+          { "type": "ci",       "section": "👷 CI/CD", "hidden": false },
+          { "type": "build",    "section": "🏗️ Build System", "hidden": false },
+          { "type": "test",     "section": "✅ Tests", "hidden": false },
+          { "type": "style",    "section": "💄 Styles", "hidden": false }
+        ]
+      },
       "writerOpts": {
         "finalizeContext": (context) => {
           // Simple approach: reuse the existing baseVersionSuffix
@@ -90,7 +104,7 @@ const config = {
       "successComment": false,
       "failComment": false,
       "releasedLabels": ["released"],
-      "draftRelease": true  // Start as draft, workflow promotes to prerelease after dev, then latest after prod
+      "draftRelease": true  // Start as draft, cut-release promotes to prerelease, deploy-prod promotes to latest
     }]
   ]
 };

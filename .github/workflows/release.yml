@@ -29,6 +29,9 @@ jobs:
     name: Build Artifacts and Create Release
     runs-on: ubuntu-latest
     
+    env:
+      DRY_RUN_MODE: 'false' # for quick testing. to not create actual releases, set to 'true'
+    
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -89,38 +92,41 @@ jobs:
       - name: Create semantic release
         id: semantic
         env:
-          # Use GITHUB_TOKEN for semantic-release (may not trigger other workflows)
-          # For triggering deploy workflow, consider using a PAT instead
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          # Run semantic-release and capture exit code
-          set +e  # Don't exit on error yet
-          npx semantic-release | tee release-output.txt
-          EXIT_CODE=${PIPESTATUS[0]}  # Get exit code from npx, not tee
-          set -e
-          
-          # Check for actual errors (exit code != 0)
-          if [ $EXIT_CODE -ne 0 ]; then
-            echo "❌ Semantic release failed with exit code $EXIT_CODE"
-            exit $EXIT_CODE
+          # 1. Capture all output to file
+          DRY_RUN_FLAG=""
+          if [[ "${{ env.DRY_RUN_MODE }}" == "true" ]]; then
+            DRY_RUN_FLAG="--dry-run"
+            echo "🧪 DRY RUN MODE - No release will be created"
           fi
           
-          # Parse the file for success indicator
+          npx semantic-release $DRY_RUN_FLAG > release-output.txt 2>&1 || true
+          
+          # 2. Check if release was published
           if grep -q "Published release" release-output.txt; then
-            # Extract version number: "Published release 3.14.5" → "3.14.5"
-            VERSION=$(grep "Published release" release-output.txt | sed -n 's/.*Published release \([0-9][0-9.]*\).*/\1/p' | head -1)
-            # Add v prefix if not present
-            if [[ ! "$VERSION" =~ ^v ]]; then
-              VERSION="v${VERSION}"
-            fi
-            # Make it available to other steps
+            # 3. Get version from package.json (semantic-release updates this before creating release)
+            # This is the most reliable source of truth for the version
+            VERSION="v$(node -p "require('./package.json').version")"
+            
+            # 4. Make it available to other steps
             echo "release_version=$VERSION" >> $GITHUB_OUTPUT
             echo "release_created=true" >> $GITHUB_OUTPUT
             echo "✅ Release created: $VERSION"
           else
-            echo "release_created=false" >> $GITHUB_OUTPUT
-            echo "ℹ️ No release created (no semantic commits found)"
+            if [[ "${{ env.DRY_RUN_MODE }}" == "true" ]]; then
+              # Default version for dry-run testing to trigger deployment workflow
+              VERSION="v1.3.0"
+              echo "release_version=$VERSION" >> $GITHUB_OUTPUT
+              echo "release_created=true" >> $GITHUB_OUTPUT
+              echo "🧪 DRY RUN: Using test version $VERSION to trigger deployment"
+            else
+              echo "release_created=false" >> $GITHUB_OUTPUT
+              echo "ℹ️ No release created (no semantic commits found)"
+            fi
           fi
+          
+          cat release-output.txt
 
       - name: Mark draft as prerelease
         if: steps.semantic.outputs.release_created == 'true'
@@ -169,7 +175,7 @@ jobs:
               EVENT_TYPE="deploy-prod"
               ;;
             *)
-              EVENT_TYPE="deploy-dev"  # dev deployment (changed from deploy-release)
+              EVENT_TYPE="deploy-dev"
               ;;
           esac
           

@@ -1,0 +1,95 @@
+name: Mark Deployment Complete
+
+on:
+  workflow_call:
+    inputs:
+      release_tag:
+        description: 'Release tag that was deployed'
+        required: true
+        type: string
+      environment:
+        description: 'Target environment name (stage or prod)'
+        required: true
+        type: string
+      old_version:
+        description: 'Previous version deployed to environment'
+        required: true
+        type: string
+      new_version:
+        description: 'New version that was deployed'
+        required: true
+        type: string
+
+permissions:
+  contents: write
+
+jobs:
+  mark-deployed:
+    name: Mark ${{ inputs.release_tag }} as Deployed to ${{ inputs.environment }}
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Update release notes with deployed status
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          RELEASE_TAG="${{ inputs.release_tag }}"
+          ENVIRONMENT="${{ inputs.environment }}"
+          OLD_VERSION="${{ inputs.old_version }}"
+          NEW_VERSION="${{ inputs.new_version }}"
+          
+          echo "✅ Marking deployment as complete..."
+          echo "Release: $RELEASE_TAG"
+          echo "Environment: $ENVIRONMENT"
+          echo "Version Range: $OLD_VERSION → $NEW_VERSION"
+          
+          # Get current release body
+          CURRENT_BODY=$(gh release view "$RELEASE_TAG" --json body -q .body 2>/dev/null)
+          
+          if [[ -z "$CURRENT_BODY" ]]; then
+            echo "❌ Release $RELEASE_TAG not found"
+            exit 1
+          fi
+          
+          # Generate timestamp in UTC
+          TIMESTAMP=$(date -u +"%Y-%m-%d %H:%M UTC")
+          
+          # Build the pending and deployed headers
+          if [[ "$OLD_VERSION" == "initial" ]]; then
+            PENDING_HEADER="## 📦 Pending Deployment to ${ENVIRONMENT} | Initial Deployment"
+            DEPLOYED_HEADER="## 📦 Deployed to ${ENVIRONMENT} | Initial Deployment | ${TIMESTAMP}"
+          else
+            PENDING_HEADER="## 📦 Pending Deployment to ${ENVIRONMENT} | ${OLD_VERSION} → ${NEW_VERSION}"
+            DEPLOYED_HEADER="## 📦 Deployed to ${ENVIRONMENT} | ${OLD_VERSION} → ${NEW_VERSION} | ${TIMESTAMP}"
+          fi
+          
+          # Check if pending header exists
+          if echo "$CURRENT_BODY" | grep -F "$PENDING_HEADER" > /dev/null; then
+            echo "✅ Found pending deployment section, updating to deployed status..."
+            
+            # Replace pending header with deployed header
+            UPDATED_BODY=$(echo "$CURRENT_BODY" | sed "s|${PENDING_HEADER}|${DEPLOYED_HEADER}|")
+            
+            # Update release notes
+            echo "$UPDATED_BODY" > /tmp/release_body.md
+            gh release edit "$RELEASE_TAG" --notes-file /tmp/release_body.md
+            
+            echo "✅ Release notes updated with deployed status"
+          else
+            echo "⚠️  Pending deployment section not found in release notes"
+            echo "⚠️  This might happen if:"
+            echo "    - Deployment was done without running consolidate-changelog"
+            echo "    - Release notes were manually edited"
+            echo "    - This is a retry after manual intervention"
+            echo ""
+            echo "ℹ️  Skipping status update (not blocking deployment)"
+          fi
+          
+          # Output summary
+          echo "### ✅ Deployment Completed" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Environment**: ${ENVIRONMENT}" >> $GITHUB_STEP_SUMMARY
+          echo "**Version Range**: ${OLD_VERSION} → ${NEW_VERSION}" >> $GITHUB_STEP_SUMMARY
+          echo "**Deployed At**: ${TIMESTAMP}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "[View Release Notes](https://github.com/${{ github.repository }}/releases/tag/${RELEASE_TAG})" >> $GITHUB_STEP_SUMMARY

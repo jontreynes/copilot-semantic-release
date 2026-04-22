@@ -1,0 +1,201 @@
+name: Consolidate Changelog
+
+on:
+  workflow_call:
+    inputs:
+      release_tag:
+        description: 'Release tag being deployed (e.g., v2.29.3)'
+        required: true
+        type: string
+      environment:
+        description: 'Target environment name (stage or prod)'
+        required: true
+        type: string
+
+permissions:
+  contents: write
+  actions: read
+
+jobs:
+  consolidate:
+    name: Consolidate Changelog for ${{ inputs.environment }}
+    runs-on: ubuntu-latest
+    outputs:
+      old_version: ${{ steps.consolidate.outputs.old_version }}
+      new_version: ${{ steps.consolidate.outputs.new_version }}
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Need full history for CHANGELOG.md parsing
+      
+      - name: Find last deployment to ${{ inputs.environment }}
+        id: find-last-deployment
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          echo "🔍 Finding last successful deployment to ${{ inputs.environment }}..."
+          
+          # Determine workflow file based on environment
+          if [[ "${{ inputs.environment }}" == "stage" ]]; then
+            WORKFLOW_FILE="deploy-stage.yml"
+          elif [[ "${{ inputs.environment }}" == "prod" ]]; then
+            WORKFLOW_FILE="deploy-prod.yml"
+          else
+            echo "❌ Invalid environment: ${{ inputs.environment }}"
+            exit 1
+          fi
+          
+          # Query GitHub API for last successful deployment
+          LAST_RUN=$(gh api \
+            "/repos/${{ github.repository }}/actions/workflows/${WORKFLOW_FILE}/runs" \
+            --field status=completed \
+            --field conclusion=success \
+            --field per_page=1 \
+            --jq '.workflow_runs[0]')
+          
+          if [[ -z "$LAST_RUN" || "$LAST_RUN" == "null" ]]; then
+            echo "ℹ️  No previous deployment found to ${{ inputs.environment }}"
+            echo "old_version=" >> $GITHUB_OUTPUT
+            echo "is_first_deployment=true" >> $GITHUB_OUTPUT
+          else
+            # Extract release tag from run name (run-name is set to release_tag)
+            OLD_TAG=$(echo "$LAST_RUN" | jq -r '.name // empty' | grep -oP 'v\d+\.\d+\.\d+(-.*)?')
+            
+            if [[ -z "$OLD_TAG" ]]; then
+              echo "⚠️  Could not extract version from last deployment"
+              echo "old_version=" >> $GITHUB_OUTPUT
+              echo "is_first_deployment=true" >> $GITHUB_OUTPUT
+            else
+              echo "✅ Last deployment to ${{ inputs.environment }}: $OLD_TAG"
+              echo "old_version=$OLD_TAG" >> $GITHUB_OUTPUT
+              echo "is_first_deployment=false" >> $GITHUB_OUTPUT
+            fi
+          fi
+      
+      - name: Extract changelog sections
+        id: extract-changelog
+        if: steps.find-last-deployment.outputs.old_version != ''
+        run: |
+          OLD_VERSION="${{ steps.find-last-deployment.outputs.old_version }}"
+          NEW_VERSION="${{ inputs.release_tag }}"
+          
+          echo "📄 Extracting changelog from $OLD_VERSION to $NEW_VERSION..."
+          
+          # Check if CHANGELOG.md exists
+          if [[ ! -f "CHANGELOG.md" ]]; then
+            echo "❌ CHANGELOG.md not found"
+            exit 1
+          fi
+          
+          # Extract changelog between versions
+          EXTRACTED=$(awk -v old="$OLD_VERSION" -v new="$NEW_VERSION" '
+            BEGIN { 
+              in_range=0
+              found_new=0
+            }
+            /^## \[/ {
+              version = $0
+              gsub(/^## \[/, "", version)
+              gsub(/\].*$/, "", version)
+              
+              # Check if we hit the new version
+              if (version == new) {
+                found_new=1
+                in_range=1
+                print $0
+                next
+              }
+              
+              # Check if we hit the old version (stop extracting)
+              if (version == old) {
+                in_range=0
+                exit
+              }
+              
+              # If in range, print the section
+              if (in_range) {
+                print $0
+                next
+              }
+            }
+            {
+              if (in_range) {
+                print $0
+              }
+            }
+          ' CHANGELOG.md)
+          
+          if [[ -z "$EXTRACTED" ]]; then
+            echo "⚠️  No changelog entries found between $OLD_VERSION and $NEW_VERSION"
+            echo "⚠️  This might be a redeploy of the same version"
+            EXTRACTED="No new changes since $OLD_VERSION"
+          fi
+          
+          # Save to file (handle multiline)
+          echo "$EXTRACTED" > /tmp/changelog_extract.md
+          
+          echo "✅ Changelog extracted successfully"
+          echo "extracted_content<<EOF" >> $GITHUB_OUTPUT
+          cat /tmp/changelog_extract.md >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+      
+      - name: Consolidate and update release notes
+        id: consolidate
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          NEW_VERSION="${{ inputs.release_tag }}"
+          OLD_VERSION="${{ steps.find-last-deployment.outputs.old_version }}"
+          IS_FIRST="${{ steps.find-last-deployment.outputs.is_first_deployment }}"
+          ENVIRONMENT="${{ inputs.environment }}"
+          
+          echo "📦 Updating release notes for $NEW_VERSION..."
+          
+          # Get current release body
+          CURRENT_BODY=$(gh release view "$NEW_VERSION" --json body -q .body 2>/dev/null || echo "")
+          
+          if [[ -z "$CURRENT_BODY" ]]; then
+            echo "❌ Release $NEW_VERSION not found"
+            exit 1
+          fi
+          
+          # Build consolidated section
+          if [[ "$IS_FIRST" == "true" || -z "$OLD_VERSION" ]]; then
+            # First deployment to this environment
+            HEADER="## 📦 Pending Deployment to ${ENVIRONMENT} | Initial Deployment"
+            CONSOLIDATED_SECTION="${HEADER}\n\nThis is the first deployment to ${ENVIRONMENT}."
+            OLD_VERSION="initial"
+          else
+            # Normal deployment with version range
+            HEADER="## 📦 Pending Deployment to ${ENVIRONMENT} | ${OLD_VERSION} → ${NEW_VERSION}"
+            
+            CHANGELOG_CONTENT=$(cat /tmp/changelog_extract.md 2>/dev/null || echo "No changes extracted")
+            
+            CONSOLIDATED_SECTION="${HEADER}\n\n${CHANGELOG_CONTENT}"
+          fi
+          
+          # Append to release body
+          NEW_BODY="${CURRENT_BODY}
+
+---
+
+${CONSOLIDATED_SECTION}"
+          
+          # Update release notes
+          echo "$NEW_BODY" > /tmp/release_body.md
+          gh release edit "$NEW_VERSION" --notes-file /tmp/release_body.md
+          
+          echo "✅ Release notes updated with pending deployment section"
+          echo "old_version=$OLD_VERSION" >> $GITHUB_OUTPUT
+          echo "new_version=$NEW_VERSION" >> $GITHUB_OUTPUT
+          
+          # Output summary
+          echo "### 📦 Changelog Consolidated" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Environment**: ${ENVIRONMENT}" >> $GITHUB_STEP_SUMMARY
+          echo "**Version Range**: ${OLD_VERSION} → ${NEW_VERSION}" >> $GITHUB_STEP_SUMMARY
+          echo "**Status**: Pending Deployment" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "[View Release Notes](https://github.com/${{ github.repository }}/releases/tag/${NEW_VERSION})" >> $GITHUB_STEP_SUMMARY
