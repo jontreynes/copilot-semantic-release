@@ -1,3 +1,10 @@
+## [3.22.7](https://github.com/jontreynes/daves-youtube-demo-action/compare/v3.22.6...v3.22.7) (2026-04-22)
+
+### 🐛 Bug Fixes
+
+* d ([d27298a](https://github.com/jontreynes/daves-youtube-demo-action/commit/d27298a0bb6ccfbef1122c915b1eddfe8d90ce1c))
+* improve extraction of old release tag in changelog consolidation ([e64ed9e](https://github.com/jontreynes/daves-youtube-demo-action/commit/e64ed9eb51e954b32ea0c3f5f8ab4df29e682932))
+
 ## [3.22.6](https://github.com/jontreynes/daves-youtube-demo-action/compare/v3.22.5...v3.22.6) (2026-04-22)
 
 ### 🐛 Bug Fixes
