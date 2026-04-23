@@ -1,3 +1,10 @@
+## [3.29.0](https://github.com/jontreynes/daves-youtube-demo-action/compare/v3.28.0...v3.29.0) (2026-04-23)
+
+### 🚀 Features
+
+* add extract-changelog script and integrate into workflow ([21a20c2](https://github.com/jontreynes/daves-youtube-demo-action/commit/21a20c2384e0de693a2b72bfa4b4d5990379fecd))
+* test release fix 1 ([a1907e5](https://github.com/jontreynes/daves-youtube-demo-action/commit/a1907e56661f5590d9762cdeaf3d9dce1f234247))
+
 ## [3.28.0](https://github.com/jontreynes/daves-youtube-demo-action/compare/v3.27.0...v3.28.0) (2026-04-23)
 
 ### 🚀 Features
