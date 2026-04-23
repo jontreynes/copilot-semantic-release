@@ -1,3 +1,9 @@
+## [3.28.0](https://github.com/jontreynes/daves-youtube-demo-action/compare/v3.27.0...v3.28.0) (2026-04-23)
+
+### 🚀 Features
+
+* enhance changelog extraction for divergent lineages and add detailed comments ([be2a28d](https://github.com/jontreynes/daves-youtube-demo-action/commit/be2a28db3815d239e225599cd49a5fdf51915445))
+
 ## [3.27.0](https://github.com/jontreynes/daves-youtube-demo-action/compare/v3.26.2...v3.27.0) (2026-04-22)
 
 ### 🚀 Features
