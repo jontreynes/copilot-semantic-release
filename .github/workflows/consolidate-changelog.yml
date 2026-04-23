@@ -29,6 +29,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
+          ref: ${{ inputs.release_tag }}  # Checkout the tag being deployed
           fetch-depth: 0  # Need full history for CHANGELOG.md parsing
       
       - name: Find last deployment to ${{ inputs.environment }}
@@ -97,6 +98,19 @@ jobs:
         id: extract-changelog
         if: steps.find-last-deployment.outputs.old_version != ''
         run: |
+          # This step extracts changelog entries between two versions.
+          # 
+          # Normal case (same lineage): Both versions exist in CHANGELOG.md
+          #   Example: v1.2.0 → v1.3.0 (both on main) = shows v1.3.0 changes
+          # 
+          # Divergent lineage: OLD version doesn't exist in NEW's CHANGELOG.md
+          #   Example: v1.2.1 (hotfix) → v1.3.0 (main) = v1.3.0 CHANGELOG has no [1.2.1]
+          #   Behavior: Shows all changes in v1.3.0's lineage + adds warning note
+          #   Rationale: Hotfix changes should be backmerged separately to main
+          # 
+          # Hotfix-to-hotfix (same lineage): Both versions exist in CHANGELOG.md
+          #   Example: v1.2.1 → v1.2.2 (both on hotfix branch) = shows v1.2.2 changes
+          
           OLD_VERSION="${{ steps.find-last-deployment.outputs.old_version }}"
           NEW_VERSION="${{ inputs.release_tag }}"
           
@@ -114,11 +128,24 @@ jobs:
           
           echo "🔍 Searching for versions: $OLD_VERSION_NORMALIZED to $NEW_VERSION_NORMALIZED"
           
+          # Check if OLD version exists in NEW version's CHANGELOG.md (detect divergent lineages)
+          OLD_EXISTS=$(grep -c "^## \[v\?${OLD_VERSION_NORMALIZED}\]" CHANGELOG.md || true)
+          
+          if [[ "$OLD_EXISTS" -eq 0 ]]; then
+            echo "⚠️  Old version $OLD_VERSION not found in $NEW_VERSION CHANGELOG.md"
+            echo "⚠️  This indicates divergent branch lineages (e.g., main-branch release after hotfix)"
+            echo "📋 Will show all changes in $NEW_VERSION release lineage"
+            DIVERGENT_LINEAGE="true"
+          else
+            DIVERGENT_LINEAGE="false"
+          fi
+          
           # Extract changelog between versions
           EXTRACTED=$(awk -v old="$OLD_VERSION_NORMALIZED" -v new="$NEW_VERSION_NORMALIZED" '
             BEGIN { 
               in_range=0
               found_new=0
+              found_old=0
             }
             /^## \[/ {
               version = $0
@@ -135,6 +162,7 @@ jobs:
               
               # Check if we hit the old version (stop extracting)
               if (version == old) {
+                found_old=1
                 in_range=0
                 exit
               }
@@ -151,6 +179,14 @@ jobs:
               }
             }
           ' CHANGELOG.md)
+          
+          # Add note for divergent lineages
+          if [[ "$DIVERGENT_LINEAGE" == "true" && -n "$EXTRACTED" ]]; then
+            EXTRACTED="${EXTRACTED}
+
+---
+**Note:** Previous deployment ($OLD_VERSION) was from a different branch lineage (e.g., hotfix). This shows all changes in the $NEW_VERSION release lineage. If hotfix changes should persist, they must be backmerged separately."
+          fi
           
           if [[ -z "$EXTRACTED" ]]; then
             echo "⚠️  No changelog entries found between $OLD_VERSION and $NEW_VERSION"
