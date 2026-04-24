@@ -179,9 +179,10 @@ jobs:
           CHANGELOG_CONTENT=$(printf '> **Changes in this deployment:**\n>\n%s' "$CHANGELOG_CONTENT")
 
           # Build contributors section if available
+          # Note: authors come from git log %aN (real names, not GitHub handles)
           CONTRIBUTORS_SECTION=""
           if [[ -f /tmp/contributors.txt && -s /tmp/contributors.txt ]]; then
-            CONTRIBUTORS_SECTION=$(printf '\n### 👥 Contributors\n\n'; sed 's/^/- @/' /tmp/contributors.txt; echo "")
+            CONTRIBUTORS_SECTION=$(printf '\n### 👥 Contributors\n\n'; sed 's/^/- /' /tmp/contributors.txt; echo "")
           fi
 
           HISTORY_HEADER="## 📦 Deployment History"
