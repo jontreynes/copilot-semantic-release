@@ -1,3 +1,10 @@
+## [3.45.0](https://github.com/jontreynes/copilot-semantic-release/compare/v3.44.0...v3.45.0) (2026-04-24)
+
+### 🚀 Features
+
+* Merge branch 'main' of https://github.com/jontreynes/copilot-semantic-release ([f3f7ba8](https://github.com/jontreynes/copilot-semantic-release/commit/f3f7ba806d5ebe61da6003e03442d192dab7ef1e))
+* testing 2 ([692eca4](https://github.com/jontreynes/copilot-semantic-release/commit/692eca46413d9a86772f6a66f6f29cf0deb497eb))
+
 ## [3.44.0](https://github.com/jontreynes/copilot-semantic-release/compare/v3.43.1...v3.44.0) (2026-04-24)
 
 ### 🚀 Features
