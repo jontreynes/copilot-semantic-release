@@ -122,7 +122,7 @@ jobs:
           # Get all unique commit authors between the two tags
           git log "${OLD_VERSION}..${NEW_VERSION}" --format='%aN' 2>/dev/null \
             | sort -u \
-            > /tmp/contributors.txt
+            > /tmp/contributors.txt || true
           
           if [[ -s /tmp/contributors.txt ]]; then
             echo "✅ Found $(wc -l < /tmp/contributors.txt | tr -d ' ') unique contributor(s):"
