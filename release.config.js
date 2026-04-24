@@ -42,14 +42,23 @@ const config = {
   ],
   plugins: [
     ["@semantic-release/commit-analyzer", {
-      "preset": "conventionalcommits"
+      "preset": "conventionalcommits",
+      "releaseRules": [
+        // patch: is the canonical bug-fix type; fix: is suppressed to avoid
+        // Azure Boards AB# keyword collision (fix/fixes/fixed auto-transition work items)
+        { "type": "patch",    "release": "patch" },
+        { "type": "feat",     "release": "minor" },
+        { "type": "fix",      "release": false },   // explicitly suppressed
+        { "type": "perf",     "release": "patch" },
+        { "type": "revert",   "release": "patch" }
+      ]
     }],
     ["@semantic-release/release-notes-generator", {
       "preset": "conventionalcommits",
       "presetConfig": {
         "types": [
           { "type": "feat",     "section": "🚀 Features" },
-          { "type": "fix",      "section": "🐛 Bug Fixes" },
+          { "type": "patch",    "section": "🐛 Bug Fixes" },
           { "type": "perf",     "section": "⚡ Performance Improvements" },
           { "type": "refactor", "section": "♻️ Code Refactoring" },
           { "type": "docs",     "section": "📚 Documentation", "hidden": false },
