@@ -1,3 +1,9 @@
+## [3.35.0](https://github.com/jontreynes/copilot-semantic-release/compare/v3.34.0...v3.35.0) (2026-04-24)
+
+### 🚀 Features
+
+* enhance deployment status handling and update release notes structure ([d8e767c](https://github.com/jontreynes/copilot-semantic-release/commit/d8e767cff372e3ba5d8c1a63df604a1657df7e68))
+
 ## [3.34.0](https://github.com/jontreynes/copilot-semantic-release/compare/v3.33.0...v3.34.0) (2026-04-24)
 
 ### 🚀 Features
