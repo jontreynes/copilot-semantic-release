@@ -1,3 +1,9 @@
+## [3.43.1](https://github.com/jontreynes/copilot-semantic-release/compare/v3.43.0...v3.43.1) (2026-04-24)
+
+### 🐛 Bug Fixes
+
+* handle potential errors when gathering unique contributors in changelog ([cc15ef7](https://github.com/jontreynes/copilot-semantic-release/commit/cc15ef75b87bbff6c08ccc566b021916c86a00e3))
+
 ## [3.43.0](https://github.com/jontreynes/copilot-semantic-release/compare/v3.42.0...v3.43.0) (2026-04-24)
 
 ### 🚀 Features
