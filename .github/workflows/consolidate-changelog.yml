@@ -110,6 +110,59 @@ jobs:
           cat /tmp/changelog_extract.md >> $GITHUB_OUTPUT
           echo "EOF" >> $GITHUB_OUTPUT
       
+      - name: Gather contributors
+        id: gather-contributors
+        if: steps.find-last-deployment.outputs.old_version != ''
+        run: |
+          OLD_VERSION="${{ steps.find-last-deployment.outputs.old_version }}"
+          NEW_VERSION="${{ inputs.release_tag }}"
+          
+          echo "🔍 Gathering contributors between $OLD_VERSION and $NEW_VERSION..."
+          
+          # Initialize contributors file
+          > /tmp/contributors.txt
+          
+          # Get merge commits (PR merges) between the two tags
+          pr_commits=$(git log "${OLD_VERSION}..${NEW_VERSION}" --oneline --merges 2>/dev/null || echo "")
+          
+          if [ -z "$pr_commits" ]; then
+            echo "ℹ️  No merge commits found between $OLD_VERSION and $NEW_VERSION"
+            exit 0
+          fi
+          
+          # Extract PR numbers from merge commit messages
+          pr_numbers=$(echo "$pr_commits" | grep -oP 'pull request #\K[0-9]+' | sort -u)
+          
+          if [ -z "$pr_numbers" ]; then
+            echo "ℹ️  No PR numbers found in merge commits"
+            exit 0
+          fi
+          
+          contributors=()
+          
+          for pr_num in $pr_numbers; do
+            api_response=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+              "https://api.github.com/repos/${{ github.repository }}/pulls/$pr_num")
+            
+            if echo "$api_response" | jq -e . >/dev/null 2>&1; then
+              error_msg=$(echo "$api_response" | jq -r '.message // empty' 2>/dev/null)
+              if [ -z "$error_msg" ]; then
+                pr_author=$(echo "$api_response" | jq -r '.user.login // empty' 2>/dev/null)
+                if [ -n "$pr_author" ]; then
+                  contributors+=("$pr_author")
+                fi
+              fi
+            fi
+          done
+          
+          # Write deduplicated, sorted contributors
+          if [ ${#contributors[@]} -gt 0 ]; then
+            printf '%s\n' "${contributors[@]}" | sort -u > /tmp/contributors.txt
+            echo "✅ Found $(wc -l < /tmp/contributors.txt | tr -d ' ') unique contributor(s)"
+          else
+            echo "ℹ️  No contributors found"
+          fi
+      
       - name: Consolidate and update release notes
         id: consolidate
         env:
@@ -131,6 +184,7 @@ jobs:
           fi
           
           # Determine version range label and raw changelog content
+          DIFF_URL=""
           if [[ "$IS_FIRST" == "true" || -z "$OLD_VERSION" ]]; then
             VERSION_RANGE="Initial Deployment"
             OLD_VERSION="initial"
@@ -139,7 +193,8 @@ jobs:
             VERSION_RANGE="Redeploying ${NEW_VERSION}"
             RAW_CHANGELOG="No new changes — redeploying ${NEW_VERSION}."
           else
-            VERSION_RANGE="${OLD_VERSION} → ${NEW_VERSION}"
+            DIFF_URL="https://github.com/${{ github.repository }}/compare/${OLD_VERSION}...${NEW_VERSION}"
+            VERSION_RANGE="[${OLD_VERSION} → ${NEW_VERSION}](${DIFF_URL})"
             RAW_CHANGELOG=$(cat /tmp/changelog_extract.md 2>/dev/null || echo "No changes extracted")
           fi
 
@@ -151,6 +206,12 @@ jobs:
             -e 's/^# /### /' | \
           awk '{ if ($0 == "") print ">"; else print "> " $0 }')
           CHANGELOG_CONTENT=$(printf '> **Changes in this deployment:**\n>\n%s' "$CHANGELOG_CONTENT")
+
+          # Build contributors section if available
+          CONTRIBUTORS_SECTION=""
+          if [[ -f /tmp/contributors.txt && -s /tmp/contributors.txt ]]; then
+            CONTRIBUTORS_SECTION=$(printf '\n### 👥 Contributors\n\n'; sed 's/^/- @/' /tmp/contributors.txt; echo "")
+          fi
 
           HISTORY_HEADER="## 📦 Deployment History"
           PENDING_LINE="- ⏳ Pending deployment to ${ENVIRONMENT} | ${VERSION_RANGE}"
@@ -186,6 +247,13 @@ jobs:
               echo "$PENDING_LINE"
               echo ""
               printf '%s\n' "$CHANGELOG_CONTENT"
+              if [[ -n "$CONTRIBUTORS_SECTION" ]]; then
+                printf '%s\n' "$CONTRIBUTORS_SECTION"
+              fi
+              if [[ -n "$DIFF_URL" ]]; then
+                echo ""
+                echo "**Full Changelog**: ${DIFF_URL}"
+              fi
             } > /tmp/release_body.md
           else
             echo "ℹ️  No existing deployment history — creating new section"
@@ -201,6 +269,13 @@ jobs:
               echo "$PENDING_LINE"
               echo ""
               printf '%s\n' "$CHANGELOG_CONTENT"
+              if [[ -n "$CONTRIBUTORS_SECTION" ]]; then
+                printf '%s\n' "$CONTRIBUTORS_SECTION"
+              fi
+              if [[ -n "$DIFF_URL" ]]; then
+                echo ""
+                echo "**Full Changelog**: ${DIFF_URL}"
+              fi
             } > /tmp/release_body.md
           fi
           
