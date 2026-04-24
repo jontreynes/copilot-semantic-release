@@ -1,3 +1,9 @@
+## [3.37.0](https://github.com/jontreynes/copilot-semantic-release/compare/v3.36.0...v3.37.0) (2026-04-24)
+
+### 🚀 Features
+
+* testing 1 ([bf0bd03](https://github.com/jontreynes/copilot-semantic-release/commit/bf0bd03c91631c0e11c5ec11e77ea0423cb80eae))
+
 ## [3.36.0](https://github.com/jontreynes/copilot-semantic-release/compare/v3.35.0...v3.36.0) (2026-04-24)
 
 ### 🚀 Features
