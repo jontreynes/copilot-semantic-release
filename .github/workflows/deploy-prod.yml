@@ -2,6 +2,10 @@ name: Deploy to Production
 
 run-name: "${{ github.event.client_payload.release_tag || inputs.release_tag || 'triggered' }}"
 
+concurrency:
+  group: deploy-prod
+  cancel-in-progress: false
+
 on:
   repository_dispatch:
     types: [deploy-prod]  # Triggered by deploy-stage workflow

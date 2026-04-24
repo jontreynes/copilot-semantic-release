@@ -2,6 +2,10 @@ name: Deploy to Staging
 
 run-name: "${{ github.event.client_payload.release_tag || inputs.release_tag || 'triggered' }}"
 
+concurrency:
+  group: deploy-stage
+  cancel-in-progress: false
+
 on:
   repository_dispatch:
     types: [deploy-stage]  # Triggered by deploy-dev workflow
