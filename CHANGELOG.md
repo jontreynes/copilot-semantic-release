@@ -1,3 +1,9 @@
+## [3.48.1](https://github.com/jontreynes/copilot-semantic-release/compare/v3.48.0...v3.48.1) (2026-04-24)
+
+### 🐛 Bug Fixes
+
+* add concurrency settings for production and staging deployment workflows so that we don't run into race conditions with tracking comparison of release notes b/w two runs in progress on the same environment ([e691ffb](https://github.com/jontreynes/copilot-semantic-release/commit/e691ffb610355679bac700c21a4e7911a7d9e306))
+
 ## [3.48.0](https://github.com/jontreynes/copilot-semantic-release/compare/v3.47.0...v3.48.0) (2026-04-24)
 
 ### 🚀 Features
