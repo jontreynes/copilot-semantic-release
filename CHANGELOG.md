@@ -1,3 +1,10 @@
+## [3.42.0](https://github.com/jontreynes/copilot-semantic-release/compare/v3.41.0...v3.42.0) (2026-04-24)
+
+### 🚀 Features
+
+* enhance changelog consolidation with commit and PR number logging ([b2a4193](https://github.com/jontreynes/copilot-semantic-release/commit/b2a41939f947f8a4f4fbd82bd5deea1b97e93128))
+* update pending deployment summary to use HTML link format ([307f177](https://github.com/jontreynes/copilot-semantic-release/commit/307f17708438e2bc985034c544d79dbed32ee378))
+
 ## [3.41.0](https://github.com/jontreynes/copilot-semantic-release/compare/v3.40.0...v3.41.0) (2026-04-24)
 
 ### 🚀 Features
