@@ -1,3 +1,9 @@
+## [3.46.0](https://github.com/jontreynes/copilot-semantic-release/compare/v3.45.0...v3.46.0) (2026-04-24)
+
+### 🚀 Features
+
+* enhance contributor gathering by using GitHub compare API for accurate usernames ([1f0b6ad](https://github.com/jontreynes/copilot-semantic-release/commit/1f0b6ada30cf58917bf69d586e5dc9deb0b2487d))
+
 ## [3.45.0](https://github.com/jontreynes/copilot-semantic-release/compare/v3.44.0...v3.45.0) (2026-04-24)
 
 ### 🚀 Features
