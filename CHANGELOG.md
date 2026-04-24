@@ -1,3 +1,10 @@
+## [3.36.0](https://github.com/jontreynes/copilot-semantic-release/compare/v3.35.0...v3.36.0) (2026-04-24)
+
+### 🚀 Features
+
+* improve changelog formatting and extraction logic in deployment workflow ([79d5106](https://github.com/jontreynes/copilot-semantic-release/commit/79d51062afc3b2e3b25332c47eb98de39e1f6847))
+* Metirge branch 'main' of https://github.com/jontreynes/copilot-semantic-release ([11ffef1](https://github.com/jontreynes/copilot-semantic-release/commit/11ffef1675dd327d44073a9d44dbee1a6fe0c5ab))
+
 ## [3.35.0](https://github.com/jontreynes/copilot-semantic-release/compare/v3.34.0...v3.35.0) (2026-04-24)
 
 ### 🚀 Features
