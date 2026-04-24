@@ -1,3 +1,13 @@
+## [3.40.0](https://github.com/jontreynes/copilot-semantic-release/compare/v3.39.0...v3.40.0) (2026-04-24)
+
+### 🚀 Features
+
+* add VSCode settings for GitHub Copilot code and commit message generation ([33ff3c0](https://github.com/jontreynes/copilot-semantic-release/commit/33ff3c01ce5bd3ef387423db2182351426d3e412))
+
+### 🐛 Bug Fixes
+
+* Merge branch 'maigithub.copilot.chat.commitMessagn' of https://github.com/jontreynes/copilot-semantic-release ([7e3cc6b](https://github.com/jontreynes/copilot-semantic-release/commit/7e3cc6b9f32418a501adeb532cf13d97cf343e10))
+
 ## [3.39.0](https://github.com/jontreynes/copilot-semantic-release/compare/v3.38.0...v3.39.0) (2026-04-24)
 
 ### 🚀 Features
