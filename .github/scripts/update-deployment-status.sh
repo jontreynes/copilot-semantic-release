@@ -36,48 +36,36 @@ fi
 # Generate timestamp in UTC
 TIMESTAMP=$(date -u +"%Y-%m-%d %H:%M UTC")
 
-# Match the ⏳ pending bullet for this environment
-echo "🔍 Looking for pending bullet for ${ENVIRONMENT}..."
+# Find the pending summary line for this environment
+echo "🔍 Looking for pending entry for ${ENVIRONMENT}..."
 
 # Save current body to temp file
 echo "$CURRENT_BODY" > /tmp/current_body.txt
 
-# Find the pending line by prefix — captures whatever version range is embedded in the bullet
-FOUND_PENDING=$(grep "^- ⏳ Pending deployment to ${ENVIRONMENT}" /tmp/current_body.txt || true)
+FOUND_PENDING=$(grep "<summary>⏳ Pending deployment to ${ENVIRONMENT}" /tmp/current_body.txt || true)
 
 if [[ -n "$FOUND_PENDING" ]]; then
   echo "✅ Found pending deployment entry: $FOUND_PENDING"
 
-  # Build deployed line: swap ⏳ Pending deployment to → ✅ Deployed to, append timestamp
-  DEPLOYED_LINE=$(echo "$FOUND_PENDING" | sed "s/^- ⏳ Pending deployment to /- ✅ Deployed to /")
-  DEPLOYED_LINE="${DEPLOYED_LINE} — ${TIMESTAMP}"
-
-  # Replace first occurrence only
-  awk -v pending="$FOUND_PENDING" -v deployed="$DEPLOYED_LINE" '
-  BEGIN { done=0 }
-  {
-    if (!done && $0 == pending) {
-      print deployed
-      done=1
-    } else {
-      print $0
-    }
-  }
-  ' /tmp/current_body.txt > /tmp/release_body.md
+  # Replace <details open> → <details> and update the summary: ⏳ Pending → ✅ Deployed + timestamp
+  sed -E \
+    -e 's|^<details open>$|<details>|' \
+    -e "s|<summary>⏳ Pending deployment to ${ENVIRONMENT} (.*)</summary>|<summary>✅ Deployed to ${ENVIRONMENT} \1 — ${TIMESTAMP}</summary>|" \
+    /tmp/current_body.txt > /tmp/release_body.md
 
   # Update release notes
   gh release edit "$RELEASE_TAG" --notes-file /tmp/release_body.md
 
   echo "✅ Release notes updated with deployed status"
 else
-  echo "⚠️  Pending deployment entry not found in release notes"
+  echo "⚠️  No pending deployment entry found in release notes"
   echo "⚠️  This might happen if:"
   echo "    - Deployment was done without running consolidate-changelog"
   echo "    - Release notes were manually edited"
   echo "    - This is a retry after manual intervention"
   echo ""
-  echo "📋 Current release body bullets:"
-  grep "^- " /tmp/current_body.txt || echo "  (no bullet lines found)"
+  echo "📋 Current release body pending entries:"
+  grep "<summary>⏳" /tmp/current_body.txt || echo "  (no pending entries found)"
   echo ""
   echo "ℹ️  Skipping status update (not blocking deployment)"
 fi
