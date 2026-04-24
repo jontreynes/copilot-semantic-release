@@ -1,3 +1,10 @@
+## [3.32.0](https://github.com/jontreynes/daves-youtube-demo-action/compare/v3.31.0...v3.32.0) (2026-04-24)
+
+### 🚀 Features
+
+* add Copilot instructions and update changelog deployment messages ([9c412a7](https://github.com/jontreynes/daves-youtube-demo-action/commit/9c412a7cd5bd0fd88b92d7a169cbe1545d00cc2a))
+* enhance release rules for semantic versioning and update bug fix section ([eb4f246](https://github.com/jontreynes/daves-youtube-demo-action/commit/eb4f246c5df0e7dd37edf167308a07aa2e82ee52))
+
 ## [3.31.0](https://github.com/jontreynes/daves-youtube-demo-action/compare/v3.30.0...v3.31.0) (2026-04-24)
 
 ### 🚀 Features
