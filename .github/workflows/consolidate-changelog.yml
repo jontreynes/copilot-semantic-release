@@ -205,7 +205,7 @@ jobs:
           else
             DIFF_URL="https://github.com/${{ github.repository }}/compare/${OLD_VERSION}...${NEW_VERSION}"
             VERSION_RANGE_TEXT="${OLD_VERSION} → ${NEW_VERSION}"
-            PENDING_SUMMARY="⏳ Pending deployment to ${ENVIRONMENT} | [${OLD_VERSION}...${NEW_VERSION}](${DIFF_URL})"
+            PENDING_SUMMARY="⏳ Pending deployment to ${ENVIRONMENT} | <a href=\"${DIFF_URL}\">${OLD_VERSION} → ${NEW_VERSION}</a>"
             RAW_CHANGELOG=$(cat /tmp/changelog_extract.md 2>/dev/null || echo "No changes extracted")
           fi
 
