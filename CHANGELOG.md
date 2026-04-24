@@ -1,3 +1,10 @@
+## [3.31.0](https://github.com/jontreynes/daves-youtube-demo-action/compare/v3.30.0...v3.31.0) (2026-04-24)
+
+### 🚀 Features
+
+* enhance changelog consolidation logic and add release notes cases documentation ([fc8ee93](https://github.com/jontreynes/daves-youtube-demo-action/commit/fc8ee933220c32973724112f4ed931a332e52eb5))
+* Merge branch 'main' of https://github.com/jontreynes/daves-youtube-demo-action ([22351e0](https://github.com/jontreynes/daves-youtube-demo-action/commit/22351e0dc4e20e81bed2888b8db8d1c65616d0d5))
+
 ## [3.30.0](https://github.com/jontreynes/daves-youtube-demo-action/compare/v3.29.0...v3.30.0) (2026-04-23)
 
 ### 🚀 Features
