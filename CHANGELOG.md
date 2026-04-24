@@ -1,3 +1,9 @@
+## [3.33.0](https://github.com/jontreynes/copilot-semantic-release/compare/v3.32.0...v3.33.0) (2026-04-24)
+
+### 🚀 Features
+
+* update project name and description for semantic release integration ([75b4d5d](https://github.com/jontreynes/copilot-semantic-release/commit/75b4d5d994668afdc062bc59d7f88c61e49a47d7))
+
 ## [3.32.0](https://github.com/jontreynes/daves-youtube-demo-action/compare/v3.31.0...v3.32.0) (2026-04-24)
 
 ### 🚀 Features
