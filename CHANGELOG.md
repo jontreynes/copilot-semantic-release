@@ -1,3 +1,13 @@
+## [3.41.0](https://github.com/jontreynes/copilot-semantic-release/compare/v3.40.0...v3.41.0) (2026-04-24)
+
+### 🚀 Features
+
+* enhance changelog output with pending deployment summaries and full changelog links ([e29ab58](https://github.com/jontreynes/copilot-semantic-release/commit/e29ab58a101cb75b0d5717c89972596d99c4b58f))
+
+### 🐛 Bug Fixes
+
+* Merge branch 'main' of https://github.com/jontreynes/copilot-semantic-release ([f2e3cc1](https://github.com/jontreynes/copilot-semantic-release/commit/f2e3cc182eb4e5319b7fde76eb7ca59c404f2a6b))
+
 ## [3.40.0](https://github.com/jontreynes/copilot-semantic-release/compare/v3.39.0...v3.40.0) (2026-04-24)
 
 ### 🚀 Features
