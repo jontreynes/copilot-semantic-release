@@ -122,16 +122,17 @@ jobs:
           # Initialize contributors file
           > /tmp/contributors.txt
           
-          # Get merge commits (PR merges) between the two tags
-          pr_commits=$(git log "${OLD_VERSION}..${NEW_VERSION}" --oneline --merges 2>/dev/null || echo "")
+          # Get all commits between the two tags (covers both merge commits and squash-merges)
+          all_commits=$(git log "${OLD_VERSION}..${NEW_VERSION}" --oneline 2>/dev/null || echo "")
           
-          if [ -z "$pr_commits" ]; then
-            echo "ℹ️  No merge commits found between $OLD_VERSION and $NEW_VERSION"
+          if [ -z "$all_commits" ]; then
+            echo "ℹ️  No commits found between $OLD_VERSION and $NEW_VERSION"
             exit 0
           fi
           
-          # Extract PR numbers from merge commit messages
-          pr_numbers=$(echo "$pr_commits" | grep -oP 'pull request #\K[0-9]+' | sort -u)
+          # Extract PR numbers from both merge commit messages ("Merge pull request #N")
+          # and squash-merge commit subjects ("feat: ... (#N)")
+          pr_numbers=$(echo "$all_commits" | grep -oP '(?:pull request #|[(#])\K[0-9]+' | sort -u)
           
           if [ -z "$pr_numbers" ]; then
             echo "ℹ️  No PR numbers found in merge commits"
@@ -186,15 +187,15 @@ jobs:
           # Determine version range label and raw changelog content
           DIFF_URL=""
           if [[ "$IS_FIRST" == "true" || -z "$OLD_VERSION" ]]; then
-            VERSION_RANGE="Initial Deployment"
+            VERSION_RANGE_TEXT="Initial Deployment"
             OLD_VERSION="initial"
             RAW_CHANGELOG="This is the first deployment to ${ENVIRONMENT}."
           elif [[ "$OLD_VERSION" == "$NEW_VERSION" ]]; then
-            VERSION_RANGE="Redeploying ${NEW_VERSION}"
+            VERSION_RANGE_TEXT="Redeploying ${NEW_VERSION}"
             RAW_CHANGELOG="No new changes — redeploying ${NEW_VERSION}."
           else
             DIFF_URL="https://github.com/${{ github.repository }}/compare/${OLD_VERSION}...${NEW_VERSION}"
-            VERSION_RANGE="[${OLD_VERSION} → ${NEW_VERSION}](${DIFF_URL})"
+            VERSION_RANGE_TEXT="${OLD_VERSION} → ${NEW_VERSION}"
             RAW_CHANGELOG=$(cat /tmp/changelog_extract.md 2>/dev/null || echo "No changes extracted")
           fi
 
@@ -214,10 +215,9 @@ jobs:
           fi
 
           HISTORY_HEADER="## 📦 Deployment History"
-          PENDING_LINE="- ⏳ Pending deployment to ${ENVIRONMENT} | ${VERSION_RANGE}"
 
           if echo "$CURRENT_BODY" | grep -q "^## 📦 Deployment History"; then
-            echo "ℹ️  Existing deployment history found — preserving ✅ entries and appending new pending entry"
+            echo "ℹ️  Existing deployment history found — preserving completed entries and appending new pending entry"
 
             # Extract semantic-release notes: everything before the --- + ## 📦 Deployment History block.
             # Blank lines after --- must be skipped or found_sep resets before the exit fires,
@@ -230,10 +230,25 @@ jobs:
               { print }
             ' | sed -e '${/^[[:space:]]*$/d}')
 
-            # Preserve all existing ✅ bullet lines
-            EXISTING_CHECKS=$(echo "$CURRENT_BODY" | grep "^- ✅ " || true)
+            # Preserve all existing <details> blocks (completed deployments)
+            EXISTING_BLOCKS=$(echo "$CURRENT_BODY" | awk '
+              /^<details>$/ { in_block=1; block=$0"\n"; next }
+              in_block && /^<\/details>$/ { block=block $0"\n"; in_block=0; printf "%s\n", block; block=""; next }
+              in_block { block=block $0"\n" }
+            ')
 
-            # Write updated body: semantic notes + separator + history header + preserved ✅ + new ⏳ + changelog
+            # Backward compat: if no <details> blocks found, convert old ✅ bullet lines
+            if [[ -z "$EXISTING_BLOCKS" ]]; then
+              OLD_CHECKS=$(echo "$CURRENT_BODY" | grep "^- ✅ " || true)
+              if [[ -n "$OLD_CHECKS" ]]; then
+                while IFS= read -r line; do
+                  summary_text="${line#- }"
+                  EXISTING_BLOCKS+="<details>"$'\n'"<summary>${summary_text}</summary>"$'\n\n'"</details>"$'\n\n'
+                done <<< "$OLD_CHECKS"
+              fi
+            fi
+
+            # Write updated body: semantic notes + separator + history header + completed entries + new pending entry
             {
               printf '%s\n' "$SEMANTIC_NOTES"
               echo ""
@@ -241,19 +256,18 @@ jobs:
               echo ""
               echo "$HISTORY_HEADER"
               echo ""
-              if [[ -n "$EXISTING_CHECKS" ]]; then
-                echo "$EXISTING_CHECKS"
+              if [[ -n "$EXISTING_BLOCKS" ]]; then
+                printf '%s\n' "$EXISTING_BLOCKS"
               fi
-              echo "$PENDING_LINE"
+              echo '<details open>'
+              echo "<summary>⏳ Pending deployment to ${ENVIRONMENT} | ${VERSION_RANGE_TEXT}</summary>"
               echo ""
               printf '%s\n' "$CHANGELOG_CONTENT"
               if [[ -n "$CONTRIBUTORS_SECTION" ]]; then
                 printf '%s\n' "$CONTRIBUTORS_SECTION"
               fi
-              if [[ -n "$DIFF_URL" ]]; then
-                echo ""
-                echo "**Full Changelog**: ${DIFF_URL}"
-              fi
+              echo ""
+              echo '</details>'
             } > /tmp/release_body.md
           else
             echo "ℹ️  No existing deployment history — creating new section"
@@ -266,16 +280,15 @@ jobs:
               echo ""
               echo "$HISTORY_HEADER"
               echo ""
-              echo "$PENDING_LINE"
+              echo '<details open>'
+              echo "<summary>⏳ Pending deployment to ${ENVIRONMENT} | ${VERSION_RANGE_TEXT}</summary>"
               echo ""
               printf '%s\n' "$CHANGELOG_CONTENT"
               if [[ -n "$CONTRIBUTORS_SECTION" ]]; then
                 printf '%s\n' "$CONTRIBUTORS_SECTION"
               fi
-              if [[ -n "$DIFF_URL" ]]; then
-                echo ""
-                echo "**Full Changelog**: ${DIFF_URL}"
-              fi
+              echo ""
+              echo '</details>'
             } > /tmp/release_body.md
           fi
           
@@ -290,7 +303,7 @@ jobs:
           echo "### 📦 Changelog Consolidated" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "**Environment**: ${ENVIRONMENT}" >> $GITHUB_STEP_SUMMARY
-          echo "**Version Range**: ${VERSION_RANGE}" >> $GITHUB_STEP_SUMMARY
+          echo "**Version Range**: ${VERSION_RANGE_TEXT}" >> $GITHUB_STEP_SUMMARY
           echo "**Status**: Pending Deployment" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "[View Release Notes](https://github.com/${{ github.repository }}/releases/tag/${NEW_VERSION})" >> $GITHUB_STEP_SUMMARY
