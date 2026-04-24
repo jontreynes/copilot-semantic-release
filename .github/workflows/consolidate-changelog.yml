@@ -130,18 +130,27 @@ jobs:
             exit 1
           fi
           
-          # Determine version range label and changelog content
+          # Determine version range label and raw changelog content
           if [[ "$IS_FIRST" == "true" || -z "$OLD_VERSION" ]]; then
             VERSION_RANGE="Initial Deployment"
             OLD_VERSION="initial"
-            CHANGELOG_CONTENT="This is the first deployment to ${ENVIRONMENT}."
+            RAW_CHANGELOG="This is the first deployment to ${ENVIRONMENT}."
           elif [[ "$OLD_VERSION" == "$NEW_VERSION" ]]; then
             VERSION_RANGE="Redeploying ${NEW_VERSION}"
-            CHANGELOG_CONTENT="No new changes — redeploying ${NEW_VERSION}."
+            RAW_CHANGELOG="No new changes — redeploying ${NEW_VERSION}."
           else
             VERSION_RANGE="${OLD_VERSION} → ${NEW_VERSION}"
-            CHANGELOG_CONTENT=$(cat /tmp/changelog_extract.md 2>/dev/null || echo "No changes extracted")
+            RAW_CHANGELOG=$(cat /tmp/changelog_extract.md 2>/dev/null || echo "No changes extracted")
           fi
+
+          # Format changelog as blockquote with downgraded headings so it renders
+          # visually smaller/inset beneath the deployment history bullets
+          CHANGELOG_CONTENT=$(printf '%s\n' "$RAW_CHANGELOG" | sed \
+            -e 's/^### /##### /' \
+            -e 's/^## /#### /' \
+            -e 's/^# /### /' | \
+          awk '{ if ($0 == "") print ">"; else print "> " $0 }')
+          CHANGELOG_CONTENT=$(printf '> **Changes in this deployment:**\n>\n%s' "$CHANGELOG_CONTENT")
 
           HISTORY_HEADER="## 📦 Deployment History"
           PENDING_LINE="- ⏳ Pending deployment to ${ENVIRONMENT} | ${VERSION_RANGE}"
@@ -149,16 +158,19 @@ jobs:
           if echo "$CURRENT_BODY" | grep -q "^## 📦 Deployment History"; then
             echo "ℹ️  Existing deployment history found — preserving ✅ entries and appending new pending entry"
 
-            # Extract semantic-release notes (everything before the --- separator that precedes the history block)
+            # Extract semantic-release notes: everything before the --- + ## 📦 Deployment History block.
+            # Blank lines after --- must be skipped or found_sep resets before the exit fires,
+            # causing the history block to be included in SEMANTIC_NOTES (duplicate bug).
             SEMANTIC_NOTES=$(echo "$CURRENT_BODY" | awk '
               /^---$/ { found_sep=1; next }
+              found_sep && /^[[:space:]]*$/ { next }
               found_sep && /^## 📦 Deployment History/ { exit }
               found_sep { found_sep=0 }
               { print }
             ' | sed -e '${/^[[:space:]]*$/d}')
 
             # Preserve all existing ✅ bullet lines
-            EXISTING_CHECKS=$(echo "$CURRENT_BODY" | grep -P "^- ✅ " || true)
+            EXISTING_CHECKS=$(echo "$CURRENT_BODY" | grep "^- ✅ " || true)
 
             # Write updated body: semantic notes + separator + history header + preserved ✅ + new ⏳ + changelog
             {
