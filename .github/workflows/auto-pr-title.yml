@@ -21,7 +21,7 @@ jobs:
             // Track the highest precedence commit type found
             let hasBreaking = false;   // Major release (breaking changes)
             let hasFeature = false;    // Minor release (new features)
-            let hasFix = false;        // Patch release (bug fixes)
+            let hasPatch = false;      // Patch release (bug fixes) — use patch: not fix: to avoid Azure Boards AB# keyword collision
             let hasPerf = false;       // Patch release (performance improvements)
             let mostRecentConventional = ''; // Fallback to most recent conventional commit
             
@@ -38,9 +38,9 @@ jobs:
               else if (message.startsWith('feat:')) {
                 hasFeature = true;
               } 
-              // Check for bug fixes (third precedence)
-              else if (message.startsWith('fix:')) {
-                hasFix = true;
+              // Check for bug fixes (third precedence) — patch: is the convention here, fix: is suppressed
+              else if (message.startsWith('patch:')) {
+                hasPatch = true;
               }
               // Check for performance improvements (third precedence)
               else if (message.startsWith('perf:')) {
@@ -64,8 +64,8 @@ jobs:
               body = '\n\nBREAKING CHANGE: This PR contains breaking changes - see individual commits for details';
             } else if (hasFeature) {
               prefix = 'feat: ';        // Minor version bump
-            } else if (hasFix) {
-              prefix = 'fix: ';         // Patch version bump (bugs)
+            } else if (hasPatch) {
+              prefix = 'patch: ';       // Patch version bump (bugs)
             } else if (hasPerf) {
               prefix = 'perf: ';        // Patch version bump (performance)
             } else if (mostRecentConventional) {

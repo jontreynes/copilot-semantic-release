@@ -1,7 +1,7 @@
 {
-  "name": "daves-youtube-demo-action",
+  "name": "copilot-semantic-release",
   "version": "3.31.0",
-  "description": "This repository accompanies my Youtube Series on how to create and release actions.",
+  "description": "A GitHub Action with Copilot-assisted commit conventions and automated semantic release workflows.",
   "main": "index.js",
   "scripts": {
     "build": "node esbuild.cjs",
@@ -9,15 +9,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/jontreynes/daves-youtube-demo-action.git"
+    "url": "git+https://github.com/jontreynes/copilot-semantic-release.git"
   },
   "keywords": [],
   "author": "",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/jontreynes/daves-youtube-demo-action/issues"
+    "url": "https://github.com/jontreynes/copilot-semantic-release/issues"
   },
-  "homepage": "https://github.com/jontreynes/daves-youtube-demo-action#readme",
+  "homepage": "https://github.com/jontreynes/copilot-semantic-release#readme",
   "devDependencies": {
     "@semantic-release/changelog": "^6.0.3",
     "@semantic-release/git": "^10.0.1",
