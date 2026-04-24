@@ -132,12 +132,18 @@ jobs:
           
           # Build consolidated section
           if [[ "$IS_FIRST" == "true" || -z "$OLD_VERSION" ]]; then
-            # First deployment to this environment
+            # No prior successful deployment found — first ever deploy to this environment
             HEADER="## 📦 Pending Deployment to ${ENVIRONMENT} | Initial Deployment"
             echo "${HEADER}" > /tmp/consolidated_section.md
             echo "" >> /tmp/consolidated_section.md
             echo "This is the first deployment to ${ENVIRONMENT}." >> /tmp/consolidated_section.md
             OLD_VERSION="initial"
+          elif [[ "$OLD_VERSION" == "$NEW_VERSION" ]]; then
+            # Same version was already deployed — this is a redeploy
+            HEADER="## 📦 Pending Deployment to ${ENVIRONMENT} | Redeploying ${NEW_VERSION}"
+            echo "${HEADER}" > /tmp/consolidated_section.md
+            echo "" >> /tmp/consolidated_section.md
+            echo "No new changes — redeploying ${NEW_VERSION}." >> /tmp/consolidated_section.md
           else
             # Normal deployment with version range
             HEADER="## 📦 Pending Deployment to ${ENVIRONMENT} | ${OLD_VERSION} → ${NEW_VERSION}"

@@ -229,7 +229,7 @@ This is the first deployment to stage.
 
 ---
 
-## 📦 Pending Deployment to stage | v1.3.0 → v1.3.0
+## 📦 Pending Deployment to stage | Redeploying v1.3.0
 
 No new changes — redeploying v1.3.0.
 ```
