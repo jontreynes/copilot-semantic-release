@@ -188,14 +188,17 @@ jobs:
           DIFF_URL=""
           if [[ "$IS_FIRST" == "true" || -z "$OLD_VERSION" ]]; then
             VERSION_RANGE_TEXT="Initial Deployment"
+            PENDING_SUMMARY="⏳ Pending deployment to ${ENVIRONMENT} | Initial Deployment"
             OLD_VERSION="initial"
             RAW_CHANGELOG="This is the first deployment to ${ENVIRONMENT}."
           elif [[ "$OLD_VERSION" == "$NEW_VERSION" ]]; then
             VERSION_RANGE_TEXT="Redeploying ${NEW_VERSION}"
+            PENDING_SUMMARY="⏳ Pending deployment to ${ENVIRONMENT} | Redeploying ${NEW_VERSION}"
             RAW_CHANGELOG="No new changes — redeploying ${NEW_VERSION}."
           else
             DIFF_URL="https://github.com/${{ github.repository }}/compare/${OLD_VERSION}...${NEW_VERSION}"
             VERSION_RANGE_TEXT="${OLD_VERSION} → ${NEW_VERSION}"
+            PENDING_SUMMARY="⏳ Pending deployment to ${ENVIRONMENT} | [${OLD_VERSION}...${NEW_VERSION}](${DIFF_URL})"
             RAW_CHANGELOG=$(cat /tmp/changelog_extract.md 2>/dev/null || echo "No changes extracted")
           fi
 
@@ -260,11 +263,15 @@ jobs:
                 printf '%s\n' "$EXISTING_BLOCKS"
               fi
               echo '<details open>'
-              echo "<summary>⏳ Pending deployment to ${ENVIRONMENT} | ${VERSION_RANGE_TEXT}</summary>"
+              echo "<summary>${PENDING_SUMMARY}</summary>"
               echo ""
               printf '%s\n' "$CHANGELOG_CONTENT"
               if [[ -n "$CONTRIBUTORS_SECTION" ]]; then
                 printf '%s\n' "$CONTRIBUTORS_SECTION"
+              fi
+              if [[ -n "$DIFF_URL" ]]; then
+                echo ""
+                echo "**Full Changelog**: ${DIFF_URL}"
               fi
               echo ""
               echo '</details>'
@@ -281,11 +288,15 @@ jobs:
               echo "$HISTORY_HEADER"
               echo ""
               echo '<details open>'
-              echo "<summary>⏳ Pending deployment to ${ENVIRONMENT} | ${VERSION_RANGE_TEXT}</summary>"
+              echo "<summary>${PENDING_SUMMARY}</summary>"
               echo ""
               printf '%s\n' "$CHANGELOG_CONTENT"
               if [[ -n "$CONTRIBUTORS_SECTION" ]]; then
                 printf '%s\n' "$CONTRIBUTORS_SECTION"
+              fi
+              if [[ -n "$DIFF_URL" ]]; then
+                echo ""
+                echo "**Full Changelog**: ${DIFF_URL}"
               fi
               echo ""
               echo '</details>'
