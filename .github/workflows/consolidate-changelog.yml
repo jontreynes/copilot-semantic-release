@@ -130,64 +130,67 @@ jobs:
             exit 1
           fi
           
-          # Build consolidated section
+          # Determine version range label and changelog content
           if [[ "$IS_FIRST" == "true" || -z "$OLD_VERSION" ]]; then
-            # No prior successful deployment found — first ever deploy to this environment
-            HEADER="## 📦 Pending Deployment to ${ENVIRONMENT} | Initial Deployment"
-            echo "${HEADER}" > /tmp/consolidated_section.md
-            echo "" >> /tmp/consolidated_section.md
-            echo "This is the first deployment to ${ENVIRONMENT}." >> /tmp/consolidated_section.md
+            VERSION_RANGE="Initial Deployment"
             OLD_VERSION="initial"
+            CHANGELOG_CONTENT="This is the first deployment to ${ENVIRONMENT}."
           elif [[ "$OLD_VERSION" == "$NEW_VERSION" ]]; then
-            # Same version was already deployed — this is a redeploy
-            HEADER="## 📦 Pending Deployment to ${ENVIRONMENT} | Redeploying ${NEW_VERSION}"
-            echo "${HEADER}" > /tmp/consolidated_section.md
-            echo "" >> /tmp/consolidated_section.md
-            echo "No new changes — redeploying ${NEW_VERSION}." >> /tmp/consolidated_section.md
+            VERSION_RANGE="Redeploying ${NEW_VERSION}"
+            CHANGELOG_CONTENT="No new changes — redeploying ${NEW_VERSION}."
           else
-            # Normal deployment with version range
-            HEADER="## 📦 Pending Deployment to ${ENVIRONMENT} | ${OLD_VERSION} → ${NEW_VERSION}"
-            
+            VERSION_RANGE="${OLD_VERSION} → ${NEW_VERSION}"
             CHANGELOG_CONTENT=$(cat /tmp/changelog_extract.md 2>/dev/null || echo "No changes extracted")
-            
-            echo "${HEADER}" > /tmp/consolidated_section.md
-            echo "" >> /tmp/consolidated_section.md
-            echo "${CHANGELOG_CONTENT}" >> /tmp/consolidated_section.md
           fi
-          
-          # Strip any existing deployment section (## 📦 ...) and its preceding --- separator.
-          # This implements "latest only" — only the current environment's section is shown.
-          STRIPPED_BODY=$(echo "${CURRENT_BODY}" | awk '
-            BEGIN { lines_count=0 }
-            { lines[++lines_count] = $0 }
-            END {
-              # Find the first ## 📦 deployment section line
-              deploy_line = 0
-              for (i=1; i<=lines_count; i++) {
-                if (lines[i] ~ /^## 📦 /) { deploy_line = i; break }
-              }
 
-              if (deploy_line == 0) {
-                # No existing deployment section — print everything as-is
-                for (i=1; i<=lines_count; i++) print lines[i]
-              } else {
-                # Walk backward from ## 📦 to include any preceding --- separator
-                cut_at = deploy_line
-                j = deploy_line - 1
-                while (j >= 1 && lines[j] == "") j--
-                if (j >= 1 && lines[j] == "---") cut_at = j
+          HISTORY_HEADER="## 📦 Deployment History"
+          PENDING_LINE="- ⏳ Pending deployment to ${ENVIRONMENT} | ${VERSION_RANGE}"
 
-                # Print up to cut_at, trimming trailing blank lines
-                end = cut_at - 1
-                while (end >= 1 && lines[end] == "") end--
-                for (i=1; i<=end; i++) print lines[i]
-              }
-            }
-          ')
+          if echo "$CURRENT_BODY" | grep -q "^## 📦 Deployment History"; then
+            echo "ℹ️  Existing deployment history found — preserving ✅ entries and appending new pending entry"
 
-          # Append the new deployment section
-          printf '%s\n\n---\n\n' "${STRIPPED_BODY}" > /tmp/release_body.md
-          cat /tmp/consolidated_section.md >> /tmp/release_body.md
+            # Extract semantic-release notes (everything before the --- separator that precedes the history block)
+            SEMANTIC_NOTES=$(echo "$CURRENT_BODY" | awk '
+              /^---$/ { found_sep=1; next }
+              found_sep && /^## 📦 Deployment History/ { exit }
+              found_sep { found_sep=0 }
+              { print }
+            ' | sed -e '${/^[[:space:]]*$/d}')
+
+            # Preserve all existing ✅ bullet lines
+            EXISTING_CHECKS=$(echo "$CURRENT_BODY" | grep -P "^- ✅ " || true)
+
+            # Write updated body: semantic notes + separator + history header + preserved ✅ + new ⏳ + changelog
+            {
+              printf '%s\n' "$SEMANTIC_NOTES"
+              echo ""
+              echo "---"
+              echo ""
+              echo "$HISTORY_HEADER"
+              echo ""
+              if [[ -n "$EXISTING_CHECKS" ]]; then
+                echo "$EXISTING_CHECKS"
+              fi
+              echo "$PENDING_LINE"
+              echo ""
+              printf '%s\n' "$CHANGELOG_CONTENT"
+            } > /tmp/release_body.md
+          else
+            echo "ℹ️  No existing deployment history — creating new section"
+
+            # Append history section to current body
+            {
+              printf '%s\n' "$CURRENT_BODY"
+              echo ""
+              echo "---"
+              echo ""
+              echo "$HISTORY_HEADER"
+              echo ""
+              echo "$PENDING_LINE"
+              echo ""
+              printf '%s\n' "$CHANGELOG_CONTENT"
+            } > /tmp/release_body.md
+          fi
           
           # Update release notes
           gh release edit "$NEW_VERSION" --notes-file /tmp/release_body.md
@@ -200,7 +203,7 @@ jobs:
           echo "### 📦 Changelog Consolidated" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "**Environment**: ${ENVIRONMENT}" >> $GITHUB_STEP_SUMMARY
-          echo "**Version Range**: ${OLD_VERSION} → ${NEW_VERSION}" >> $GITHUB_STEP_SUMMARY
+          echo "**Version Range**: ${VERSION_RANGE}" >> $GITHUB_STEP_SUMMARY
           echo "**Status**: Pending Deployment" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "[View Release Notes](https://github.com/${{ github.repository }}/releases/tag/${NEW_VERSION})" >> $GITHUB_STEP_SUMMARY

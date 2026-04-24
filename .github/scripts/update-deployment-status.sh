@@ -36,78 +36,48 @@ fi
 # Generate timestamp in UTC
 TIMESTAMP=$(date -u +"%Y-%m-%d %H:%M UTC")
 
-# Build the pending and deployed headers
-if [[ "$OLD_VERSION" == "initial" ]]; then
-  PENDING_HEADER="## 📦 Pending Deployment to ${ENVIRONMENT} | Initial Deployment"
-  DEPLOYED_HEADER="## 📦 Deployed to ${ENVIRONMENT} | Initial Deployment | ${TIMESTAMP}"
-else
-  PENDING_HEADER="## 📦 Pending Deployment to ${ENVIRONMENT} | ${OLD_VERSION} → ${NEW_VERSION}"
-  DEPLOYED_HEADER="## 📦 Deployed to ${ENVIRONMENT} | ${OLD_VERSION} → ${NEW_VERSION} | ${TIMESTAMP}"
-fi
+# Match the ⏳ pending bullet for this environment
+echo "🔍 Looking for pending bullet for ${ENVIRONMENT}..."
 
-echo "🔍 Looking for: $PENDING_HEADER"
+# Save current body to temp file
+echo "$CURRENT_BODY" > /tmp/current_body.txt
 
-# First try exact match
-FOUND_EXACT=false
-if echo "$CURRENT_BODY" | grep -qF "$PENDING_HEADER" 2>/dev/null; then
-  FOUND_EXACT=true
-  echo "✅ Found exact pending deployment header"
-fi
+# Find the pending line by prefix — captures whatever version range is embedded in the bullet
+FOUND_PENDING=$(grep "^- ⏳ Pending deployment to ${ENVIRONMENT}" /tmp/current_body.txt || true)
 
-# If exact match not found, search for any pending deployment to this environment
-if [[ "$FOUND_EXACT" == false ]]; then
-  echo "🔍 Exact match not found, searching for any pending deployment to ${ENVIRONMENT}..."
-  PENDING_LINE=$(echo "$CURRENT_BODY" | grep "^## 📦 Pending Deployment to ${ENVIRONMENT} |" || true)
-  
-  if [[ -n "$PENDING_LINE" ]]; then
-    echo "✅ Found pending deployment line: $PENDING_LINE"
-    PENDING_HEADER="$PENDING_LINE"
-    
-    # Extract version info from the found header to build deployed header
-    if echo "$PENDING_LINE" | grep -q "Initial Deployment"; then
-      DEPLOYED_HEADER="## 📦 Deployed to ${ENVIRONMENT} | Initial Deployment | ${TIMESTAMP}"
-    else
-      # Extract the version range from the pending header
-      VERSION_RANGE=$(echo "$PENDING_LINE" | sed 's/^## 📦 Pending Deployment to .* | //')
-      DEPLOYED_HEADER="## 📦 Deployed to ${ENVIRONMENT} | ${VERSION_RANGE} | ${TIMESTAMP}"
-    fi
-    
-    echo "📝 Will replace with: $DEPLOYED_HEADER"
-    FOUND_EXACT=true
-  fi
-fi
+if [[ -n "$FOUND_PENDING" ]]; then
+  echo "✅ Found pending deployment entry: $FOUND_PENDING"
 
-# Check if pending header exists  
-if [[ "$FOUND_EXACT" == true ]]; then
-  echo "✅ Found pending deployment section, updating to deployed status..."
-  
-  # Save current body to temp file
-  echo "$CURRENT_BODY" > /tmp/current_body.txt
-  
-  # Use awk to replace the pending header with deployed header (handles unicode)
-  awk -v pending="$PENDING_HEADER" -v deployed="$DEPLOYED_HEADER" '
+  # Build deployed line: swap ⏳ Pending deployment to → ✅ Deployed to, append timestamp
+  DEPLOYED_LINE=$(echo "$FOUND_PENDING" | sed "s/^- ⏳ Pending deployment to /- ✅ Deployed to /")
+  DEPLOYED_LINE="${DEPLOYED_LINE} — ${TIMESTAMP}"
+
+  # Replace first occurrence only
+  awk -v pending="$FOUND_PENDING" -v deployed="$DEPLOYED_LINE" '
+  BEGIN { done=0 }
   {
-      if ($0 == pending) {
-          print deployed
-      } else {
-          print $0
-      }
+    if (!done && $0 == pending) {
+      print deployed
+      done=1
+    } else {
+      print $0
+    }
   }
   ' /tmp/current_body.txt > /tmp/release_body.md
-  
+
   # Update release notes
   gh release edit "$RELEASE_TAG" --notes-file /tmp/release_body.md
-  
+
   echo "✅ Release notes updated with deployed status"
 else
-  echo "⚠️  Pending deployment section not found in release notes"
+  echo "⚠️  Pending deployment entry not found in release notes"
   echo "⚠️  This might happen if:"
   echo "    - Deployment was done without running consolidate-changelog"
   echo "    - Release notes were manually edited"
   echo "    - This is a retry after manual intervention"
   echo ""
-  echo "📋 Current release body headers:"
-  echo "$CURRENT_BODY" | grep "^## " || echo "  (no headers found)"
+  echo "📋 Current release body bullets:"
+  grep "^- " /tmp/current_body.txt || echo "  (no bullet lines found)"
   echo ""
   echo "ℹ️  Skipping status update (not blocking deployment)"
 fi
