@@ -1,3 +1,13 @@
+## [3.44.0](https://github.com/jontreynes/copilot-semantic-release/compare/v3.43.1...v3.44.0) (2026-04-24)
+
+### 🚀 Features
+
+* testing 1 ([37c760b](https://github.com/jontreynes/copilot-semantic-release/commit/37c760bf6c24983b4fa5c4154a544f70cf8a6771))
+
+### 🐛 Bug Fixes
+
+* update README to clarify commit message generation instructions ([6440ab9](https://github.com/jontreynes/copilot-semantic-release/commit/6440ab97b1f0c2f7d69ba34af9b44ff852fa6803))
+
 ## [3.43.1](https://github.com/jontreynes/copilot-semantic-release/compare/v3.43.0...v3.43.1) (2026-04-24)
 
 ### 🐛 Bug Fixes
