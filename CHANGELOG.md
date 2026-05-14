@@ -1,3 +1,9 @@
+## [3.51.0](https://github.com/jontreynes/copilot-semantic-release/compare/v3.50.0...v3.51.0) (2026-05-14)
+
+### 🚀 Features
+
+* remove concurrency settings from deploy workflows ([c006ab5](https://github.com/jontreynes/copilot-semantic-release/commit/c006ab538d7a917aab16772642f903eb373bcba6))
+
 ## [3.50.0](https://github.com/jontreynes/copilot-semantic-release/compare/v3.49.0...v3.50.0) (2026-04-29)
 
 ### 🚀 Features
